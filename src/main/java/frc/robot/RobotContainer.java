@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.controllers.PS4Gamepad;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,12 +20,31 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  private final Drive drive = new Drive();
+  private final Shooter shooter = new Shooter();
+  
+  public static PS4Gamepad driverPad = new PS4Gamepad(RobotMap.DRIVER_JOYSTICK_1_USB_ID);
+ 
+  Button driverTriangle = driverPad.getButtonTriangle();
+  Button driverSquare = driverPad.getButtonSquare();
+  Button driverCircle = driverPad.getButtonCircle();
+  Button driverX = driverPad.getButtonX();
+  Button driverShare = driverPad.getShareButton();
+  Button driverOptions = driverPad.getOptionsButton();
+  Button driverPadButton = driverPad.getButtonPad();
+  Button driverL1 = driverPad.getL1();
+  Button driverL2 = driverPad.getL2();
+  Button driverL3 = driverPad.getL3();
+  Button driverR1 = driverPad.getR1();
+  Button driverR3 = driverPad.getR3();
+  Button startButton = driverPad.getStartButton();
+  Button driverDPadUp = driverPad.getDPadUp();
+  Button driverDPadDown = driverPad.getDPadDown();
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    
+   
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -34,15 +55,22 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
+  
+  //Get Controller Objects
+  public static PS4Gamepad getDriver() {
+    return driverPad;
+  }
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  }
+    return null;
+}
 }
