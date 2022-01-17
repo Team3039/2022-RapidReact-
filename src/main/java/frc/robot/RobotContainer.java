@@ -6,11 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import frc.robot.controllers.PS4Gamepad;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Shooter;
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,31 +22,26 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drive drive = new Drive();
-  private final Shooter shooter = new Shooter();
-  
-  public static PS4Gamepad driverPad = new PS4Gamepad(RobotMap.DRIVER_JOYSTICK_1_USB_ID);
- 
-  Button driverTriangle = driverPad.getButtonTriangle();
-  Button driverSquare = driverPad.getButtonSquare();
-  Button driverCircle = driverPad.getButtonCircle();
-  Button driverX = driverPad.getButtonX();
-  Button driverShare = driverPad.getShareButton();
-  Button driverOptions = driverPad.getOptionsButton();
-  Button driverPadButton = driverPad.getButtonPad();
-  Button driverL1 = driverPad.getL1();
-  Button driverL2 = driverPad.getL2();
-  Button driverL3 = driverPad.getL3();
-  Button driverR1 = driverPad.getR1();
-  Button driverR3 = driverPad.getR3();
-  Button startButton = driverPad.getStartButton();
-  Button driverDPadUp = driverPad.getDPadUp();
-  Button driverDPadDown = driverPad.getDPadDown();
-  
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+
+  private final InterpolatedPS4Gamepad m_controller = new InterpolatedPS4Gamepad(0);
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
-    
-   
+    // Set up the default command for the drivetrain.
+    // The controls are for field-oriented driving:
+    // Left stick Y axis -> forward and backwards movement
+    // Left stick X axis -> left and right movement
+    // Right stick X axis -> rotation
+    m_drivetrainSubsystem.zeroGyroscope();
+    m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
+            m_drivetrainSubsystem,
+            () -> -(m_controller.interpolatedLeftYAxis()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -(m_controller.interpolatedLeftXAxis()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            () -> -(m_controller.interpolatedRightXAxis()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -56,7 +53,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    // Back button zeros the gyroscope
+      Button m_driverX = m_controller.getButtonX();
+            // No requirements because we don't need to interrupt anything
+            m_driverX.whenPressed(m_drivetrainSubsystem::zeroGyroscope);
   }
 
   /**
@@ -64,13 +64,20 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  
-  //Get Controller Objects
-  public static PS4Gamepad getDriver() {
-    return driverPad;
-  }
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
-}
+    return new InstantCommand();
+  }
+
+  private static double deadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
 }
