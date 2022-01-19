@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,6 +17,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+
+  public static double targetValid; //Whether the limelight has any valid targets (0 or 1)
+  public static double targetX; //Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees
+   public static double targetY; //Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
+   public static double targetArea; //Target Area (0% of image to 100% of image)
+
 
   private RobotContainer m_robotContainer;
 
@@ -43,6 +50,13 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+
+      
+    targetValid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    targetX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    targetY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    targetArea = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+    
     CommandScheduler.getInstance().run();
   }
 
