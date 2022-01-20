@@ -11,12 +11,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
-  public Turret() {
+  public Turret() {}
 
-   public void setCamMode(boolean is) {
+   public void setCamMode(boolean Track) {
+     if(Track) {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
    }
+     else {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);   
+     }
   }
+
 
   @Override
   public void periodic() {
