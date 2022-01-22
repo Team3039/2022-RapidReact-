@@ -1,22 +1,15 @@
 package frc.robot;
 
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.DrivetrainSubsystem;
-
 public class InterpolatedPS4Gamepad extends PS4Gamepad {
 
     static double deadZoneThreshold;
     static double fullThrottleThreshold;
-
-    static RampComponent rComponent;
 
     public InterpolatedPS4Gamepad(int port) {
         super(port);
 
         deadZoneThreshold = 0.05;
         fullThrottleThreshold = 0.9;
-
-        rComponent = new RampComponent(1, 0.5);
     }
 
     public static boolean inDeadZone(double axis) {
@@ -28,20 +21,20 @@ public class InterpolatedPS4Gamepad extends PS4Gamepad {
     }
 
     public double interpolatedLeftYAxis() {
-            if (this.getLeftYAxis() <= 0.01)
+            if (Math.abs(this.getLeftYAxis()) <= 0.05)
                 return 0.0;
-            return rComponent.applyAsDouble(-(Math.pow(4, this.getLeftYAxis())));
+            return ((Math.sin(this.getLeftYAxis())))/2;
         }
 
     public double interpolatedLeftXAxis() {
-        if (this.getLeftXAxis() <= 0.01)
+        if (Math.abs(this.getLeftXAxis()) <= 0.05)
             return 0.0;
-        return rComponent.applyAsDouble(-(Math.pow(4, this.getLeftXAxis())));
+        return ((Math.sin(this.getLeftXAxis())))/2;
     }
 
     public double interpolatedRightXAxis() {
-        if (this.getRightXAxis() <= 0.01)
+        if (Math.abs(this.getRightXAxis()) <= 0.05)
             return 0.0;
-        return rComponent.applyAsDouble(-(Math.pow(4, this.getRightXAxis())));
+        return -(Math.sin(this.getRightXAxis()))/2;
     }
 }
