@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import frc.robot.commands.ResetTurretPos;
+import frc.robot.commands.SetTurretPos;
 import frc.robot.commands.trackTarget;
 import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Drive;
@@ -44,7 +44,9 @@ public class RobotContainer {
   Button startButton = driverPad.getStartButton();
   Button driverDPadUp = driverPad.getDPadUp();
   Button driverDPadDown = driverPad.getDPadDown();
-  
+  Button driverDPadLeft = driverPad.getDPadLeft();
+  Button driverDPadRight = driverPad.getDPadRight();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     
@@ -60,8 +62,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverDPadDown.toggleWhenPressed(new trackTarget());
-    driverDPadUp.toggleWhenPressed(new ResetTurretPos());
+    driverDPadDown.whileHeld(new trackTarget());
+    //turns turret forward
+    driverDPadUp.whileHeld(new SetTurretPos(0));
+    //turns turret to the left
+    driverDPadLeft.whileHeld(new SetTurretPos(90));
+    //turns turret to the right
+    driverDPadRight.whileHeld(new SetTurretPos(-90));
   }
 
   /**

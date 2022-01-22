@@ -6,28 +6,35 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Turret.TurretMode;
 
-public class ResetTurretPos extends CommandBase {
-  /** Creates a new ResetTurretPos. */
-  public ResetTurretPos() {
+public class SetTurretPos extends CommandBase {
+  /** Creates a new SetTurretPos. */
+  double angle;
+  
+  public SetTurretPos(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.angle = angle;
   }
+ 
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    RobotContainer.turret.turretAngle = angle;
+    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.turret.setCamMode(false);
-    RobotContainer.turret.resetPose();
+ 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.turret.stop();
+ 
   }
 
   // Returns true when the command should end.

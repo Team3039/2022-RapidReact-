@@ -17,11 +17,20 @@ import frc.robot.RobotMap;
 
 public class Turret extends SubsystemBase {
 
+  public enum TurretMode {
+    TRACKING, 
+    DRIVE,
+    LEFT,
+    RIGHT
+  }
+  
+  public double turretAngle;
+  private TurretMode turretmode = TurretMode.DRIVE;
+
   TalonSRX turret = new TalonSRX(RobotMap.turret);
 
-  
   public static double targetValid; //Whether the limelight has any valid targets (0 or 1)
-  public static double targetX; //Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees
+  public static double targetX; //HorizontalDR Offset From Crosshair To Target (-27 degrees to 27 degrees
   public static double targetY; //Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
   public static double targetArea; //Target Area (0% of image to 100% of image)
 
@@ -30,6 +39,14 @@ public class Turret extends SubsystemBase {
   public Turret() {
     
   }
+   
+   public void setTurretMode(TurretMode Mode) {
+     this.turretmode = Mode;
+   }
+   
+   public TurretMode getTurretMode() {
+     return turretmode;
+   }
 
    public void setCamMode(boolean setVision) {
      if(setVision) {
@@ -55,9 +72,18 @@ public class Turret extends SubsystemBase {
       double errorX = targetX % 360;
       double correctionX = errorX * Constants.kP_TURRET_TRACK;
 
-      SmartDashboard.putNumber("turretOutput", correctionX);
-      SmartDashboard.putNumber("targetX", targetX);
+     // SmartDashboard.putNumber("turretOutput", correctionX);
+     // SmartDashboard.putNumber("targetX", targetX);
+
+      if(turret.getSelectedSensorPosition() >= 90 && targetX < 0) {
+        turret.set(ControlMode.PercentOutput, 0);
+      } 
+      else if(turret.getSelectedSensorPosition() <= -90 && targetX > 0) {
+        turret.set(ControlMode.PercentOutput, 0);
+      }
+      else {
       turret.set(ControlMode.PercentOutput, correctionX);
+     }
     }
 
     public void manualTarget(double targetAngle) {
@@ -69,23 +95,40 @@ public class Turret extends SubsystemBase {
       setCamMode(false);
       
     }
+  //rotate turret to specified angle
+    public void targetPose(double targetAngle) {
+      double errorX = turret.getSelectedSensorPosition() - targetAngle;
+      double correctionX = MathUtil.clamp(errorX * Constants.kP_TURRET_RESET_POS, -0.7, 0.7);
 
-    public void resetPose() {
-      double errorX = turret.getSelectedSensorPosition();
-      double correctionX = MathUtil.clamp(errorX * Constants.kP_TURRET_RESET_POS, -1, 1);
+    //  SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
+    //  SmartDashboard.putNumber("TargetPosOutput", correctionX);
 
-      SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
-      SmartDashboard.putNumber("ResetPosOutput", correctionX);
       turret.set(ControlMode.PercentOutput, correctionX);
     }
 
 
   @Override
-  public void periodic() {
+  public void periodic() { 
+    // This method will be called once per scheduler run
     targetValid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
     targetX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     targetY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
     targetArea = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-    // This method will be called once per scheduler run
-  }
+
+    SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
+    
+    TurretMode currentMode = getTurretMode();
+    switch(currentMode) {
+      case TRACKING:
+         setCamMode(true);
+         trackTarget();
+         break;
+      case DRIVE:
+         setCamMode(false);
+         targetPose(turretAngle);
+         break;
+      default:
+         stop();
+    }
+  } 
 }
