@@ -8,9 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.commands.ResetTurretPos;
+import frc.robot.commands.trackTarget;
 import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,8 +23,9 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drive drive = new Drive();
-  private final Shooter shooter = new Shooter();
+  public static Drive drive = new Drive();
+  public static Shooter shooter = new Shooter();
+  public static Turret turret = new Turret();
   
   public static PS4Gamepad driverPad = new PS4Gamepad(RobotMap.DRIVER_JOYSTICK_1_USB_ID);
  
@@ -56,7 +60,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    driverDPadDown.toggleWhenPressed(new trackTarget());
+    driverDPadUp.toggleWhenPressed(new ResetTurretPos());
   }
 
   /**

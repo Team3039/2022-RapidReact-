@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,11 +20,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  public static double targetValid; //Whether the limelight has any valid targets (0 or 1)
-  public static double targetX; //Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees
-   public static double targetY; //Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
-   public static double targetArea; //Target Area (0% of image to 100% of image)
-
 
   private RobotContainer m_robotContainer;
 
@@ -35,6 +32,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    RobotContainer.turret.setCamMode(false);
+
+    
   }
 
   /**
@@ -52,10 +52,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
 
       
-    targetValid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    targetX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-    targetY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-    targetArea = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+
     
     CommandScheduler.getInstance().run();
   }

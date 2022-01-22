@@ -59,7 +59,8 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
 
     //Turret
-    public static final double kP_TURRET = -0.03;
+    public static final double kP_TURRET_TRACK = 0.03;
+    public static final double kP_TURRET_RESET_POS = .02;
     public static final double TURRET_RATIO = 15155.2;
 
     public static final double HOOD_THRESHOLD = 2;
