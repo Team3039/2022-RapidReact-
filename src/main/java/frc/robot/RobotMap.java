@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 package frc.robot;
 
 public class RobotMap {
@@ -47,3 +48,5 @@ public class RobotMap {
 
 //AIO
 }
+=======
+>>>>>>> Stashed changes
