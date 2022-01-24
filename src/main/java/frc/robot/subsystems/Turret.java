@@ -20,8 +20,6 @@ public class Turret extends SubsystemBase {
   public enum TurretMode {
     TRACKING, 
     DRIVE,
-    LEFT,
-    RIGHT
   }
   
   public double turretAngle;

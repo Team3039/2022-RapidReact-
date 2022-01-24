@@ -24,10 +24,6 @@ import frc.robot.subsystems.Turret;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static Drive drive = new Drive();
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
->>>>>>> parent of 2cdfa90 (-Base Commit)
   public static Shooter shooter = new Shooter();
   public static Turret turret = new Turret();
   
@@ -50,13 +46,7 @@ public class RobotContainer {
   Button driverDPadDown = driverPad.getDPadDown();
   Button driverDPadLeft = driverPad.getDPadLeft();
   Button driverDPadRight = driverPad.getDPadRight();
-<<<<<<< HEAD
-=======
-=======
 
-  public static PS4Gamepad driverPad = new PS4Gamepad(0);
->>>>>>> Stashed changes
->>>>>>> parent of 2cdfa90 (-Base Commit)
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -80,13 +70,6 @@ public class RobotContainer {
     driverDPadLeft.whileHeld(new SetTurretPos(90));
     //turns turret to the right
     driverDPadRight.whileHeld(new SetTurretPos(-90));
-<<<<<<< HEAD
-=======
-  }
-
-  public PS4Gamepad getDriverController() {
-    return driverPad;
->>>>>>> parent of 2cdfa90 (-Base Commit)
   }
 
   /**
