@@ -4,14 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.autonomous.routines.DoNothingAuto;
+import frc.robot.autonomous.routines.TestAuto;
 import frc.robot.subsystems.Turret.TurretMode;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 
 /**
@@ -23,6 +23,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
+  SendableChooser<Command> autonomousChooser = new SendableChooser<>();
 
   private RobotContainer m_robotContainer;
 
@@ -36,8 +37,14 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     RobotContainer.turret.setCamMode(false);
-    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);;
+    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
 
+
+    autonomousChooser.setDefaultOption("Do Nothing", new DoNothingAuto());
+
+    autonomousChooser.addOption("Test Auto", new TestAuto());
+
+    SmartDashboard.putData("SetAutonomous", autonomousChooser);
     
   }
 
@@ -50,6 +57,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -69,12 +78,14 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = autonomousChooser.getSelected();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
