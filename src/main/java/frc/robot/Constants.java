@@ -33,7 +33,7 @@ public final class Constants {
 
     // 2020 Drive Constants
     public static final double kWheelDiameterInches = 5.835;
-    public static final double kTrackWidthInches = 28.5;
+    public static final double kTrackWidthInches = 27.5;
     public static final double kDriveEncoderPPR = 2048;
     public static final double kEncoderRotationToWheelRotationRatio = 9.0/1.0;
 
@@ -45,11 +45,11 @@ public final class Constants {
     public static final double kvVoltSecondsPerMeter = .036345975446567435;
     public static final double kaVoltSecondsSquaredPerMeter = .002053036858073132;
 
-    public static final double kPDriveVel = 3; //8.5
+    public static final double kPDriveVel = 1.5; //8.5
     public static final double kDDriveVel = 0;
 
-    public static final double kMinSpeedMetersPerSecond = Units.feetToMeters(3); //Find good value
-    public static final double kMinAcclerationMetersPerSecondSquared = Math.pow(Units.feetToMeters(3), 2);
+    public static final double kMinSpeedMetersPerSecond = Units.feetToMeters(6); //Find good value
+    public static final double kMinAcclerationMetersPerSecondSquared = Math.pow(Units.feetToMeters(5), 2);
 
     public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(10.5); //Find good value
     public static final double kMaxAccelerationMetersPerSecondSquared = Math.pow(Units.feetToMeters(8), 2);

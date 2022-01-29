@@ -10,24 +10,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 public class Drive extends SubsystemBase {
-
-  public enum DriveControlMode {
-    JOYSTICK, PATH_FOLLOWING
-  }
-
-  private DriveControlMode driveControlMode = DriveControlMode.JOYSTICK;
 
   // Left Drive
   private WPI_TalonFX leftMaster;
@@ -41,19 +36,12 @@ public class Drive extends SubsystemBase {
 
   // Gyro
   private PigeonIMU gyroPigeon;
-  private double[] yprPigeon = new double[3];
-  private boolean isCalibrating = false;
-  private double gyroYawOffsetAngleDeg = 0;
 
   // Differential Drive
-  private DifferentialDrive drive;
+  DifferentialDrive drive;
 
   //Path Following
-  private final DifferentialDriveOdometry odometry;
-
-
-  // Subsystem Instance
-  private final static Drive INSTANCE = new Drive();
+  DifferentialDriveOdometry odometry;
 
   public Drive() {
     leftMaster = new WPI_TalonFX(RobotMap.leftFrontDrive);
@@ -101,23 +89,9 @@ public class Drive extends SubsystemBase {
     
     drive.setDeadband(0.05);
 
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroFusedHeadingAngleDeg()));
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
   }
 
-  public static Drive getInstance() {
-    return INSTANCE;
-  }
-
-  //Encoder Setup
-  public synchronized DriveControlMode getControlMode() {
-    return driveControlMode;
-  }
-
-  public synchronized void setControlMode(DriveControlMode controlMode) {
-    this.driveControlMode = controlMode;
-  }
-
-  // Encoder Setup
 
   //Returns left sensors velocity in ticks per 100ms
   public double getLeftVelocityNativeUnits() {
@@ -218,45 +192,6 @@ public class Drive extends SubsystemBase {
     rightMaster.setSelectedSensorPosition(0);
   }
 
-  // Gyro Set Up
-  public void calibrateGyro() {
-    gyroPigeon.enterCalibrationMode(PigeonIMU.CalibrationMode.Temperature);
-  }
-
-  public void endGyroCalibration() {
-    if (isCalibrating == true) {
-      isCalibrating = false;
-    }
-  }
-
-  public void setGyroYawOffset(double offsetDeg) {
-    gyroYawOffsetAngleDeg = offsetDeg;
-  }
-
-  public synchronized double getGyroYawAngleDeg() {
-    gyroPigeon.getYawPitchRoll(yprPigeon);
-    return yprPigeon[0] + gyroYawOffsetAngleDeg;
-  }
-
-  public synchronized double getGyroFusedHeadingAngleDeg() {
-    return (gyroPigeon.getFusedHeading() + gyroYawOffsetAngleDeg) % 360;
-  }
-
-  public synchronized double getGyroPitchAngle() {
-    gyroPigeon.getYawPitchRoll(yprPigeon);
-    return yprPigeon[2];
-  }
-
-  public synchronized void resetGyroYawAngle() {
-    gyroPigeon.setYaw(0);
-    gyroPigeon.setFusedHeading(0);
-  }
-
-  public synchronized void resetGyroYawAngle(double homeAngle) {
-    resetGyroYawAngle();
-    setGyroYawOffset(homeAngle);
-  }
-
   public synchronized void driveWithJoystick() {
     double y = -1 * RobotContainer.getDriver().getLeftYAxis() * Constants.DRIVER_Y;
     double rot = RobotContainer.getDriver().getRightXAxis() * Constants.DRIVER_ROT;
@@ -296,8 +231,7 @@ public class Drive extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    resetGyroYawAngle(0);
-    odometry.resetPosition(pose, Rotation2d.fromDegrees(getGyroFusedHeadingAngleDeg()));
+    odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
   }
 
   /**
@@ -312,29 +246,16 @@ public class Drive extends SubsystemBase {
     drive.feed();
   }
 
+  public double getHeading() {
+    return gyroPigeon.getFusedHeading() % 360;
+  }
+
+  public void resetHeading() {
+    gyroPigeon.setFusedHeading(0);
+  }
+
   public void periodic() {
-    synchronized (Drive.this){
-      DriveControlMode currentControlMode = getControlMode();
-      switch (currentControlMode){
-        case JOYSTICK:
-          driveWithJoystick();
-          break;
-        case PATH_FOLLOWING:
-          odometry.update(Rotation2d.fromDegrees(getGyroFusedHeadingAngleDeg()),
-                  getLeftWheelDistanceMeters(),getRightWheelDistanceMeters());
-          break;
-        default:
-          System.out.println("Unknown drive control mode: " + currentControlMode);
-      }
-    }
-
-    // SmartDashboard.putNumber("Left Distance Inches: ", getLeftWheelDistanceInches());
-    // SmartDashboard.putNumber("Right Distance Inches: ", getRightWheelDistanceInches());
-
-    // SmartDashboard.putNumber("Left Distance Meters: ", getLeftWheelDistanceMeters());
-    // SmartDashboard.putNumber("Right Distance Meters: ", getRightWheelDistanceMeters());
-
-    // SmartDashboard.putNumber("Heading: ", getGyroFusedHeadingAngleDeg());
-
+    odometry.update(Rotation2d.fromDegrees(gyroPigeon.getFusedHeading()), getLeftWheelDistanceMeters(),getRightWheelDistanceMeters());
+    SmartDashboard.putNumber("gyro", getHeading());
   }
 }
