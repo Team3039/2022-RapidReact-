@@ -42,20 +42,32 @@ public class TrajectoryGenerator {
                 // Apply the voltage constraint
                 .addConstraint(autoVoltageConstraint);
 
+    TrajectoryConfig testConfigReversed =
+      new TrajectoryConfig(Constants.kMinSpeedMetersPerSecond,
+                Constants.kMinAcclerationMetersPerSecondSquared)
+                // Add kinematics to ensure max speed is actually obeyed
+               .setKinematics(Constants.kDriveKinematics)
+                // Apply the voltage constraint
+               .setReversed(true)
+               .addConstraint(autoVoltageConstraint);
+               
+
     public Trajectory testTrajectory = edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory( 
         new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(
-             new Translation2d(Units.inchesToMeters(60), 0),
-             new Translation2d(Units.inchesToMeters(100), 100),
-             new Translation2d(Units.inchesToMeters(140), Units.inchesToMeters(100))
+          List.of(
+                 new Translation2d(Units.inchesToMeters(30), Units.inchesToMeters(0))    
       ),
-              new Pose2d(Units.inchesToMeters(90), Units.inchesToMeters(90), new Rotation2d(Units.degreesToRadians(0))), 
-        testConfig );
+         new Pose2d(Units.inchesToMeters(60), Units.inchesToMeters(0), new Rotation2d(Units.degreesToRadians(0))), 
+        testConfig 
+        );
      
-    
-         
-
-
-
-    
+        
+    public Trajectory testTrajectoryReversed = edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+        new Pose2d(60, 0, new Rotation2d(0)),
+          List.of(
+                 new Translation2d(Units.inchesToMeters(30), Units.inchesToMeters(0))
+        ),
+        new Pose2d(Units.inchesToMeters(0), Units.inchesToMeters(0), new Rotation2d(Units.degreesToRadians(0))),
+        testConfigReversed
+    );
 }

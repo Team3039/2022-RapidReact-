@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.autonomous.routines.DoNothingAuto;
 import frc.robot.autonomous.routines.TestAuto;
+import frc.robot.subsystems.Drive.DriveControlMode;
 import frc.robot.subsystems.Turret.TurretMode;
 
 
@@ -36,8 +38,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
     RobotContainer.turret.setCamMode(false);
     RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+    RobotContainer.drive.resetOdometry(new Pose2d());
 
 
     autonomousChooser.setDefaultOption("Do Nothing", new DoNothingAuto());
@@ -73,8 +77,10 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    RobotContainer.drive.resetOdometry(new Pose2d());
     RobotContainer.turret.turretAngle = 0;
     RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+  // RobotContainer.turret.setTurretMode(TurretMode.TRACKING);
   }
 
   @Override
@@ -85,6 +91,9 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    RobotContainer.drive.setControlMode(DriveControlMode.PATH_FOLLOWING);
+    RobotContainer.drive.resetOdometry(new Pose2d());
+    
     m_autonomousCommand = autonomousChooser.getSelected();
 
     // schedule the autonomous command (example)
@@ -106,6 +115,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    RobotContainer.drive.setControlMode(DriveControlMode.JOYSTICK);
   }
 
   /** This function is called periodically during operator control. */

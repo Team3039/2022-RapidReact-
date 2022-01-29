@@ -48,8 +48,8 @@ public final class Constants {
     public static final double kPDriveVel = 3; //8.5
     public static final double kDDriveVel = 0;
 
-    public static final double kMinSpeedMetersPerSecond = Units.feetToMeters(1.5); //Find good value
-    public static final double kMinAcclerationMetersPerSecondSquared = Math.pow(Units.feetToMeters(1.5), 2);
+    public static final double kMinSpeedMetersPerSecond = Units.feetToMeters(3); //Find good value
+    public static final double kMinAcclerationMetersPerSecondSquared = Math.pow(Units.feetToMeters(3), 2);
 
     public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(10.5); //Find good value
     public static final double kMaxAccelerationMetersPerSecondSquared = Math.pow(Units.feetToMeters(8), 2);
