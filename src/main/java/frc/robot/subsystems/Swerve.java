@@ -92,7 +92,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d getQuarterPi() {
-        return Rotation2d.fromDegrees(160);
+        return Rotation2d.fromDegrees(-45);
     }
 
     public void resetOdometry(Pose2d pose) {

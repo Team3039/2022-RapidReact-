@@ -28,7 +28,7 @@ public class exampleAuto extends SequentialCommandGroup {
                 TrajectoryConfig configLow =
                 new TrajectoryConfig(
                         Constants.AutoConstants.kMaxSpeedMetersPerSecond - 2,
-                        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared - 2)
                     .setKinematics(Constants.Swerve.swerveKinematics);
 
         // An example trajectory to follow.  All units in meters.
@@ -36,9 +36,12 @@ public class exampleAuto extends SequentialCommandGroup {
             TrajectoryGenerator.generateTrajectory(
                 List.of(
                     new Pose2d(),
-                    new Pose2d(new Translation2d(Units.inchesToMeters(78), 0), Rotation2d.fromDegrees(0))
+                    new Pose2d(new Translation2d(Units.inchesToMeters(78), 0), Rotation2d.fromDegrees(0)),
+                    // new Pose2d(new Translation2d(Units.inchesToMeters(78), 0), Rotation2d.fromDegrees(0)),
+                    new Pose2d(new Translation2d(Units.inchesToMeters(110), Units.inchesToMeters(-50)), Rotation2d.fromDegrees(0))
                 ),
-                config);
+                configLow
+                );
 
             Trajectory exA =
                 TrajectoryGenerator.generateTrajectory(
@@ -55,7 +58,9 @@ public class exampleAuto extends SequentialCommandGroup {
                             new Pose2d(new Translation2d(Units.inchesToMeters(110), Units.inchesToMeters(-50)), Rotation2d.fromDegrees(0)),
                             new Pose2d(new Translation2d(Units.inchesToMeters(150), Units.inchesToMeters(0)), Rotation2d.fromDegrees(0))
                         ), 
-                        config);
+                        configLow
+                        );
+
             // TrajectoryGenerator.generateTrajectory(
             //     // Start at the origin facing the +X direction
             //     new Pose2d(0, 0, new Rotation2d(0)),
@@ -112,7 +117,7 @@ public class exampleAuto extends SequentialCommandGroup {
         addCommands(
             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
             swerveControllerCommand,
-            mCommand,
+           // mCommand,
             mCommandB
             // mCommand
         );
