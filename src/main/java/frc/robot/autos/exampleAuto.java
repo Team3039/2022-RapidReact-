@@ -27,8 +27,8 @@ public class exampleAuto extends SequentialCommandGroup {
 
                 TrajectoryConfig configLow =
                 new TrajectoryConfig(
-                        Constants.AutoConstants.kMaxSpeedMetersPerSecond - 2,
-                        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared - 2)
+                        Constants.AutoConstants.kMaxSpeedMetersPerSecond - 1,
+                        Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                     .setKinematics(Constants.Swerve.swerveKinematics);
 
         // An example trajectory to follow.  All units in meters.

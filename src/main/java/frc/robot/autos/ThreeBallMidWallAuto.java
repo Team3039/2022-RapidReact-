@@ -25,87 +25,105 @@ import frc.robot.subsystems.Swerve;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Figure8Auto extends SequentialCommandGroup {
+public class ThreeBallMidWallAuto extends SequentialCommandGroup {
   private TrajectoryConfig configLow;
 
 
-  /** Creates a new Figure8Auto. */
-  public Figure8Auto(Swerve s_Swerve) {
+  /** Creates a new ThreeBallMidWallAuto. */
+  public ThreeBallMidWallAuto(Swerve s_Swerve) {
   
    TrajectoryConfig config =
                 new TrajectoryConfig(
                         Constants.AutoConstants.kMaxSpeedMetersPerSecond,
                         Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                     .setKinematics(Constants.Swerve.swerveKinematics);
+                //    .setReversed(true);
     
                     TrajectoryConfig configLow =
                     new TrajectoryConfig(
                             Constants.AutoConstants.kMaxSpeedMetersPerSecond - 2,
                             Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared - 2)
                         .setKinematics(Constants.Swerve.swerveKinematics);
-    
+                     //   .setReversed(true);
+                    
    
-
-           Trajectory figureEightTrajectory =
+            //START AT 210 DEGREES AT THE STARTING POINT
+           Trajectory testThreeBallTrajectoryBallOne =
              TrajectoryGenerator.generateTrajectory(
                List.of( 
-                  new Pose2d(),
-                //   new Pose2d(new Translation2d(Units.inchesToMeters(28.2), Units.inchesToMeters(28.2)), Rotation2d.fromDegrees(0)),
-                  new Pose2d(new Translation2d(Units.inchesToMeters(40), Units.inchesToMeters(40)), Rotation2d.fromDegrees(0)),
-                //   new Pose2d(new Translation2d(Units.inchesToMeters(68.2), Units.inchesToMeters(28.2)), Rotation2d.fromDegrees(0)),
-                  new Pose2d(new Translation2d(Units.inchesToMeters(80), Units.inchesToMeters(0)), Rotation2d.fromDegrees(0))
+                  new Pose2d(new Translation2d(Units.inchesToMeters(0), 0), new Rotation2d(0)),
+                  new Pose2d(new Translation2d(Units.inchesToMeters(-60), 0), new Rotation2d(180))
                ),
-               configLow
-             );
-
-           Trajectory figureEightTrajectory2 =
-             TrajectoryGenerator.generateTrajectory(
-                 List.of(
-                    new Pose2d(new Translation2d(Units.inchesToMeters(80), Units.inchesToMeters(0)), Rotation2d.fromDegrees(0)),
-                    // new Pose2d(new Translation2d(Units.inchesToMeters(68.2), Units.inchesToMeters(-28.2)), Rotation2d.fromDegrees(0)),
-                    new Pose2d(new Translation2d(Units.inchesToMeters(40), Units.inchesToMeters(-40)), Rotation2d.fromDegrees(0)),
-                    // new Pose2d(new Translation2d(Units.inchesToMeters(28.2), Units.inchesToMeters(-28.2)), Rotation2d.fromDegrees(0)),
-                    new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(0)), Rotation2d.fromDegrees(0))
-               ),
-               configLow
-             );
-               
+               config
+             );             
+            
+           Trajectory testThreeBallTrajectoryBallTwo =
+            TrajectoryGenerator.generateTrajectory(
+            List.of(
+             new Pose2d(new Translation2d(Units.inchesToMeters(-60), 0), new Rotation2d(0)),
+             new Pose2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(-90)), new Rotation2d(0))
+            ),
+            config
+          );   
+           
+          Trajectory testThreeBallTrajectoryBallThree =
+          TrajectoryGenerator.generateTrajectory(
+          List.of( 
+            new Pose2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(-90)), new Rotation2d(0)),
+            new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(-15)), new Rotation2d(0))
+          ),
+          config
+        );   
+            
              var thetaController =
              new ProfiledPIDController(
                  Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
          thetaController.enableContinuousInput(-Math.PI, Math.PI);
- 
-         SwerveControllerCommand figureEightOneCommand =
-             new SwerveControllerCommand(
-                 figureEightTrajectory,
-                 s_Swerve::getPose,
-                 Constants.Swerve.swerveKinematics,
-                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                 thetaController,
-                 s_Swerve::getPI,
-                 s_Swerve::setModuleStates,
-                 s_Swerve
-             );
 
-             SwerveControllerCommand figureEightTwoCommand =
+
+         SwerveControllerCommand threeBallCommandOne =
              new SwerveControllerCommand(
-                 figureEightTrajectory2,
+                 testThreeBallTrajectoryBallOne,
                  s_Swerve::getPose,
                  Constants.Swerve.swerveKinematics,
                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                  thetaController,
-                 s_Swerve::getPI,
+                 Swerve.getSwerveHeadinSupplier(-140),
                  s_Swerve::setModuleStates,
-                 s_Swerve
-             );
+                 s_Swerve);
+            
  
- 
+         SwerveControllerCommand threeBallCommandTwo =
+             new SwerveControllerCommand(
+                 testThreeBallTrajectoryBallTwo,
+                 s_Swerve::getPose,
+                 Constants.Swerve.swerveKinematics,
+                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                 thetaController,
+                 Swerve.getSwerveHeadinSupplier(-15),
+                 s_Swerve::setModuleStates,
+                 s_Swerve);
+
+         
+             SwerveControllerCommand threeBallCommandThree =
+             new SwerveControllerCommand(
+                 testThreeBallTrajectoryBallThree,
+                 s_Swerve::getPose,
+                 Constants.Swerve.swerveKinematics,
+                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                 thetaController,
+                 Swerve.getSwerveHeadinSupplier(0),
+                 s_Swerve::setModuleStates,
+                 s_Swerve);
+
          addCommands(
-             new InstantCommand(() -> s_Swerve.resetOdometry(figureEightTrajectory.getInitialPose())),
-             figureEightOneCommand,
-             figureEightTwoCommand
+             new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
+             threeBallCommandOne,
+             threeBallCommandTwo,
+             threeBallCommandThree
          );
      }
 }

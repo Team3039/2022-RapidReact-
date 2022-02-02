@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.function.Supplier;
+
+import javax.swing.text.rtf.RTFEditorKit;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
@@ -93,6 +96,10 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d getQuarterPi() {
         return Rotation2d.fromDegrees(-45);
+    }
+
+    public static Supplier<Rotation2d> getSwerveHeadinSupplier(double theta) {
+        return () -> Rotation2d.fromDegrees(theta);
     }
 
     public void resetOdometry(Pose2d pose) {
