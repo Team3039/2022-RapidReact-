@@ -52,7 +52,7 @@ public class ThreeBallMidWallAuto extends SequentialCommandGroup {
              TrajectoryGenerator.generateTrajectory(
                List.of( 
                   new Pose2d(new Translation2d(Units.inchesToMeters(0), 0), new Rotation2d(0)),
-                  new Pose2d(new Translation2d(Units.inchesToMeters(-60), 0), new Rotation2d(180))
+                  new Pose2d(new Translation2d(Units.inchesToMeters(-54), 0), new Rotation2d(180))
                ),
                config
              );             
@@ -60,8 +60,8 @@ public class ThreeBallMidWallAuto extends SequentialCommandGroup {
            Trajectory testThreeBallTrajectoryBallTwo =
             TrajectoryGenerator.generateTrajectory(
             List.of(
-             new Pose2d(new Translation2d(Units.inchesToMeters(-60), 0), new Rotation2d(0)),
-             new Pose2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(-90)), new Rotation2d(0))
+             new Pose2d(new Translation2d(Units.inchesToMeters(-54), 0), new Rotation2d(0)),
+             new Pose2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(-75)), new Rotation2d(0))
             ),
             config
           );   
@@ -69,7 +69,7 @@ public class ThreeBallMidWallAuto extends SequentialCommandGroup {
           Trajectory testThreeBallTrajectoryBallThree =
           TrajectoryGenerator.generateTrajectory(
           List.of( 
-            new Pose2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(-90)), new Rotation2d(0)),
+            new Pose2d(new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(-75)), new Rotation2d(0)),
             new Pose2d(new Translation2d(Units.inchesToMeters(0), Units.inchesToMeters(-15)), new Rotation2d(0))
           ),
           config
@@ -89,11 +89,13 @@ public class ThreeBallMidWallAuto extends SequentialCommandGroup {
                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                  thetaController,
-                 Swerve.getSwerveHeadinSupplier(-140),
+                 Swerve.getSwerveHeadinSupplier(-130),
                  s_Swerve::setModuleStates,
                  s_Swerve);
-            
- 
+            //-145 is good for the next angle being 40
+            //-160 is good for the next angle being 20
+           // idk which is better :/
+
          SwerveControllerCommand threeBallCommandTwo =
              new SwerveControllerCommand(
                  testThreeBallTrajectoryBallTwo,
@@ -102,10 +104,11 @@ public class ThreeBallMidWallAuto extends SequentialCommandGroup {
                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                  thetaController,
-                 Swerve.getSwerveHeadinSupplier(-15),
+                 Swerve.getSwerveHeadinSupplier(40),
                  s_Swerve::setModuleStates,
                  s_Swerve);
-
+            // 40 is good if the previous angle is -145
+            // 20 is good if the previous angle is -160
          
              SwerveControllerCommand threeBallCommandThree =
              new SwerveControllerCommand(
