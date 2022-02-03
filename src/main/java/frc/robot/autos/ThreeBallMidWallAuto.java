@@ -18,6 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
@@ -34,7 +35,7 @@ public class ThreeBallMidWallAuto extends SequentialCommandGroup {
   
    TrajectoryConfig config =
                 new TrajectoryConfig(
-                        Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                        Constants.AutoConstants.kMaxSpeedMetersPerSecond - 1,
                         Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                     .setKinematics(Constants.Swerve.swerveKinematics);
                 //    .setReversed(true);
@@ -125,7 +126,9 @@ public class ThreeBallMidWallAuto extends SequentialCommandGroup {
          addCommands(
              new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
              threeBallCommandOne,
+             new WaitCommand(0.75),
              threeBallCommandTwo,
+             new WaitCommand(0.75),
              threeBallCommandThree
          );
      }
