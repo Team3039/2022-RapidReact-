@@ -1,4 +1,4 @@
-package frc.robot.autos;
+package frc.robot.auto.routines;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class exampleAuto extends SequentialCommandGroup {
-    public exampleAuto(Swerve s_Swerve){
+public class ExampleAuto extends SequentialCommandGroup {
+    public ExampleAuto(Swerve s_Swerve){
         TrajectoryConfig config =
             new TrajectoryConfig(
                     Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -84,7 +84,7 @@ public class exampleAuto extends SequentialCommandGroup {
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                 thetaController,
-                s_Swerve::getHalfPi,
+                Swerve.getSwerveHeadingSupplier(90),
                 s_Swerve::setModuleStates,
                 s_Swerve
             );
@@ -97,7 +97,7 @@ public class exampleAuto extends SequentialCommandGroup {
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
             thetaController,
-            s_Swerve::getHalfPi,
+            Swerve.getSwerveHeadingSupplier(90),
             s_Swerve::setModuleStates,
             s_Swerve);
 
@@ -109,7 +109,7 @@ public class exampleAuto extends SequentialCommandGroup {
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
             thetaController,
-            s_Swerve::getQuarterPi,
+            Swerve.getSwerveHeadingSupplier(45),
             s_Swerve::setModuleStates,
             s_Swerve);
 

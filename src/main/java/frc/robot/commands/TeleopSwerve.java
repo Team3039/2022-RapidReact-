@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.InterpolatedPS4Gamepad;
@@ -37,17 +38,14 @@ public class TeleopSwerve extends CommandBase {
 
     @Override
     public void execute() {
-        double yAxis = -controller.interpolatedLeftYAxis();
-        double xAxis = -controller.interpolatedLeftXAxis();
-        double rAxis = controller.interpolatedRightXAxis();
-        
-        /* Deadbands */
-        yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
-        xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
-        rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
+        if (RobotState.isTeleop()) {
+            double yAxis = -controller.interpolatedLeftYAxis();
+            double xAxis = -controller.interpolatedLeftXAxis();
+            double rAxis = controller.interpolatedRightXAxis();
 
-        translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.maxSpeed);
-        rotation = rAxis * Constants.Swerve.maxAngularVelocity;
-        s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
+            translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.maxSpeed);
+            rotation = rAxis * Constants.Swerve.maxAngularVelocity;
+            s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
+        }
     }
 }

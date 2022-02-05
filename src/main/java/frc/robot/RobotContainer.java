@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autos.exampleAuto;
-import frc.robot.autos.ThreeBallMidWallAuto;
+import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -33,7 +32,7 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
 
   /* Subsystems */
-  private final Swerve s_Swerve = new Swerve();
+  public static final Swerve s_Swerve = new Swerve();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -41,7 +40,6 @@ public class RobotContainer {
     boolean fieldRelative = true;
     boolean openLoop = true;
     s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop));
-
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -64,6 +62,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new ThreeBallMidWallAuto(s_Swerve);
+    return new RightFarFourBallAuto(s_Swerve);
   }
 }

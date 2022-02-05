@@ -1,9 +1,12 @@
 package frc.robot;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.SwerveModuleConstants;
@@ -32,6 +35,13 @@ public final class Constants {
                 new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
                 new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
                 new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
+
+        public static final SwerveModuleState[] ZERO_STATES = {
+            new SwerveModuleState(),
+            new SwerveModuleState(),
+            new SwerveModuleState(),
+            new SwerveModuleState()
+        };
 
         /* Swerve Current Limiting */
         public static final int angleContinuousCurrentLimit = 25;

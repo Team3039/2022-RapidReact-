@@ -24,6 +24,9 @@ import frc.robot.Constants;
 import frc.robot.SwerveModule;
 
 public class Swerve extends SubsystemBase {
+
+    public static Swerve INSTANCE = new Swerve();
+
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
@@ -50,6 +53,10 @@ public class Swerve extends SubsystemBase {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+    }
+
+    public static Swerve getInstance() {
+        return INSTANCE;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -86,19 +93,7 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getPoseMeters();
     }
 
-    public Rotation2d getPI() {
-        return Rotation2d.fromDegrees(180);
-    }
-
-    public Rotation2d getHalfPi() {
-        return Rotation2d.fromDegrees(-90);
-    }
-
-    public Rotation2d getQuarterPi() {
-        return Rotation2d.fromDegrees(-45);
-    }
-
-    public static Supplier<Rotation2d> getSwerveHeadinSupplier(double theta) {
+    public static Supplier<Rotation2d> getSwerveHeadingSupplier(double theta) {
         return () -> Rotation2d.fromDegrees(theta);
     }
 

@@ -6,9 +6,17 @@ package frc.robot;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.auto.routines.RightFarFourBallAuto;
+import frc.robot.auto.routines.RightNearFourBallAuto;
+import frc.robot.auto.routines.ExampleAuto;
+import frc.robot.subsystems.Swerve;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,14 +25,16 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static Field2d field;
+
   public static CTREConfigs ctreConfigs;
   public static Trajectory mTrajectory = new Trajectory();
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
-  SendableChooser<Command> autonomousChooser = new SendableChooser<>();
-
+  SendableChooser<Command> autonTaskChooser = new SendableChooser<>();
+  
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -36,9 +46,17 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    
+    autonTaskChooser = new SendableChooser<>();
 
+    autonTaskChooser.setDefaultOption("Do Nothing", new PrintCommand("Do Nothing"));
 
+    autonTaskChooser.addOption("Example Auto", new ExampleAuto(Swerve.getInstance()));
+    autonTaskChooser.addOption("Right Far Four Ball", new RightFarFourBallAuto(Swerve.getInstance()));
+    autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Swerve.getInstance()));
+
+    SmartDashboard.putData("Autonomous", autonTaskChooser);
+    // field.setRobotPose(Swerve.getInstance().getPose());
+    // SmartDashboard.putData("Field", field);
   }
 
 
@@ -57,6 +75,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    // field.setRobotPose(Swerve.getInstance().getPose());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -69,7 +88,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = autonTaskChooser.getSelected();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -94,7 +113,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
   public void testInit() {
