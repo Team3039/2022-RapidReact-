@@ -5,16 +5,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
-public class SetHopperModeIndex extends CommandBase {
-  /** Creates a new SetIntakingMode. */
-  public SetHopperModeIndex() {
+public class SetSnap extends CommandBase {
+
+  double snapAngle;
+  /** Creates a new SetSnap. */
+  public SetSnap(double snapAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.snapAngle = snapAngle;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    RobotContainer.s_Swerve.startSnap(snapAngle);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -22,7 +29,9 @@ public class SetHopperModeIndex extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.s_Swerve.setModuleStates(Constants.Swerve.ZERO_STATES);
+  }
 
   // Returns true when the command should end.
   @Override

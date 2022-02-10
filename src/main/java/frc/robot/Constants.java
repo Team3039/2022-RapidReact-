@@ -107,6 +107,13 @@ public final class Constants {
         /* Angle Encoder Invert */
         public static final boolean canCoderInvert = false;
 
+        /* Snap Constants */
+
+        public static final double KP_SNAP = 3.0;
+        public static final double KI_SNAP = 0;
+        public static final double KD_SNAP = 0.0;
+        public static final double ESPILON_SNAP = 0.01;
+
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
