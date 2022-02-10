@@ -23,8 +23,9 @@ public final class Constants {
         public static final int intake = 1;
         public static final int intakeTilt = 1;
 
-        public static final int hopperRoller = 1;
-        public static final int hopperBelt = 1;
+        public static final int hopperFrontBelt = 1;
+        public static final int hopperBackBelt = 1;
+        public static final int hopperFrontWheel = 1;
 
         public static final int shooterA = 1;
         public static final int shooterB = 1;
@@ -32,6 +33,9 @@ public final class Constants {
 
         public static final int climber = 1;
         public static final int climberSolenoid = 1;
+
+        public static final int topBeam = 1;
+        public static final int bottomBeam = 1;
 
     }
 

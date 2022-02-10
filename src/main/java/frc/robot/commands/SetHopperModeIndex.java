@@ -5,16 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Hopper.HopperControlMode;
 
-public class SetIntakingMode extends CommandBase {
+public class SetHopperModeIndex extends CommandBase {
   /** Creates a new SetIntakingMode. */
-  public SetIntakingMode() {
+  public SetHopperModeIndex() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    RobotContainer.hopper.setHopperControlMode(HopperControlMode.INDEXING);
+    RobotContainer.intake.runIntake(0.5, true);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -22,7 +27,9 @@ public class SetIntakingMode extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.intake.runIntake(0, false);
+  }
 
   // Returns true when the command should end.
   @Override
