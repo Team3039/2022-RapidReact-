@@ -31,6 +31,11 @@ public class Intake extends SubsystemBase {
     intakeTilt.set(Actuated);
   }
 
+  public void runIntake(double speed, boolean Actuated) {
+    setIntakeSpeed(speed);
+    actuateIntake(Actuated);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

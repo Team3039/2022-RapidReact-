@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.commands.SetSnap;
+import frc.robot.commands.SetHopperModeIndex;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 
@@ -34,6 +36,7 @@ public class RobotContainer {
   private final JoystickButton driverX = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
   private final JoystickButton driverCircle = new JoystickButton(driver, PS4Gamepad.BUTTON_Circle);
   private final JoystickButton driverSquare = new JoystickButton(driver, PS4Gamepad.BUTTON_Square);
+  private final JoystickButton driverTriangle = new JoystickButton(driver, PS4Gamepad.BUTTON_Triangle);
   
 
   
@@ -41,6 +44,7 @@ public class RobotContainer {
   /* Subsystems */
   public static final Swerve s_Swerve = new Swerve();
   public static final Intake intake = new Intake();
+  public static final Hopper hopper = new Hopper();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -62,6 +66,8 @@ public class RobotContainer {
     /* Driver Buttons */
     driverX.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
     driverSquare.whileHeld(new SetSnap(0));
+    driverCircle.toggleWhenPressed(new SetHopperModeIndex());
+
   }
 
   /**
