@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 
 /**
@@ -30,9 +31,12 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
+  private final JoystickButton 
+  
 
   /* Subsystems */
   public static final Swerve s_Swerve = new Swerve();
+  public static final Intake intake = new Intake();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */

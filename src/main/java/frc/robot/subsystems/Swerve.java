@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
 
-import javax.swing.text.rtf.RTFEditorKit;
-
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,7 +32,7 @@ public class Swerve extends SubsystemBase {
     public static Trajectory trajectory = new Trajectory();
 
     public Swerve() {
-        gyro = new PigeonIMU(Constants.Swerve.pigeonID);
+        gyro = new PigeonIMU(Constants.RobotMap.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
         
