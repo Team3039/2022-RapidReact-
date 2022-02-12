@@ -78,7 +78,6 @@ public class RobotContainer {
 
     driverR1.whileHeld(new SetGear(true));
     driverR1.whenReleased(new SetGear(false));
-    // driverCircle.toggleWhenPressed(new SetHopperModeIndex());
   }
 
   /**
