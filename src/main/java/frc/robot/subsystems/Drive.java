@@ -4,12 +4,11 @@ import static frc.robot.Constants.Swerve.KD_SNAP;
 import static frc.robot.Constants.Swerve.KI_SNAP;
 import static frc.robot.Constants.Swerve.KP_SNAP;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,99 +18,88 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
 
-public class Swerve extends SubsystemBase {
+public class Drive extends SubsystemBase {
 
-    public static Swerve INSTANCE = new Swerve();
+    public static Drive INSTANCE = new Drive();
 
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
 
-    public boolean isSnapping;
     public ProfiledPIDController snapPIDController;
 
     public static Trajectory trajectory = new Trajectory();
-    
-    public static TrapezoidProfile.Constraints thetaController; 
+    public static TrapezoidProfile.Constraints thetaController;
 
-    public Swerve() {
+    public boolean isSnapping;
+    public boolean isHighGear;
+
+    public Drive() {
         gyro = new PigeonIMU(Constants.RobotMap.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
-        
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw());
+
+        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw());
 
         thetaController = new TrapezoidProfile.Constraints(
-            Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,  
-            Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared
-        );
-      
-    
+                Constants.AutoConstants.K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND,
+                Constants.AutoConstants.K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
-        isSnapping = false;
         snapPIDController = new ProfiledPIDController(KP_SNAP, KI_SNAP, KD_SNAP, thetaController);
 
         mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants),
-            new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants),
-            new SwerveModule(3, Constants.Swerve.Mod3.constants)
+                new SwerveModule(0, Constants.Swerve.Mod0.constants),
+                new SwerveModule(1, Constants.Swerve.Mod1.constants),
+                new SwerveModule(2, Constants.Swerve.Mod2.constants),
+                new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
-            String trajectoryJSON = "\n  C:/Users/Robotics/Documents/GitHub/BaseFalconSwerve/src/main/deploy/output/Unnamed.wpilib.json";
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            try {
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+        isSnapping = false;
+        isHighGear = false;
     }
 
-    public static Swerve getInstance() {
+    public static Drive getInstance() {
         return INSTANCE;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        if(isSnapping) {
-            if(Math.abs(rotation) == 0.0) {
+        if (isSnapping) {
+            if (Math.abs(rotation) == 0.0) {
                 checkStopSnap(false);
                 rotation = calculateSnapValue();
             } else {
                 checkStopSnap(true);
             }
-        } 
-        SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+        }
+        SwerveModuleState[] swerveModuleStates = 
+            Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation, 
-                                    getYaw()
-                                )
-                                : new ChassisSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation)
-                                );
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+                        isHighGear ? MathUtil.clamp(translation.getX(), -1.0, 1.0) : translation.getX(),
+                        translation.getY(),
+                        rotation,
+                        getYaw())
+                        : new ChassisSpeeds(
+                                translation.getX(),
+                                translation.getY(),
+                                rotation));
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
-        for(SwerveModule mod : mSwerveMods){
+        for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
+    }
 
-    public void checkStopSnap(boolean force){
-        if(!isSnapping){
+    public void checkStopSnap(boolean force) {
+        if (!isSnapping) {
             return;
-        } 
-        if(force || snapComplete()) {
+        }
+        if (force || snapComplete()) {
             isSnapping = false;
             snapPIDController.reset(getYaw().getRadians());
         }
@@ -126,23 +114,28 @@ public class Swerve extends SubsystemBase {
         snapPIDController.setGoal(new TrapezoidProfile.State(Math.toRadians(snapAngle), 0.0));
         isSnapping = true;
     }
-    
 
     private boolean snapComplete() {
         double error = snapPIDController.getGoal().position - getYaw().getRadians();
         return Math.abs(error) < Math.toRadians(Constants.Swerve.ESPILON_SNAP);
     }
 
+    public void setGear(boolean isHighGear) {
+        this.isHighGear = isHighGear;
+    }
 
+    public boolean getGear() {
+        return isHighGear;
+    }
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-        
-        for(SwerveModule mod : mSwerveMods){
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
+
+        for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
-    }    
+    }
 
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
@@ -156,32 +149,32 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.resetPosition(pose, getYaw());
     }
 
-    public SwerveModuleState[] getStates(){
+    public SwerveModuleState[] getStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for(SwerveModule mod : mSwerveMods){
+        for (SwerveModule mod : mSwerveMods) {
             states[mod.moduleNumber] = mod.getState();
         }
         return states;
     }
 
-    public void zeroGyro(){
+    public void zeroGyro() {
         gyro.setYaw(0);
     }
 
     public Rotation2d getYaw() {
         double[] ypr = new double[3];
         gyro.getYawPitchRoll(ypr);
-        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
+        return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
     }
 
     @Override
-    public void periodic(){
-        swerveOdometry.update(getYaw(), getStates());  
+    public void periodic() {
+        swerveOdometry.update(getYaw(), getStates());
 
-        for(SwerveModule mod : mSwerveMods){
+        for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
         }
     }
 }

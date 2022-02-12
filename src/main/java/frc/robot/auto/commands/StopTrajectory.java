@@ -2,11 +2,11 @@ package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Drive;
 
 public class StopTrajectory extends CommandBase {
 
-    private static final Swerve s_Swerve = Swerve.getInstance();
+    private static final Drive s_Swerve = Drive.getInstance();
 
     @Override
     public void initialize() {
@@ -16,7 +16,6 @@ public class StopTrajectory extends CommandBase {
 
     @Override
     public void execute() {
-
     }
 
     @Override

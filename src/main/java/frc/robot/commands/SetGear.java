@@ -5,35 +5,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
-public class SetSnap extends CommandBase {
-
-  double snapAngle;
-
-  /** Creates a new SetSnap. */
-  public SetSnap(double snapAngle) {
-    this.snapAngle = snapAngle;
+public class SetGear extends CommandBase {
+  /** Creates a new SetGear. */
+  boolean isHighGear;
+  public SetGear(boolean isHighGear) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.isHighGear = isHighGear;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Drive.getInstance().startSnap(snapAngle);
+    Drive.getInstance().setGear(isHighGear);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    Drive.getInstance().setModuleStates(Constants.Swerve.ZERO_STATES);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

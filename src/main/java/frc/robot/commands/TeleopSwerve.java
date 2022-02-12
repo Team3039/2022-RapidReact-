@@ -4,9 +4,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.InterpolatedPS4Gamepad;
-import frc.robot.subsystems.Swerve;
-
+import frc.robot.controllers.InterpolatedPS4Gamepad;
+import frc.robot.subsystems.Drive;
 
 public class TeleopSwerve extends CommandBase {
 
@@ -14,8 +13,8 @@ public class TeleopSwerve extends CommandBase {
     private Translation2d translation;
     private boolean fieldRelative;
     private boolean openLoop;
-    
-    private Swerve s_Swerve;
+
+    private Drive s_Swerve;
     private InterpolatedPS4Gamepad controller;
     private int translationAxis;
     private int strafeAxis;
@@ -24,7 +23,8 @@ public class TeleopSwerve extends CommandBase {
     /**
      * Driver control
      */
-    public TeleopSwerve(Swerve s_Swerve, InterpolatedPS4Gamepad controller, int translationAxis, int strafeAxis, int rotationAxis, boolean fieldRelative, boolean openLoop) {
+    public TeleopSwerve(Drive s_Swerve, InterpolatedPS4Gamepad controller, int translationAxis, int strafeAxis,
+            int rotationAxis, boolean fieldRelative, boolean openLoop) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
@@ -43,8 +43,8 @@ public class TeleopSwerve extends CommandBase {
             double xAxis = -controller.interpolatedLeftXAxis();
             double rAxis = controller.interpolatedRightXAxis();
 
-            translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.maxSpeed);
-            rotation = rAxis * Constants.Swerve.maxAngularVelocity;
+            translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.MAX_SPEED);
+            rotation = rAxis * Constants.Swerve.MAX_ANGULAR_VELOCITY;
             s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
         }
     }

@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.controllers;
 
 public class InterpolatedPS4Gamepad extends PS4Gamepad {
 
@@ -21,20 +21,20 @@ public class InterpolatedPS4Gamepad extends PS4Gamepad {
     }
 
     public double interpolatedLeftYAxis() {
-            if (Math.abs(this.getLeftYAxis()) <= 0.05)
-                return 0.0;
-            return ((Math.sin(this.getLeftYAxis()))/2);
-        }
+        if (Math.abs(this.getLeftYAxis()) <= 0.05)
+            return 0.0;
+        return ((Math.sin(this.getLeftYAxis())) / 2);
+    }
 
     public double interpolatedLeftXAxis() {
         if (Math.abs(this.getLeftXAxis()) <= 0.05)
             return 0.0;
-        return ((Math.sin(this.getLeftXAxis()))/2);
+        return ((Math.sin(this.getLeftXAxis())) / 2);
     }
 
     public double interpolatedRightXAxis() {
         if (Math.abs(this.getRightXAxis()) <= 0.05)
             return 0.0;
-        return -(Math.sin(this.getRightXAxis())/2);
+        return -(Math.sin(this.getRightXAxis()) / 2);
     }
 }
