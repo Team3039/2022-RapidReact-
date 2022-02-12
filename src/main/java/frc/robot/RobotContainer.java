@@ -11,12 +11,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.commands.SetGear;
-// import frc.robot.commands.SetHopperModeIndex;
 import frc.robot.commands.SetSnap;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
+
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,6 +33,13 @@ import frc.robot.subsystems.Drive;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  /* Subsystems */
+  public static final Drive drive = new Drive();
+  public static final Climber climber = new Climber();
+  public static final Intake intake = new Intake();
+  public static final Hopper hopper = new Hopper();
+  public static final Shooter shooter = new Shooter();
+  
   /* Controllers */
   private final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(0);
 

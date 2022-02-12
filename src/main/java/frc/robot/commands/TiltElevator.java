@@ -6,18 +6,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Hopper.HopperControlMode;
 
-public class SetHopperModeUnjam extends CommandBase {
-  /** Creates a new SetHopperModeUnjam. */
-  public SetHopperModeUnjam() {
+public class TiltElevator extends CommandBase {
+  /** Creates a new TiltElevator. */
+  public TiltElevator() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.hopper.setHopperControlMode(HopperControlMode.UNJAMMING);
+    RobotContainer.climber.tiltElevator(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -26,7 +25,9 @@ public class SetHopperModeUnjam extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.climber.tiltElevator(false);
+  }
 
   // Returns true when the command should end.
   @Override
