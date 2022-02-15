@@ -9,14 +9,16 @@ import frc.robot.RobotContainer;
 
 public class TiltElevator extends CommandBase {
   /** Creates a new TiltElevator. */
-  public TiltElevator() {
+  boolean isExtended;
+  public TiltElevator(boolean isExtended) {
     // Use addRequirements() here to declare subsystem dependencies.
+  this.isExtended = isExtended;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.climber.tiltElevator(true);
+    RobotContainer.climber.tiltElevator(isExtended);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -26,7 +28,7 @@ public class TiltElevator extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.tiltElevator(false);
+    RobotContainer.climber.tiltElevator(!isExtended);
   }
 
   // Returns true when the command should end.

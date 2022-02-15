@@ -7,9 +7,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class setElevator extends CommandBase {
-  /** Creates a new setElevator. */
-  public setElevator() {
+public class SetElevator extends CommandBase {
+  /** Creates a new SetElevator. */
+  public SetElevator() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

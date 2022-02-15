@@ -10,16 +10,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.auto.routines.RightFarFourBallAuto;
+import frc.robot.commands.SetElevator;
 import frc.robot.commands.SetGear;
 import frc.robot.commands.SetSnap;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TiltElevator;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 
 
@@ -55,8 +57,11 @@ public class RobotContainer {
   private final JoystickButton driverDPadDown = new JoystickButton(driver, PS4Gamepad.DPAD_DOWN);
   private final JoystickButton driverDPadLeft = new JoystickButton(driver, PS4Gamepad.DPAD_LEFT);
   private final JoystickButton driverDPadRight = new JoystickButton(driver, PS4Gamepad.DPAD_RIGHT);
-
+   
   private final JoystickButton driverR1 = new JoystickButton(driver, PS4Gamepad.BUTTON_R1);
+  private final JoystickButton driverR2 = new JoystickButton(driver, PS4Gamepad.BUTTON_R2);
+  private final JoystickButton driverL1 = new JoystickButton(driver, PS4Gamepad.BUTTON_L1);
+  private final JoystickButton driverL2 = new JoystickButton(driver, PS4Gamepad.BUTTON_L2); 
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -90,6 +95,9 @@ public class RobotContainer {
 
     driverR1.whileHeld(new SetGear(true));
     driverR1.whenReleased(new SetGear(false));
+
+    driverL1.whileHeld(new SetElevator());
+    driverL2.toggleWhenPressed(new TiltElevator(true));
   }
 
   /**
