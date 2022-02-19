@@ -9,12 +9,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.commands.SetElevator;
 import frc.robot.commands.SetGear;
+import frc.robot.commands.SetHopperModeIndex;
+import frc.robot.commands.SetHopperModeShoot;
+import frc.robot.commands.SetHopperModeUnjam;
 import frc.robot.commands.SetSnap;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TiltElevator;
+import frc.robot.commands.setShooterSpeed;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Climber;
@@ -52,6 +55,9 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
+  private final JoystickButton driverSquare = new JoystickButton(driver, PS4Gamepad.BUTTON_Square);
+  private final JoystickButton driverTriangle = new JoystickButton(driver, PS4Gamepad.BUTTON_Triangle);
+  private final JoystickButton driverCircle = new JoystickButton(driver, PS4Gamepad.BUTTON_Circle);
 
   private final JoystickButton driverDPadUp = new JoystickButton(driver, PS4Gamepad.DPAD_UP);
   private final JoystickButton driverDPadDown = new JoystickButton(driver, PS4Gamepad.DPAD_DOWN);
@@ -63,6 +69,7 @@ public class RobotContainer {
   private final JoystickButton driverL1 = new JoystickButton(driver, PS4Gamepad.BUTTON_L1);
   private final JoystickButton driverL2 = new JoystickButton(driver, PS4Gamepad.BUTTON_L2); 
 
+  private final JoystickButton driverOptions = new JoystickButton(driver, PS4Gamepad.BUTTON_OPTIONS);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -96,8 +103,17 @@ public class RobotContainer {
     driverR1.whileHeld(new SetGear(true));
     driverR1.whenReleased(new SetGear(false));
 
+    driverSquare.whenPressed(new SetHopperModeIndex());
+    driverCircle.whenPressed(new SetHopperModeShoot());
+    driverOptions.whenPressed(new SetHopperModeUnjam());
+
+
     driverL1.whileHeld(new SetElevator());
     driverL2.toggleWhenPressed(new TiltElevator(true));
+
+    driverR2.toggleWhenPressed(new setShooterSpeed(.65));
+
+
   }
 
   /**
@@ -106,7 +122,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new RightFarFourBallAuto(Drive.getInstance());
+      return null;
   }
 }
