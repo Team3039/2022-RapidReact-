@@ -5,7 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +30,8 @@ import frc.robot.subsystems.Drive;
 public class Robot extends TimedRobot {
   public static Field2d field;
 
+  public static boolean isRedAlliance;
+
   public static CTREConfigs ctreConfigs;
   public static Trajectory mTrajectory = new Trajectory();
 
@@ -43,12 +47,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    addPeriodic(
-        () -> Drive.getInstance().swerveOdometry.update(
-            Drive.getInstance().getYaw(),
-            Drive.getInstance().getStates()),
-        0.01);
-        
     ctreConfigs = new CTREConfigs();
     m_robotContainer = new RobotContainer();
 
@@ -78,7 +76,15 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    if(DriverStation.getAlliance().equals(Alliance.Red)) {
+      isRedAlliance = true;
+    }
+    else if(DriverStation.getAlliance().equals(Alliance.Blue)) {
+      isRedAlliance = false;
+    }
   }
+
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
@@ -101,6 +107,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    addPeriodic(
+      () -> Drive.getInstance().swerveOdometry.update(
+          Drive.getInstance().getYaw(),
+          Drive.getInstance().getStates()),
+      0.01);
   }
 
   @Override
