@@ -5,9 +5,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -17,11 +23,17 @@ public class Hopper extends SubsystemBase {
   TalonSRX backBelt = new TalonSRX(Constants.RobotMap.hopperBackBelt);
   TalonSRX frontWheel = new TalonSRX(Constants.RobotMap.hopperFrontWheel);
 
+  I2C.Port i2cPort = I2C.Port.kOnboard;
+  ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+
   public DigitalInput topBeam = new DigitalInput(Constants.RobotMap.topBeam);
   public DigitalInput bottomBeam = new DigitalInput(Constants.RobotMap.bottomBeam);
 
   /** Creates a new Hopper. */
   public Hopper() {
+    frontBelt.setNeutralMode(NeutralMode.Coast);
+    backBelt.setNeutralMode(NeutralMode.Coast);
+    frontWheel.setNeutralMode(NeutralMode.Coast);
   }
 
   /* Control Modes */
@@ -29,7 +41,8 @@ public class Hopper extends SubsystemBase {
     INDEXING,
     UNJAMMING,
     SHOOTING,
-    IDLE
+    IDLE,
+    REJECTING
   }
 
   public HopperControlMode hopperControlMode = HopperControlMode.IDLE;
@@ -85,6 +98,27 @@ public class Hopper extends SubsystemBase {
     }
   }
 
+  public boolean getWrongBallDetection() {
+    Color detectedColor = colorSensor.getColor();
+
+    if(DriverStation.getAlliance().equals(Alliance.Blue)) {
+      if(detectedColor.red > .4) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if(DriverStation.getAlliance().equals(Alliance.Red)) {
+      if(detectedColor.blue > .4) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+
   @Override
   public void periodic() {
 
@@ -101,6 +135,8 @@ public class Hopper extends SubsystemBase {
       case UNJAMMING:
         runFeeder(-0.5, -0.5, -0.5);
         break;
+      case REJECTING:
+        runFeeder(-.75, 0, 0);
     }
 
   }

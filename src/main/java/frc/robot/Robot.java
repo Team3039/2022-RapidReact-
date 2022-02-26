@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Turret.TurretMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -62,6 +63,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Autonomous", autonTaskChooser);
     // field.setRobotPose(Swerve.getInstance().getPose());
     // SmartDashboard.putData("Field", field);
+    
+    RobotContainer.turret.setCamMode(false);
+    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+
+
   }
 
   /**
@@ -83,6 +89,9 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    RobotContainer.turret.turretAngle = 0;
+    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+
   }
 
   @Override

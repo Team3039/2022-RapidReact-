@@ -25,6 +25,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 
 
@@ -44,6 +45,7 @@ public class RobotContainer {
   public static final Intake intake = new Intake();
   public static final Hopper hopper = new Hopper();
   public static final Shooter shooter = new Shooter();
+  public static final Turret turret = new Turret();
   
   /* Controllers */
   private final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(0);
