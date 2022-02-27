@@ -5,11 +5,13 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 public class Intake extends SubsystemBase {
     private static double kIntakingVoltage = 12.0;
@@ -29,7 +31,7 @@ public class Intake extends SubsystemBase {
 
     ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     Color detectedColor;
-    boolean isBallRed;
+    boolean isWrongBall;
 
     public Intake() {
         mMaster = new TalonFX(0);
@@ -63,10 +65,21 @@ public class Intake extends SubsystemBase {
         mState = wanted_state;
         }
 
+    public void wrongBallCheck() {
+        if (!Robot.isRedAlliance && detectedColor.red >= 0.4) 
+            isWrongBall = true;
+        else if (Robot.isRedAlliance && detectedColor.blue >= 0.4) 
+            isWrongBall = true;
+        else 
+            isWrongBall = false;
+       }
+        
+    
+
     @Override
     public void periodic() {
         detectedColor = colorSensor.getColor();
-        isBallRed = (detectedColor.red >= 0.4);
+        wrongBallCheck();
 
       synchronized (Intake.this) {
           switch(getState()) {

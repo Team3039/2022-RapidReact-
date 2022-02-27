@@ -81,7 +81,7 @@ public class Indexer extends SubsystemBase {
         if (isActive) {
             switch (Indexer.getInstance().getState()) {
                 case ACTIVE_INDEXING:
-                    if (Intake.getInstance().isBallRed != Robot.isRedAlliance)
+                    if (Intake.getInstance().isWrongBall)
                         Intake.getInstance().setState(IntakeState.REJECTION);
                     else {
                         if (!this.hasTwoBalls)
