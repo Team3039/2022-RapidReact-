@@ -62,7 +62,6 @@ public class Intake extends SubsystemBase {
     public void setState(IntakeState wanted_state) {
         mState = wanted_state;
         }
-    
 
     @Override
     public void periodic() {

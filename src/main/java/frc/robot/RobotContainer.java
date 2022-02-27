@@ -19,6 +19,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 
 
@@ -37,12 +38,16 @@ public class RobotContainer {
   public static final Intake intake = new Intake();
   public static final Indexer indexer = new Indexer();
   public static final Shooter shooter = new Shooter();
+  public static final Turret turret = new Turret();
   
   /* Controllers */
   private final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(0);
 
   /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
+  private final JoystickButton driverSquare = new JoystickButton(driver, PS4Gamepad.BUTTON_Square);
+  private final JoystickButton driverTriangle = new JoystickButton(driver, PS4Gamepad.BUTTON_Triangle);
+  private final JoystickButton driverCircle = new JoystickButton(driver, PS4Gamepad.BUTTON_Circle);
 
   private final JoystickButton driverDPadUp = new JoystickButton(driver, PS4Gamepad.DPAD_UP);
   private final JoystickButton driverDPadDown = new JoystickButton(driver, PS4Gamepad.DPAD_DOWN);
@@ -51,6 +56,7 @@ public class RobotContainer {
    
   private final JoystickButton driverR1 = new JoystickButton(driver, PS4Gamepad.BUTTON_R1);
 
+  private final JoystickButton driverOptions = new JoystickButton(driver, PS4Gamepad.BUTTON_OPTIONS);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -96,7 +102,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new RightFarFourBallAuto(Drive.getInstance());
+      return null;
   }
 }
