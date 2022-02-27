@@ -65,13 +65,14 @@ public class Intake extends SubsystemBase {
         mState = wanted_state;
         }
 
-    public void wrongBallCheck() {
+    //Checks if the color sensor detects the opponent's ball
+    public boolean wrongBallCheck() {
         if (!Robot.isRedAlliance && detectedColor.red >= 0.4) 
-            isWrongBall = true;
+            return true;
         else if (Robot.isRedAlliance && detectedColor.blue >= 0.4) 
-            isWrongBall = true;
-        else 
-            isWrongBall = false;
+            return true;
+        
+         return false;
        }
         
     
@@ -79,7 +80,6 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         detectedColor = colorSensor.getColor();
-        wrongBallCheck();
 
       synchronized (Intake.this) {
           switch(getState()) {
