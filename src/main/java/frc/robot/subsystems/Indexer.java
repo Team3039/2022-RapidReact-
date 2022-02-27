@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Intake.IntakeState;
 
 public class Indexer extends SubsystemBase {
@@ -48,7 +49,7 @@ public class Indexer extends SubsystemBase {
         mFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
         mFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 125);
 
-        mFeeder.configVoltageCompSaturation(12.0, Constants.kLongCANTimeoutMs);
+        mFeeder.configVoltageCompSaturation(12.0);
         mFeeder.enableVoltageCompensation(true);
     }
     
@@ -79,12 +80,16 @@ public class Indexer extends SubsystemBase {
         if (isActive) {
             switch (Indexer.getInstance().getState()) {
                 case ACTIVE_INDEXING:
-                    if (!this.hasTwoBalls)
-                        Intake.getInstance().setState(IntakeState.INTAKING);
-                    else if (isJamming)
+                    if (Intake.getInstance().isBallRed != Robot.isRedAlliance)
                         Intake.getInstance().setState(IntakeState.OUTTAKING);
-                    else
-                        Intake.getInstance().setState(IntakeState.IDLE);
+                    else {
+                        if (!this.hasTwoBalls)
+                            Intake.getInstance().setState(IntakeState.INTAKING);
+                        else if (isJamming)
+                            Intake.getInstance().setState(IntakeState.OUTTAKING);
+                        else
+                            Intake.getInstance().setState(IntakeState.IDLE);
+                    }
                 default:
                     break;
             }
@@ -100,12 +105,9 @@ public class Indexer extends SubsystemBase {
     public void setState(IndexerState wanted_state) {
         final IndexerState prev_state = mState;
         mState = wanted_state;
-        
-
         if (mState != prev_state && mState == IndexerState.PASSIVE_INDEXING) {
             mBackwards = !mBackwards;
         }
-
         if (mState != prev_state && mState == IndexerState.ACTIVE_INDEXING) {
             mFeeder.configClosedloopRamp(0.2, 0);
         } else if (mState != prev_state) {
@@ -123,8 +125,6 @@ public class Indexer extends SubsystemBase {
                 setOpenLoop(0.5, 0.5);
                 break;
             case ACTIVE_INDEXING:
-                
-
                 if (!hasOneBall && !hasTwoBalls)
                     setOpenLoop(0.75, 0.75);
                 if (hasOneBall)

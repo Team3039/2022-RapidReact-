@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
   /**
    * This function is run when the robot is first started up and should be used
    * for any
-   * initialization code.
+   * initialization code.s
    */
   @Override
   public void robotInit() {
@@ -64,8 +64,6 @@ public class Robot extends TimedRobot {
     
     RobotContainer.turret.setCamMode(false);
     RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
-
-
   }
 
   /**
@@ -90,7 +88,6 @@ public class Robot extends TimedRobot {
       isRedAlliance = false;
     }
   }
-
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
