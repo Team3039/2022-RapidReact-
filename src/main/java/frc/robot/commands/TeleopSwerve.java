@@ -14,24 +14,17 @@ public class TeleopSwerve extends CommandBase {
     private boolean fieldRelative;
     private boolean openLoop;
 
-    private Drive s_Swerve;
+    private Drive mDrive;
     private InterpolatedPS4Gamepad controller;
-    private int translationAxis;
-    private int strafeAxis;
-    private int rotationAxis;
 
     /**
      * Driver control
      */
-    public TeleopSwerve(Drive s_Swerve, InterpolatedPS4Gamepad controller, int translationAxis, int strafeAxis,
-            int rotationAxis, boolean fieldRelative, boolean openLoop) {
-        this.s_Swerve = s_Swerve;
-        addRequirements(s_Swerve);
+    public TeleopSwerve(Drive mDrive, InterpolatedPS4Gamepad controller, boolean fieldRelative, boolean openLoop) {
+        this.mDrive = mDrive;
+        addRequirements(mDrive);
 
         this.controller = controller;
-        this.translationAxis = translationAxis;
-        this.strafeAxis = strafeAxis;
-        this.rotationAxis = rotationAxis;
         this.fieldRelative = fieldRelative;
         this.openLoop = openLoop;
     }
@@ -45,7 +38,7 @@ public class TeleopSwerve extends CommandBase {
 
             translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.MAX_SPEED);
             rotation = rAxis * Constants.Swerve.MAX_ANGULAR_VELOCITY;
-            s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
+            mDrive.drive(translation, rotation, fieldRelative, openLoop);
         }
     }
 }
