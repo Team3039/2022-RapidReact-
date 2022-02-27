@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake.IntakeState;
 
@@ -37,6 +36,7 @@ public class Indexer extends SubsystemBase {
     private boolean hasOneBall;
     private boolean hasTwoBalls;
     private boolean isJamming;
+    public boolean isFeeding;
 
     public Indexer() {
         mFeeder = new TalonFX(0);
@@ -76,26 +76,25 @@ public class Indexer extends SubsystemBase {
         mFeeder.setNeutralMode(NeutralMode.Brake);
     }
 
-    public boolean indexIntake(boolean isActive) {
+    public void indexIntake(boolean isActive) {
+        isFeeding = isActive;
         if (isActive) {
             switch (Indexer.getInstance().getState()) {
                 case ACTIVE_INDEXING:
                     if (Intake.getInstance().isBallRed != Robot.isRedAlliance)
-                        Intake.getInstance().setState(IntakeState.OUTTAKING);
+                        Intake.getInstance().setState(IntakeState.REJECTION);
                     else {
                         if (!this.hasTwoBalls)
                             Intake.getInstance().setState(IntakeState.INTAKING);
                         else if (isJamming)
-                            Intake.getInstance().setState(IntakeState.OUTTAKING);
+                            Intake.getInstance().setState(IntakeState.REJECTION);
                         else
                             Intake.getInstance().setState(IntakeState.IDLE);
                     }
                 default:
                     break;
             }
-            return true;
         }
-        return false;
     }
 
     public synchronized void setBackwardsMode(boolean backwards) {
@@ -105,14 +104,6 @@ public class Indexer extends SubsystemBase {
     public void setState(IndexerState wanted_state) {
         final IndexerState prev_state = mState;
         mState = wanted_state;
-        if (mState != prev_state && mState == IndexerState.PASSIVE_INDEXING) {
-            mBackwards = !mBackwards;
-        }
-        if (mState != prev_state && mState == IndexerState.ACTIVE_INDEXING) {
-            mFeeder.configClosedloopRamp(0.2, 0);
-        } else if (mState != prev_state) {
-            mFeeder.configClosedloopRamp(0.0, 0);
-        }
     }
 
     @Override
@@ -123,6 +114,7 @@ public class Indexer extends SubsystemBase {
                 break;
             case PASSIVE_INDEXING:
                 setOpenLoop(0.5, 0.5);
+                indexIntake(true);
                 break;
             case ACTIVE_INDEXING:
                 if (!hasOneBall && !hasTwoBalls)
@@ -131,6 +123,7 @@ public class Indexer extends SubsystemBase {
                     setOpenLoop(0.25, 0);
                 if (hasTwoBalls)
                     setOpenLoop(0, 0);
+                indexIntake(false);
                 break;
             case CLIMB:
                 mGripper.set(ControlMode.Disabled, 0);

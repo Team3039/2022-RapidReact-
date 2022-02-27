@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
     private Solenoid mDeploySolenoid;
 
     public enum IntakeState {
-        IDLE, INTAKING, OUTTAKING, INDEXING,
+        IDLE, INTAKING, REJECTION, INDEXING,
     }
 
     private IntakeState mState = IntakeState.IDLE;
@@ -66,13 +66,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         detectedColor = colorSensor.getColor();
-
-        if(detectedColor.red >= 0.4) {
-            isBallRed = true;
-        }
-        else {
-            isBallRed = false;
-        }
+        isBallRed = (detectedColor.red >= 0.4);
 
       synchronized (Intake.this) {
           switch(getState()) {
@@ -81,10 +75,13 @@ public class Intake extends SubsystemBase {
                 mMaster.set(ControlMode.PercentOutput, 0.0);
                 break;
             case INTAKING:
-                mDeploySolenoid.set(true);
+                if (!Indexer.getInstance().isFeeding)
+                    mDeploySolenoid.set(true);
                 mMaster.set(ControlMode.PercentOutput, 0.75);
                 break;
-            case OUTTAKING:
+            case REJECTION:
+                if (!Indexer.getInstance().isFeeding)
+                    mDeploySolenoid.set(true);
                 mMaster.set(ControlMode.PercentOutput, -0.25);
                 break;
             default:
