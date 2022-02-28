@@ -5,12 +5,12 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.ColorSensorV3;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class Intake extends SubsystemBase {
@@ -34,12 +34,12 @@ public class Intake extends SubsystemBase {
     boolean isWrongBall;
 
     public Intake() {
-        mMaster = new TalonFX(0);
+        mMaster = new TalonFX(Constants.RobotMap.intake);
         mMaster.changeMotionControlFramePeriod(255);
         mMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
         mMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 255);
         mMaster.setInverted(true);
-        mDeploySolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        mDeploySolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RobotMap.intakeDeploy);
     }
 
     public synchronized static Intake getInstance() {
@@ -74,8 +74,6 @@ public class Intake extends SubsystemBase {
         
          return false;
        }
-        
-    
 
     @Override
     public void periodic() {

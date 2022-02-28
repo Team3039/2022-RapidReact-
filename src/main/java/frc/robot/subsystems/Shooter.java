@@ -8,12 +8,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 
 public class Shooter extends SubsystemBase {
-  public TalonFX shooter = new TalonFX(0);
+  public TalonFX shooter = new TalonFX(Constants.RobotMap.shooter);
 
   /** Creates a new Shotoer. */
   public Shooter() {
@@ -25,20 +25,19 @@ public class Shooter extends SubsystemBase {
     shooter.config_kD(0, 0);
   }
 
-  public BangBangController mWPIController = new BangBangController(0.1);
+  // Velocity in ticks per 100ms  (getSelectedSensorVelocity)
+  public double velocityToRPM(double velocity) {
+    return velocity / Constants.Shooter.SHOOTER_TO_ENCODER_RATIO / Constants.Shooter.TICKS_PER_ROTATION * 600;
+  }
+  
+  public double RPMToVelocity(double rpm) {
+    return rpm * Constants.Shooter.SHOOTER_TO_ENCODER_RATIO * Constants.Shooter.TICKS_PER_ROTATION / 600;
+ }
 
-  public void setShooterSpeedBang(double setPoint) {
-    shooter.set(ControlMode.PercentOutput,
-        MathUtil.clamp(mWPIController.calculate(shooter.getSelectedSensorVelocity(), setPoint), 0, 0.8));
+  public void setShooterRPM(double rpm) {
+    shooter.set(ControlMode.Velocity, RPMToVelocity(rpm));
   }
 
-  public void setShooterSpeed(double desiredVoltage) {
-    shooter.set(ControlMode.PercentOutput, desiredVoltage);
-  }
-
-  public void setShooterSpeedPID() {
-    shooter.getClosedLoopError();
-  }
 
   @Override
   public void periodic() {

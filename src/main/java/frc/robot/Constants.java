@@ -12,22 +12,21 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
 
-    // Port numbers for motors and solenoids
     public static final class RobotMap {
 
         public static final int pigeonID = 12;
 
         /* change these later when robot is fully wired */
         public static final int intake = 1;
-        public static final int intakeTilt = 1;
+        public static final int intakeDeploy = 1;
 
-        public static final int hopperFrontBelt = 1;
-        public static final int hopperBackBelt = 1;
-        public static final int hopperFrontWheel = 1;
+        public static final int hopperFeeder = 1;
+        public static final int hopperGripper = 1;
 
-        public static final int shooterA = 1;
-        public static final int shooterB = 1;
-        public static final int topWheel = 1;
+        public static final int hopperFeederGate = 0;
+        public static final int hopperGripperGate = 1;
+
+        public static final int shooter = 1;
 
         public static final int climberRaiseA = 1;
         public static final int climberRaiseB = 1;
@@ -35,11 +34,13 @@ public final class Constants {
         public static final int climberTiltA = 1;
         public static final int climberTiltB = 1;
 
-        public static final int topBeam = 1;
-        public static final int bottomBeam = 1;
-
         public static final int turret = 1;
 
+    }
+
+    public static final class Shooter {
+        public static final double SHOOTER_TO_ENCODER_RATIO = 1;
+        public static final double TICKS_PER_ROTATION = 2048;
     }
 
     public static final class Turret {
