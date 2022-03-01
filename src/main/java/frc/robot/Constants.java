@@ -47,6 +47,11 @@ public final class Constants {
         public static final double kP_TURRET_TRACK = 0.03;
         public static final double kP_TURRET_RESET_POS = 0.015;
     }
+
+    public static final class Indexer {
+        //Change later
+        public static final double JAMMING_CURRENT_THRESHOLD = 30;
+    }
     public static final class Swerve {
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
 

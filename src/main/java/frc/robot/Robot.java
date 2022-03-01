@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -30,6 +31,8 @@ import frc.robot.subsystems.Turret.TurretMode;
  */
 public class Robot extends TimedRobot {
   public static Field2d field;
+
+  public static Timer mTimer = new Timer();
 
   public static boolean isRedAlliance;
 

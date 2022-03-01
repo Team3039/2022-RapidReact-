@@ -22,7 +22,7 @@ public class Indexer extends SubsystemBase {
     private static final double kCurrentIgnoreTime = 1.0; 
 
     public enum IndexerState {
-        IDLE, PASSIVE_INDEXING,  ACTIVE_INDEXING, CLIMBING, HELLA_ZOOMING, CLIMB,
+        IDLE, PASSIVE_INDEXING,  ACTIVE_INDEXING, CLIMBING, HELLA_ZOOMING, UNJAMMING
     }
 
     private final TalonFX mGripper;
@@ -75,6 +75,10 @@ public class Indexer extends SubsystemBase {
         hasTwoBalls = hasOneBall && !mGripperGate.get();
     }
 
+    public void jammingCheck() {
+        isJamming = (mFeeder.getStatorCurrent() > Constants.Indexer.JAMMING_CURRENT_THRESHOLD && hasOneBall);
+    }
+
     public synchronized void setOpenLoop(
       double gripperOutput,
       double feederOutput) {
@@ -95,8 +99,6 @@ public class Indexer extends SubsystemBase {
                     else {
                         if (!this.hasTwoBalls)
                             Intake.getInstance().setState(IntakeState.INTAKING);
-                        else if (isJamming)
-                            Intake.getInstance().setState(IntakeState.REJECTION);
                         else
                             Intake.getInstance().setState(IntakeState.IDLE);
                     }
@@ -115,6 +117,9 @@ public class Indexer extends SubsystemBase {
     @Override
     public void periodic() {
         gateCheck();
+        jammingCheck();
+        if (isJamming) 
+            setState(IndexerState.UNJAMMING);
 
         switch (mState) {
             case IDLE:
@@ -135,10 +140,19 @@ public class Indexer extends SubsystemBase {
                     setOpenLoop(0, 0);
                 indexIntake();
                 break;
-            case CLIMB:
+            case CLIMBING:
                 mGripper.set(ControlMode.Disabled, 0);
                 mFeeder.set(ControlMode.Disabled, 0);
                 break;
+            case UNJAMMING:
+                if(isJamming) {
+                    setOpenLoop(-0.25, -0.25);
+                    Intake.getInstance().setState(IntakeState.REJECTION);
+                }
+                else {
+                    setOpenLoop(0, 0);
+                    Intake.getInstance().setState(IntakeState.IDLE);
+                }
             default:
                 System.out.println("Fell through on Indexer states!");
             }
