@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.SetGear;
+import frc.robot.commands.IntakeCargo;
+import frc.robot.commands.SetDriveDefenseMode;
 import frc.robot.commands.SetSnap;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.TeleopSwerve;
@@ -59,6 +61,10 @@ public class RobotContainer {
   private final JoystickButton driverDPadRight = new JoystickButton(driver, PS4Gamepad.DPAD_RIGHT);
    
   private final JoystickButton driverR1 = new JoystickButton(driver, PS4Gamepad.BUTTON_R1);
+  private final JoystickButton driverR2 = new JoystickButton(driver, PS4Gamepad.BUTTON_R2);
+
+  private final JoystickButton driverL1 = new JoystickButton(driver, PS4Gamepad.BUTTON_L1);
+  private final JoystickButton driverL2 = new JoystickButton(driver, PS4Gamepad.BUTTON_L2);
 
   private final JoystickButton driverOptions = new JoystickButton(driver, PS4Gamepad.BUTTON_OPTIONS);
   private final JoystickButton driverShare = new JoystickButton(driver, PS4Gamepad.BUTTON_SHARE);
@@ -97,10 +103,10 @@ public class RobotContainer {
     driverDPadLeft.whileHeld(new SetSnap(90));
     driverDPadRight.whileHeld(new SetSnap(270));
 
-    driverR1.whileHeld(new SetGear(true));
-    driverR1.whenReleased(new SetGear(false));
-
     driverShare.whileHeld(new SetUnjamming());
+    driverL1.whileHeld(new IntakeCargo());
+
+    driverR2.whileHeld(new SetDriveDefenseMode());
   }
 
   /**

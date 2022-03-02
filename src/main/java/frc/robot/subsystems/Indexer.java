@@ -61,6 +61,29 @@ public class Indexer extends SubsystemBase {
         mFeeder.setNeutralMode(NeutralMode.Brake);
     }
 
+    public void indexIntake() {
+        switch (Indexer.getInstance().getState()) {
+          case ACTIVE_INDEXING:
+            if (Intake.getInstance().isWrongBall())
+              Intake.getInstance().setState(IntakeState.OUTTAKING);
+            else {
+              if (!Superstructure.getInstance().hasTwoBalls)
+                Intake.getInstance().setState(IntakeState.INTAKING);
+              else
+                Intake.getInstance().setState(IntakeState.IDLE);
+            }
+            break;
+          case PASSIVE_INDEXING:
+            Intake.getInstance().setState(IntakeState.INTAKING);
+            break;
+          case UNJAMMING:
+            Intake.getInstance().setState(IntakeState.OUTTAKING);
+            break;
+          default:
+            break;
+        }
+      }
+
     @Override
     public void periodic() {
         switch (mState) {
@@ -69,6 +92,7 @@ public class Indexer extends SubsystemBase {
                 break;
             case PASSIVE_INDEXING:
                 setOpenLoop(0.5, 0.5);
+                indexIntake();
                 break;
             case ACTIVE_INDEXING:
                 if (!Superstructure.getInstance().hasOneBall && !Superstructure.getInstance().hasTwoBalls)
@@ -77,6 +101,7 @@ public class Indexer extends SubsystemBase {
                     setOpenLoop(0.25, 0);
                 else if (Superstructure.getInstance().hasTwoBalls)
                     setOpenLoop(0, 0);
+                indexIntake();
                 break;
             case CLIMBING:
                 mGripper.set(ControlMode.Disabled, 0);
@@ -84,6 +109,7 @@ public class Indexer extends SubsystemBase {
                 break;
             case UNJAMMING:
                 setOpenLoop(-0.25, -0.25);
+                indexIntake();
                 break;
             default:
                 System.out.println("Fell through on Indexer states!");

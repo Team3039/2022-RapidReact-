@@ -64,8 +64,8 @@ public final class Vector2 implements Interpolable<Vector2>, Serializable {
 	 * @return A unit vector with the specified angle.
      * @since 0.2
 	 */
-	public static Vector2 fromAngle(Rotation2d rotation) {
-		return new Vector2(rotation.getCos(), rotation.getSin());
+	public static Vector2 fromAngle(Rotation2 rotation) {
+		return new Vector2(rotation.cos, rotation.sin);
 	}
 
 	/**
@@ -91,8 +91,8 @@ public final class Vector2 implements Interpolable<Vector2>, Serializable {
      * @return A rotation representing the vector's angle
      * @since 0.2
      */
-	public Rotation2d getAngle() {
-		return new Rotation2d(x, y);
+	public Rotation2 getAngle() {
+		return new Rotation2(x, y, true);
 	}
 
     /**
@@ -222,8 +222,8 @@ public final class Vector2 implements Interpolable<Vector2>, Serializable {
 	 * @return A vector rotated by the specified amount
      * @since 0.2
 	 */
-	public Vector2 rotateBy(Rotation2d rotation) {
-		return new Vector2(x * rotation.getCos() - y * rotation.getSin(), x * rotation.getSin() + y * rotation.getCos());
+	public Vector2 rotateBy(Rotation2 rotation) {
+		return new Vector2(x * rotation.cos - y * rotation.sin, x * rotation.sin + y * rotation.cos);
 	}
 
     /**

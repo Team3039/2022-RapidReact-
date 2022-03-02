@@ -18,10 +18,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Indexer.IndexerState;
-import frc.robot.subsystems.Intake.IntakeState;
-import frc.robot.subsystems.Turret.TurretState;
 
 /**
  * The VM is configured to automatically run this class, and to call the

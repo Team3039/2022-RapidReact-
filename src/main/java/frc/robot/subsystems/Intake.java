@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -26,16 +26,14 @@ public class Intake extends SubsystemBase {
 
     private IntakeState mState = IntakeState.IDLE;
 
-    private final TalonFX mMaster;
+    private final CANSparkMax mMaster;
 
     ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     Color detectedColor;
 
     public Intake() {
-        mMaster = new TalonFX(Constants.RobotMap.intake);
-        mMaster.changeMotionControlFramePeriod(255);
-        mMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
-        mMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 255);
+        mMaster = new CANSparkMax(Constants.RobotMap.intake, MotorType.kBrushless);
+        mMaster.setIdleMode(IdleMode.kCoast);
         mMaster.setInverted(true);
         mDeploySolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RobotMap.intakeDeploy);
     }
@@ -49,11 +47,7 @@ public class Intake extends SubsystemBase {
     }
 
     public synchronized void setOpenLoop(double percentage) {
-        mMaster.set(ControlMode.PercentOutput, percentage);
-    }
-
-    public double getVoltage() {
-        return mMaster.getMotorOutputVoltage();
+        mMaster.set(percentage);
     }
 
     public void setState(IntakeState wanted_state) {
@@ -76,17 +70,17 @@ public class Intake extends SubsystemBase {
             switch (getState()) {
                 case IDLE:
                     mDeploySolenoid.set(false);
-                    mMaster.set(ControlMode.PercentOutput, 0.0);
+                    setOpenLoop(0);
                     break;
                 case INTAKING:
                     if (Indexer.getInstance().getState().equals(IndexerState.ACTIVE_INDEXING))
                         mDeploySolenoid.set(true);
-                    mMaster.set(ControlMode.PercentOutput, 0.75);
+                    setOpenLoop(.35);
                     break;
                 case OUTTAKING:
                     if (!Indexer.getInstance().getState().equals(IndexerState.ACTIVE_INDEXING))
                         mDeploySolenoid.set(true);
-                    mMaster.set(ControlMode.PercentOutput, -0.25);
+                    setOpenLoop(-.25);
                     break;
                 default:
                     break;

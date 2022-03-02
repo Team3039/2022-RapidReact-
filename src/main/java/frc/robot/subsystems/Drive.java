@@ -22,6 +22,9 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.InterpolatingDouble;
+import frc.lib.util.InterpolatingTreeMap;
+import frc.lib.util.RigidTransform2;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
 
@@ -37,6 +40,8 @@ public class Drive extends SubsystemBase {
     }
 
     public static DriveState mState = DriveState.AUTO;
+
+    private final InterpolatingTreeMap<InterpolatingDouble, RigidTransform2> latencyCompensationMap = new InterpolatingTreeMap<>();
 
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
@@ -82,7 +87,7 @@ public class Drive extends SubsystemBase {
         return mState;
     }
 
-    public static void setState(DriveState traverseState) {
+    public void setState(DriveState traverseState) {
         mState = traverseState;
     }
 
@@ -185,9 +190,16 @@ public class Drive extends SubsystemBase {
         return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
     }
 
+    public RigidTransform2 getPoseAtTime(double timestamp) {
+            if (latencyCompensationMap.isEmpty()) {
+                return RigidTransform2.ZERO;
+            }
+            return latencyCompensationMap.getInterpolated(new InterpolatingDouble(timestamp));
+    }
+    
     @Override
     public void periodic() {
-        switch (Drive.getInstance().getState()) {
+        switch (getState()) {
             case AUTO:
                 swerveOdometry.update(getYaw(), getStates());
                 isAltCenter = false;

@@ -56,35 +56,12 @@ public class Superstructure extends SubsystemBase {
     return INSTANCE;
   }
 
-  public void indexIntake() {
-    switch (Indexer.getInstance().getState()) {
-      case ACTIVE_INDEXING:
-        if (Intake.getInstance().isWrongBall())
-          Intake.getInstance().setState(IntakeState.OUTTAKING);
-        else {
-          if (!hasTwoBalls)
-            Intake.getInstance().setState(IntakeState.INTAKING);
-          else
-            Intake.getInstance().setState(IntakeState.IDLE);
-        }
-        break;
-      case PASSIVE_INDEXING:
-        Intake.getInstance().setState(IntakeState.INTAKING);
-        break;
-      case UNJAMMING:
-        Intake.getInstance().setState(IntakeState.OUTTAKING);
-        break;
-      default:
-        break;
-    }
-  }
-
   @Override
   public void periodic() {
     hasOneBall = !mFeederGate.get();
     hasTwoBalls = hasOneBall && !mGripperGate.get();
 
-    switch (Superstructure.getInstance().getState()) {
+    switch (getState()) {
       case CLIMBING:
         break;
       case IDLE:
@@ -95,18 +72,15 @@ public class Superstructure extends SubsystemBase {
         break;
       case INTAKING:
         Indexer.getInstance().setState(IndexerState.ACTIVE_INDEXING);
-        indexIntake();
         break;
       case SHOOTING:
         Shooter.getInstance().setState(ShooterState.SHOOTING);
         Indexer.getInstance().setState(IndexerState.PASSIVE_INDEXING);
         Turret.getInstance().setState(TurretState.TRACKING);
-        indexIntake();
         break;
       case UNJAMMING:
         Indexer.getInstance().setState(IndexerState.UNJAMMING);
         Shooter.getInstance().setState(ShooterState.UNJAMMING);
-        indexIntake();
         break;
       default:
         break;

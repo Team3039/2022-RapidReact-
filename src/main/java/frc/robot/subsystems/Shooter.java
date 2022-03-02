@@ -14,23 +14,24 @@ import frc.lib.util.InterpolatingTreeMap;
 import frc.lib.util.Vector2;
 import frc.robot.Constants;
 
-
 public class Shooter extends SubsystemBase {
 
   public static Shooter INSTANCE = new Shooter();
   public static ShooterState mState = ShooterState.IDLE;
 
-  public TalonFX mMaster = new TalonFX(Constants.RobotMap.shooter);
-  public TalonFX mSlave = new TalonFX(Constants.RobotMap.shooter);
+  public TalonFX mMaster = new TalonFX(Constants.RobotMap.shooterA);
+  public TalonFX mSlave = new TalonFX(Constants.RobotMap.shooterB);
+
+  public double setpoint = 0;
+  public boolean atSetpoint = false;
 
   public static InterpolatingTreeMap<InterpolatingDouble, Vector2> mShooterMap = new InterpolatingTreeMap();
 
-  
   /** Creates a new Shotoer. */
   public Shooter() {
     mMaster.setInverted(true);
     mMaster.setNeutralMode(NeutralMode.Coast);
-    
+
     mSlave.follow(mMaster);
 
     mMaster.config_kP(0, 0.5);
@@ -39,7 +40,7 @@ public class Shooter extends SubsystemBase {
 
     mShooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
   }
-  
+
   public static Shooter getInstance() {
     return INSTANCE;
   }
@@ -62,24 +63,34 @@ public class Shooter extends SubsystemBase {
   public double velocityToRPM(double velocity) {
     return velocity / Constants.Shooter.SHOOTER_TO_ENCODER_RATIO / Constants.Shooter.TICKS_PER_ROTATION * 600;
   }
-  
+
   public double RPMToVelocity(double rpm) {
     return rpm * Constants.Shooter.SHOOTER_TO_ENCODER_RATIO * Constants.Shooter.TICKS_PER_ROTATION / 600;
- }
+  }
 
   public void setShooterRPM(double rpm) {
     mMaster.set(ControlMode.Velocity, RPMToVelocity(rpm));
   }
 
+  public Vector2 calculateShooterOutput(double distance) {
+    return mShooterMap.getInterpolated(new InterpolatingDouble(Double.valueOf(distance)));
+  }
+
   @Override
   public void periodic() {
-    switch (Shooter.getInstance().getState()) {
+    switch (getState()) {
       case IDLE:
         mMaster.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
+        mMaster.set(ControlMode.Velocity, RPMToVelocity(
+            mShooterMap.getInterpolated(
+                new InterpolatingDouble(
+                    Double.valueOf(
+                        LLDriver.getInstance().getDistanceToTarget().getAsDouble()))).y));
         break;
       case SPIN_UP:
+        mMaster.set(ControlMode.PercentOutput, 0.5);
         break;
       case UNJAMMING:
         mMaster.set(ControlMode.PercentOutput, 0.45);

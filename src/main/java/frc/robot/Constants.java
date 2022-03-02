@@ -36,7 +36,6 @@ public final class Constants {
         // public static final int climberTiltB = 1;
 
         public static final int turret = 9;
-
     }
 
     public static final class Shooter {
@@ -47,12 +46,15 @@ public final class Constants {
     public static final class Turret {
         public static final double kP_TURRET_TRACK = 0.03;
         public static final double kP_TURRET_RESET_POS = 0.015;
+
+        public static final double TURRET_TO_ENCODER_RATIO = (159 / 29);
     }
 
     public static final class Indexer {
         //Change later
         public static final double JAMMING_CURRENT_THRESHOLD = 30;
     }
+
     public static final class Swerve {
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
 
