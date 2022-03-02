@@ -9,23 +9,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Turret extends SubsystemBase {
 
-  public enum TurretMode {
+  public enum TurretState {
     TRACKING,
     DRIVE,
-    LEFT,
-    RIGHT
   }
 
   public double turretAngle;
-  private TurretMode turretmode = TurretMode.DRIVE;
+  private TurretState turretState = TurretState.DRIVE;
 
   TalonSRX turret = new TalonSRX(Constants.RobotMap.turret);
 
@@ -38,12 +34,12 @@ public class Turret extends SubsystemBase {
   public Turret() {
   }
 
-  public void setTurretMode(TurretMode Mode) {
-    this.turretmode = Mode;
+  public void setState(TurretState State) {
+    this.turretState = State;
   }
 
-  public TurretMode getTurretMode() {
-    return turretmode;
+  public TurretState getTurretState() {
+    return turretState;
   }
 
   public void setCamMode(boolean setVision) {
@@ -96,6 +92,8 @@ public class Turret extends SubsystemBase {
     turret.set(ControlMode.PercentOutput, correctionX);
   }
 
+  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -106,7 +104,7 @@ public class Turret extends SubsystemBase {
 
     SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
 
-    TurretMode currentMode = getTurretMode();
+    TurretState currentMode = getTurretState();
     switch (currentMode) {
       case TRACKING:
         setCamMode(true);

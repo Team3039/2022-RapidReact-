@@ -6,29 +6,30 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Turret.TurretState;
+import frc.robot.subsystems.Indexer.IndexerState;
 
-public class TrackTarget extends CommandBase {
-
-  /** Creates a new trackTarget. */
-  public TrackTarget() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class SetActiveIndexing extends CommandBase {
+  /** Creates a new SetActiveIndexing. */
+  public SetActiveIndexing() {
+    addRequirements(RobotContainer.indexer);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.turret.setState(TurretState.TRACKING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
-  
+  public void execute() {
+    RobotContainer.indexer.setState(IndexerState.ACTIVE_INDEXING);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.indexer.setState(IndexerState.IDLE);
+  }
 
   // Returns true when the command should end.
   @Override

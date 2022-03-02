@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Turret.TurretMode;
+import frc.robot.subsystems.Turret.TurretState;
 
 public class SetTurretPos extends CommandBase {
   /** Creates a new SetTurretPos. */
@@ -22,7 +22,7 @@ public class SetTurretPos extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.turret.turretAngle = angle;
-    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+    RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

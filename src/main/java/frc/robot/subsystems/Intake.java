@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
     private Solenoid mDeploySolenoid;
 
     public enum IntakeState {
-        IDLE, INTAKING, REJECTION, INDEXING,
+        IDLE, INTAKING, OUTTAKING, INDEXING,
     }
 
     private IntakeState mState = IntakeState.IDLE;
@@ -31,7 +31,6 @@ public class Intake extends SubsystemBase {
 
     ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     Color detectedColor;
-    boolean isWrongBall;
 
     public Intake() {
         mMaster = new TalonFX(Constants.RobotMap.intake);
@@ -66,7 +65,7 @@ public class Intake extends SubsystemBase {
         }
 
     //Checks if the color sensor detects the opponent's ball
-    public boolean wrongBallCheck() {
+    public boolean isWrongBall() {
         if (!Robot.isRedAlliance && detectedColor.red >= 0.4) 
             return true;
         else if (Robot.isRedAlliance && detectedColor.blue >= 0.4) 
@@ -90,7 +89,7 @@ public class Intake extends SubsystemBase {
                     mDeploySolenoid.set(true);
                 mMaster.set(ControlMode.PercentOutput, 0.75);
                 break;
-            case REJECTION:
+            case OUTTAKING:
                 if (!Indexer.getInstance().isFeeding)
                     mDeploySolenoid.set(true);
                 mMaster.set(ControlMode.PercentOutput, -0.25);

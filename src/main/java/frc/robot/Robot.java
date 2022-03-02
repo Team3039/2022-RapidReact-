@@ -6,9 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Turret.TurretMode;
+import frc.robot.subsystems.Indexer.IndexerState;
+import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Turret.TurretState;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -66,7 +68,10 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putData("Field", field);
     
     RobotContainer.turret.setCamMode(false);
-    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+    RobotContainer.turret.setState(TurretState.DRIVE);
+
+    RobotContainer.indexer.setState(IndexerState.IDLE);
+    RobotContainer.intake.setState(IntakeState.IDLE);
   }
 
   /**
@@ -96,7 +101,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     RobotContainer.turret.turretAngle = 0;
-    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
+    RobotContainer.turret.setState(TurretState.DRIVE);
 
   }
 
