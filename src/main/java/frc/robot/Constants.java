@@ -20,21 +20,22 @@ public final class Constants {
         public static final int intake = 1;
         public static final int intakeDeploy = 1;
 
-        public static final int hopperFeeder = 1;
-        public static final int hopperGripper = 1;
+        public static final int hopperFeeder = 10;
+        public static final int hopperGripper = 8;
 
         public static final int hopperFeederGate = 0;
         public static final int hopperGripperGate = 1;
 
-        public static final int shooter = 1;
+        public static final int shooterA = 11;
+        public static final int shooterB = 12;
 
-        public static final int climberRaiseA = 1;
-        public static final int climberRaiseB = 1;
+        // public static final int climberRaiseA = 1;
+        // public static final int climberRaiseB = 1;
 
-        public static final int climberTiltA = 1;
-        public static final int climberTiltB = 1;
+        // public static final int climberTiltA = 1;
+        // public static final int climberTiltB = 1;
 
-        public static final int turret = 1;
+        public static final int turret = 9;
 
     }
 
@@ -154,9 +155,9 @@ public final class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final int driveMotorID = 6;
-            public static final int angleMotorID = 7;
-            public static final int canCoderID = 3;
+            public static final int driveMotorID = 4;
+            public static final int angleMotorID = 5;
+            public static final int canCoderID = 2;
             public static final double angleOffset = 119.97;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -164,9 +165,9 @@ public final class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final int driveMotorID = 4;
-            public static final int angleMotorID = 5;
-            public static final int canCoderID = 2;
+            public static final int driveMotorID = 6;
+            public static final int angleMotorID = 7;
+            public static final int canCoderID = 3;
             public static final double angleOffset = 97.99;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
