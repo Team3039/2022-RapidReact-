@@ -95,7 +95,8 @@ public class Drive extends SubsystemBase {
                 checkStopSnap(true);
             }
         }
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = 
+        Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         isHighGear ? MathUtil.clamp(translation.getX(), -1.0, 1.0) : translation.getX(),
                         translation.getY(),

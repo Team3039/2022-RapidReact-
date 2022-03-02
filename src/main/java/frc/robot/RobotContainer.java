@@ -9,9 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.SetActiveIndexing;
 import frc.robot.commands.SetGear;
-import frc.robot.commands.SetPassiveIndexing;
 import frc.robot.commands.SetSnap;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.TeleopSwerve;
@@ -102,8 +100,6 @@ public class RobotContainer {
     driverR1.whileHeld(new SetGear(true));
     driverR1.whenReleased(new SetGear(false));
 
-    driverSquare.whileHeld(new SetActiveIndexing());
-    driverX.whileHeld(new SetPassiveIndexing());
     driverShare.whileHeld(new SetUnjamming());
   }
 
