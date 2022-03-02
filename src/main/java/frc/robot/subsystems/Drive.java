@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,17 +29,26 @@ public class Drive extends SubsystemBase {
 
     public static Drive INSTANCE = new Drive();
 
+    public static enum DriveState {
+        AUTO,
+        PRECISION,
+        DEFENSE,
+        SPEED
+    }
+
+    public static DriveState mState = DriveState.AUTO;
+
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
 
     public ProfiledPIDController snapPIDController;
 
-    public static Trajectory trajectory = new Trajectory();
     public static TrapezoidProfile.Constraints thetaController;
 
     public boolean isSnapping;
     public boolean isHighGear;
+    public boolean isAltCenter;
 
     public Drive() {
         gyro = new PigeonIMU(Constants.RobotMap.pigeonID);
@@ -68,6 +78,14 @@ public class Drive extends SubsystemBase {
         return INSTANCE;
     }
 
+    public static DriveState getState() {
+        return mState;
+    }
+
+    public static void setState(DriveState traverseState) {
+        mState = traverseState;
+    }
+
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         if (isSnapping) {
             if (Math.abs(rotation) == 0.0) {
@@ -77,8 +95,7 @@ public class Drive extends SubsystemBase {
                 checkStopSnap(true);
             }
         }
-        SwerveModuleState[] swerveModuleStates = 
-            Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         isHighGear ? MathUtil.clamp(translation.getX(), -1.0, 1.0) : translation.getX(),
                         translation.getY(),
@@ -169,7 +186,28 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        swerveOdometry.update(getYaw(), getStates());
+        switch (Drive.getInstance().getState()) {
+            case AUTO:
+                swerveOdometry.update(getYaw(), getStates());
+                isAltCenter = false;
+                break;
+            case DEFENSE:
+                isHighGear = true;
+                isAltCenter = true;
+                break;
+            case PRECISION:
+                isHighGear = false;
+                isAltCenter = false;
+                break;
+            case SPEED:
+                isHighGear = true;
+                isAltCenter = false;
+                break;
+            default:
+                isHighGear = true;
+                isAltCenter = false;
+                break;
+        }
 
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());

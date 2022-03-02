@@ -20,6 +20,12 @@ public class Turret extends SubsystemBase {
     DRIVE,
   }
 
+  public static Turret INSTANCE = new Turret();
+
+  public static Turret getInstance() {
+    return INSTANCE;
+  }
+
   public double turretAngle;
   private TurretState turretState = TurretState.DRIVE;
 
@@ -30,8 +36,12 @@ public class Turret extends SubsystemBase {
   public static double targetY; // Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
   public static double targetArea; // Target Area (0% of image to 100% of image)
 
-  /** Creates a new Turret. */
   public Turret() {
+    turret.configForwardSoftLimitThreshold(1000);
+    turret.configForwardSoftLimitEnable(true);
+
+    turret.configReverseSoftLimitThreshold(1000);
+    turret.configReverseSoftLimitEnable(true);
   }
 
   public void setState(TurretState State) {
@@ -62,16 +72,7 @@ public class Turret extends SubsystemBase {
     double errorX = targetX % 360;
     double correctionX = errorX * Constants.Turret.kP_TURRET_TRACK;
 
-    // SmartDashboard.putNumber("turretOutput", correctionX);
-    // SmartDashboard.putNumber("targetX", targetX);
-
-    if (turret.getSelectedSensorPosition() >= 90 && targetX < 0) {
-      turret.set(ControlMode.PercentOutput, 0);
-    } else if (turret.getSelectedSensorPosition() <= -90 && targetX > 0) {
-      turret.set(ControlMode.PercentOutput, 0);
-    } else {
-      turret.set(ControlMode.PercentOutput, correctionX);
-    }
+    turret.set(ControlMode.PercentOutput, correctionX);
   }
 
   public void stop() {

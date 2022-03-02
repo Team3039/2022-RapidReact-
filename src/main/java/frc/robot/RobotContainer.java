@@ -20,7 +20,9 @@ import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Turret;
 
 
@@ -35,12 +37,14 @@ import frc.robot.subsystems.Turret;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  /* Subsystems */
-  public static final Drive drive = new Drive();
-  public static final Intake intake = new Intake();
-  public static final Indexer indexer = new Indexer();
-  public static final Shooter shooter = new Shooter();
-  public static final Turret turret = new Turret();
+
+  public static Drive mDrive = Drive.getInstance();
+  public static Indexer mIndexer = Indexer.getInstance();
+  public static Intake mIntake = Intake.getInstance();
+  public static Shooter mShooter = Shooter.getInstance();
+  public static Turret mTurret = Turret.getInstance();
+  public static LEDs mLEDs = new LEDs();
+  public static Superstructure mSuperstructure = Superstructure.getInstance();
   
   /* Controllers */
   private final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(0);

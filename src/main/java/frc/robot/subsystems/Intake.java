@@ -12,12 +12,11 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.subsystems.Indexer.IndexerState;
 
 public class Intake extends SubsystemBase {
-    private static double kIntakingVoltage = 12.0;
-    private static double kIdleVoltage = 0;
 
-    private static Intake mInstance;
+    private static Intake INSTANCE = new Intake();
 
     private Solenoid mDeploySolenoid;
 
@@ -42,10 +41,7 @@ public class Intake extends SubsystemBase {
     }
 
     public synchronized static Intake getInstance() {
-        if (mInstance == null) {
-            mInstance = new Intake();
-        }
-        return mInstance;
+        return INSTANCE;
     }
 
     public synchronized IntakeState getState() {
@@ -53,7 +49,7 @@ public class Intake extends SubsystemBase {
     }
 
     public synchronized void setOpenLoop(double percentage) {
-         mMaster.set(ControlMode.PercentOutput, percentage);
+        mMaster.set(ControlMode.PercentOutput, percentage);
     }
 
     public double getVoltage() {
@@ -62,41 +58,39 @@ public class Intake extends SubsystemBase {
 
     public void setState(IntakeState wanted_state) {
         mState = wanted_state;
-        }
+    }
 
-    //Checks if the color sensor detects the opponent's ball
     public boolean isWrongBall() {
-        if (!Robot.isRedAlliance && detectedColor.red >= 0.4) 
+        if (!Robot.isRedAlliance && detectedColor.red >= 0.4)
             return true;
-        else if (Robot.isRedAlliance && detectedColor.blue >= 0.4) 
+        else if (Robot.isRedAlliance && detectedColor.blue >= 0.4)
             return true;
-        
-         return false;
-       }
+        return false;
+    }
 
     @Override
     public void periodic() {
         detectedColor = colorSensor.getColor();
 
-      synchronized (Intake.this) {
-          switch(getState()) {
-            case IDLE:
-                mDeploySolenoid.set(false);
-                mMaster.set(ControlMode.PercentOutput, 0.0);
-                break;
-            case INTAKING:
-                if (!Indexer.getInstance().isFeeding)
-                    mDeploySolenoid.set(true);
-                mMaster.set(ControlMode.PercentOutput, 0.75);
-                break;
-            case OUTTAKING:
-                if (!Indexer.getInstance().isFeeding)
-                    mDeploySolenoid.set(true);
-                mMaster.set(ControlMode.PercentOutput, -0.25);
-                break;
-            default:
-                break;
-          }
-      }
+        synchronized (Intake.this) {
+            switch (getState()) {
+                case IDLE:
+                    mDeploySolenoid.set(false);
+                    mMaster.set(ControlMode.PercentOutput, 0.0);
+                    break;
+                case INTAKING:
+                    if (Indexer.getInstance().getState().equals(IndexerState.ACTIVE_INDEXING))
+                        mDeploySolenoid.set(true);
+                    mMaster.set(ControlMode.PercentOutput, 0.75);
+                    break;
+                case OUTTAKING:
+                    if (!Indexer.getInstance().getState().equals(IndexerState.ACTIVE_INDEXING))
+                        mDeploySolenoid.set(true);
+                    mMaster.set(ControlMode.PercentOutput, -0.25);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
