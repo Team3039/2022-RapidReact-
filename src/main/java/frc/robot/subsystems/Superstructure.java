@@ -48,7 +48,7 @@ public class Superstructure extends SubsystemBase {
     return mState;
   }
 
-  public static void setState(SuperstructureState traverseState) {
+  public void setState(SuperstructureState traverseState) {
     mState = traverseState;
   }
 

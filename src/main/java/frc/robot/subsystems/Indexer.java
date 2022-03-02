@@ -63,30 +63,26 @@ public class Indexer extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         switch (mState) {
             case IDLE:
                 setOpenLoop(0, 0);
                 break;
             case PASSIVE_INDEXING:
                 setOpenLoop(0.5, 0.5);
-                indexIntake();
                 break;
             case ACTIVE_INDEXING:
-                if (!hasOneBall && !hasTwoBalls)
+                if (!Superstructure.getInstance().hasOneBall && !Superstructure.getInstance().hasTwoBalls)
                     setOpenLoop(0.75, 0.75);
-                else if (hasOneBall && !hasTwoBalls)
+                else if (Superstructure.getInstance().hasOneBall && !Superstructure.getInstance().hasTwoBalls)
                     setOpenLoop(0.25, 0);
-                else if (hasTwoBalls)
+                else if (Superstructure.getInstance().hasTwoBalls)
                     setOpenLoop(0, 0);
-                indexIntake();
                 break;
             case CLIMBING:
                 mGripper.set(ControlMode.Disabled, 0);
                 mFeeder.set(ControlMode.Disabled, 0);
                 break;
             case UNJAMMING:
-                isFeeding = false;
                 setOpenLoop(-0.25, -0.25);
                 break;
             default:
