@@ -9,11 +9,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+<<<<<<< HEAD
 import frc.robot.commands.SetGear;
 import frc.robot.commands.IntakeCargo;
 import frc.robot.commands.SetDriveDefenseMode;
+=======
+import frc.robot.auto.routines.RightFarFourBallAuto;
+import frc.robot.commands.SetGear;
+>>>>>>> parent of 4fcc90b (-Minor Edits)
 import frc.robot.commands.SetSnap;
-import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
@@ -67,7 +71,6 @@ public class RobotContainer {
   private final JoystickButton driverL2 = new JoystickButton(driver, PS4Gamepad.BUTTON_L2);
 
   private final JoystickButton driverOptions = new JoystickButton(driver, PS4Gamepad.BUTTON_OPTIONS);
-  private final JoystickButton driverShare = new JoystickButton(driver, PS4Gamepad.BUTTON_SHARE);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -96,17 +99,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    driverTriangle.whenPressed(new InstantCommand(() -> Drive.getInstance().zeroGyro()));
+    driverX.whenPressed(new InstantCommand(() -> Drive.getInstance().zeroGyro()));
     
     driverDPadUp.whileHeld(new SetSnap(0));
     driverDPadDown.whileHeld(new SetSnap(180));
     driverDPadLeft.whileHeld(new SetSnap(90));
     driverDPadRight.whileHeld(new SetSnap(270));
 
+<<<<<<< HEAD
     driverShare.whileHeld(new SetUnjamming());
     driverL1.whileHeld(new IntakeCargo());
 
     driverR2.whileHeld(new SetDriveDefenseMode());
+=======
+    driverR1.whileHeld(new SetGear(true));
+    driverR1.whenReleased(new SetGear(false));
+>>>>>>> parent of 4fcc90b (-Minor Edits)
   }
 
   /**
