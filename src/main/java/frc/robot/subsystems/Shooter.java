@@ -11,36 +11,78 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-
 public class Shooter extends SubsystemBase {
-  public TalonFX shooter = new TalonFX(Constants.RobotMap.shooter);
+
+  public static Shooter instance = new Shooter();
+  public static ShooterState state = ShooterState.IDLE;
+
+  public TalonFX leader = new TalonFX(Constants.RobotMap.shooterA);
+  public TalonFX follower = new TalonFX(Constants.RobotMap.shooterB);
+
+  public double setpoint = 0;
+  public boolean atSetpoint = false;
+
 
   /** Creates a new Shotoer. */
   public Shooter() {
-    shooter.setInverted(true);
-    shooter.setNeutralMode(NeutralMode.Coast);
+    leader.setInverted(true);
+    leader.setNeutralMode(NeutralMode.Coast);
 
-    shooter.config_kP(0, 0.5);
-    shooter.config_kI(0, 0);
-    shooter.config_kD(0, 0);
+    follower.follow(leader);
+
+    leader.config_kP(0, 0.5);
+    leader.config_kI(0, 0);
+    leader.config_kD(0, 0);
+
   }
 
-  // Velocity in ticks per 100ms  (getSelectedSensorVelocity)
+  public static Shooter getInstance() {
+    return instance;
+  }
+
+  public static enum ShooterState {
+    IDLE,
+    SPIN_UP,
+    UNJAMMING,
+    SHOOTING
+  }
+
+  public static ShooterState getState() {
+    return state;
+  }
+
+  public void setState(ShooterState traverseState) {
+    state = traverseState;
+  }
+
   public double velocityToRPM(double velocity) {
     return velocity / Constants.Shooter.SHOOTER_TO_ENCODER_RATIO / Constants.Shooter.TICKS_PER_ROTATION * 600;
   }
-  
+
   public double RPMToVelocity(double rpm) {
     return rpm * Constants.Shooter.SHOOTER_TO_ENCODER_RATIO * Constants.Shooter.TICKS_PER_ROTATION / 600;
- }
-
-  public void setShooterRPM(double rpm) {
-    shooter.set(ControlMode.Velocity, RPMToVelocity(rpm));
   }
 
+  public void setShooterRPM(double rpm) {
+    leader.set(ControlMode.Velocity, RPMToVelocity(rpm));
+  }
 
   @Override
   public void periodic() {
-
+    switch (getState()) {
+      case IDLE:
+        leader.set(ControlMode.PercentOutput, 0);
+        break;
+      case SHOOTING:
+        setShooterRPM(1000);
+        break;
+      case SPIN_UP:
+        leader.set(ControlMode.PercentOutput, 0.5);
+        break;
+      case UNJAMMING:
+        leader.set(ControlMode.PercentOutput, -0.45);
+      default:
+        break;
+    }
   }
 }

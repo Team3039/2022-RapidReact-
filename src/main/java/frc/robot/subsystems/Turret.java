@@ -20,7 +20,7 @@ public class Turret extends SubsystemBase {
     DRIVE,
   }
 
-  public double turretAngle;
+  public static double turretAngle = 0;
   private TurretState turretState = TurretState.DRIVE;
 
   TalonSRX turret = new TalonSRX(Constants.RobotMap.turret);
@@ -77,7 +77,6 @@ public class Turret extends SubsystemBase {
   public void stop() {
     turret.set(ControlMode.PercentOutput, 0);
     setCamMode(false);
-
   }
 
   // rotate turret to specified angle

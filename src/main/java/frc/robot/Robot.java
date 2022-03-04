@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
   public static Trajectory mTrajectory = new Trajectory();
 
   private Command m_autonomousCommand;
-  
+
   @SuppressWarnings("unused")
   private RobotContainer m_robotContainer;
 
@@ -102,9 +102,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    RobotContainer.turret.turretAngle = 0;
     RobotContainer.turret.setState(TurretState.DRIVE);
-
   }
 
   @Override

@@ -26,7 +26,8 @@ public final class Constants {
         public static final int secondStageGate = 0;
         public static final int firstStageGate = 1;
 
-        public static final int shooter = 1;
+        public static final int shooterA = 11;
+        public static final int shooterB = 12;
 
         public static final int climberRaiseA = 1;
         public static final int climberRaiseB = 1;

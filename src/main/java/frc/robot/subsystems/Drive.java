@@ -137,6 +137,7 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    // Field Centric
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }
@@ -161,6 +162,7 @@ public class Drive extends SubsystemBase {
         gyro.setYaw(0);
     }
 
+    // Robot Centric
     public Rotation2d getYaw() {
         double[] ypr = new double[3];
         gyro.getYawPitchRoll(ypr);
