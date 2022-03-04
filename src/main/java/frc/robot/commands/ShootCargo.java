@@ -17,7 +17,7 @@ public class ShootCargo extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Superstructure.getInstance().setState(SuperstructureState.SHOOTING);
+    // Superstructure.getInstance().setState(SuperstructureState.SHOOTING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -27,7 +27,7 @@ public class ShootCargo extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Superstructure.getInstance().setState(SuperstructureState.IDLE);
+    // Superstructure.getInstance().setState(SuperstructureState.IDLE);
   }
 
   // Returns true when the command should end.

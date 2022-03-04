@@ -21,13 +21,13 @@ public class IntakeCargo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Superstructure.getInstance().setState(SuperstructureState.INTAKING);
+    // Superstructure.getInstance().setState(SuperstructureState.INTAKING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Superstructure.getInstance().setState(SuperstructureState.IDLE);
+    // Superstructure.getInstance().setState(SuperstructureState.IDLE);
   }
 
   // Returns true when the command should end.

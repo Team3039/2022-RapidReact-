@@ -61,29 +61,29 @@ public class Superstructure extends SubsystemBase {
     hasOneBall = !mFeederGate.get();
     hasTwoBalls = hasOneBall && !mGripperGate.get();
 
-    switch (getState()) {
-      case CLIMBING:
-        break;
-      case IDLE:
-        Indexer.getInstance().setState(IndexerState.IDLE);
-        Intake.getInstance().setState(IntakeState.IDLE);
-        Shooter.getInstance().setState(ShooterState.IDLE);
-        Turret.getInstance().setState(TurretState.DRIVE);
-        break;
-      case INTAKING:
-        Indexer.getInstance().setState(IndexerState.ACTIVE_INDEXING);
-        break;
-      case SHOOTING:
-        Shooter.getInstance().setState(ShooterState.SHOOTING);
-        Indexer.getInstance().setState(IndexerState.PASSIVE_INDEXING);
-        Turret.getInstance().setState(TurretState.TRACKING);
-        break;
-      case UNJAMMING:
-        Indexer.getInstance().setState(IndexerState.UNJAMMING);
-        Shooter.getInstance().setState(ShooterState.UNJAMMING);
-        break;
-      default:
-        break;
+    // switch (getState()) {
+      // case CLIMBING:
+      //   break;
+      // case IDLE:
+      //   Indexer.getInstance().setState(IndexerState.IDLE);
+      //   Intake.getInstance().setState(IntakeState.IDLE);
+      //   Shooter.getInstance().setState(ShooterState.IDLE);
+      //   Turret.getInstance().setState(TurretState.DRIVE);
+      //   break;
+      // case INTAKING:
+      //   Indexer.getInstance().setState(IndexerState.ACTIVE_INDEXING);
+      //   break;
+      // case SHOOTING:
+      //   Shooter.getInstance().setState(ShooterState.SHOOTING);
+      //   Indexer.getInstance().setState(IndexerState.PASSIVE_INDEXING);
+      //   Turret.getInstance().setState(TurretState.TRACKING);
+      //   break;
+      // case UNJAMMING:
+      //   Indexer.getInstance().setState(IndexerState.UNJAMMING);
+      //   Shooter.getInstance().setState(ShooterState.UNJAMMING);
+      //   break;
+      // default:
+      //   break;
     }
   }
-}
+// }

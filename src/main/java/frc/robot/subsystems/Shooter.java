@@ -25,20 +25,20 @@ public class Shooter extends SubsystemBase {
   public double setpoint = 0;
   public boolean atSetpoint = false;
 
-  public static InterpolatingTreeMap<InterpolatingDouble, Vector2> mShooterMap = new InterpolatingTreeMap();
+  public static InterpolatingTreeMap<InterpolatingDouble, Vector2> mShooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
 
   /** Creates a new Shotoer. */
   public Shooter() {
-    mMaster.setInverted(true);
-    mMaster.setNeutralMode(NeutralMode.Coast);
+    // mMaster.setInverted(true);
+    // mMaster.setNeutralMode(NeutralMode.Coast);
 
-    mSlave.follow(mMaster);
+    // mSlave.follow(mMaster);
 
-    mMaster.config_kP(0, 0.5);
-    mMaster.config_kI(0, 0);
-    mMaster.config_kD(0, 0);
+    // mMaster.config_kP(0, 0.5);
+    // mMaster.config_kI(0, 0);
+    // mMaster.config_kD(0, 0);
 
-    mShooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
+    // mShooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
   }
 
   public static Shooter getInstance() {
@@ -80,20 +80,20 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     switch (getState()) {
       case IDLE:
-        mMaster.set(ControlMode.PercentOutput, 0);
+        // mMaster.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
-        mMaster.set(ControlMode.Velocity, RPMToVelocity(
-            mShooterMap.getInterpolated(
-                new InterpolatingDouble(
-                    Double.valueOf(
-                        LLDriver.getInstance().getDistanceToTarget().getAsDouble()))).y));
+        // mMaster.set(ControlMode.Velocity, RPMToVelocity(
+            // mShooterMap.getInterpolated(
+                // new InterpolatingDouble(
+                    // Double.valueOf(
+                        // LLDriver.getInstance().getDistanceToTarget().getAsDouble()))).y));
         break;
       case SPIN_UP:
-        mMaster.set(ControlMode.PercentOutput, 0.5);
+        // mMaster.set(ControlMode.PercentOutput, 0.5);
         break;
       case UNJAMMING:
-        mMaster.set(ControlMode.PercentOutput, 0.45);
+        // mMaster.set(ControlMode.PercentOutput, 0.45);
       default:
         break;
     }

@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import frc.robot.auto.routines.RightFarFourBallAuto;
-import frc.robot.auto.routines.RightNearFourBallAuto;
+// import frc.robot.auto.routines.RightFarFourBallAuto;
+// import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
 
 /**
@@ -57,8 +57,8 @@ public class Robot extends TimedRobot {
 
     autonTaskChooser.setDefaultOption("Do Nothing", new PrintCommand("Do Nothing"));
 
-    autonTaskChooser.addOption("Right Far Four Ball", new RightFarFourBallAuto(Drive.getInstance()));
-    autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Drive.getInstance()));
+    // autonTaskChooser.addOption("Right Far Four Ball", new RightFarFourBallAuto(Drive.getInstance()));
+    // autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Drive.getInstance()));
 
     SmartDashboard.putData("Autonomous", autonTaskChooser);
   }
@@ -107,11 +107,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    addPeriodic(
-      () -> Drive.getInstance().swerveOdometry.update(
-          Drive.getInstance().getYaw(),
-          Drive.getInstance().getStates()),
-      0.01);
+    // addPeriodic(
+      // () -> Drive.getInstance().swerveOdometry.update(
+          // Drive.getInstance().getYaw(),
+          // Drive.getInstance().getStates()),
+      // 0.01);
   }
 
   @Override

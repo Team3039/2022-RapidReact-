@@ -36,11 +36,11 @@ public class Turret extends SubsystemBase {
   TalonSRX mTurret = new TalonSRX(Constants.RobotMap.turret);
 
   public Turret() {
-    mTurret.configForwardSoftLimitThreshold(1000);
-    mTurret.configForwardSoftLimitEnable(true);
+    // mTurret.configForwardSoftLimitThreshold(1000);
+    // mTurret.configForwardSoftLimitEnable(true);
 
-    mTurret.configReverseSoftLimitThreshold(1000);
-    mTurret.configReverseSoftLimitEnable(true);
+    // mTurret.configReverseSoftLimitThreshold(1000);
+    // mTurret.configReverseSoftLimitEnable(true);
   }
 
   public void setState(TurretState State) {
@@ -53,14 +53,14 @@ public class Turret extends SubsystemBase {
 
   public void trackTarget() {
     if (LLDriver.getInstance().getAngleToTarget() != null) {
-      mTurret.set(
-          ControlMode.Position,
-          degreesToTicks(LLDriver.getInstance().getAngleToTarget().getAsDouble()));
+      // mTurret.set(
+          // ControlMode.Position,
+          // degreesToTicks(LLDriver.getInstance().getAngleToTarget().getAsDouble()));
     }
   }
 
   public void setPose(double degrees) {
-    mTurret.set(ControlMode.Position, degreesToTicks(degrees));
+    // mTurret.set(ControlMode.Position, degreesToTicks(degrees));
   }
 
   public double degreesToTicks(double degrees) {

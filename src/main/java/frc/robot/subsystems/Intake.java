@@ -1,10 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.ColorSensorV3;
-
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -18,7 +13,7 @@ public class Intake extends SubsystemBase {
 
     private static Intake INSTANCE = new Intake();
 
-    private Solenoid mDeploySolenoid;
+    // private Solenoid mDeploySolenoid;
 
     public enum IntakeState {
         IDLE, INTAKING, OUTTAKING, INDEXING,
@@ -26,16 +21,16 @@ public class Intake extends SubsystemBase {
 
     private IntakeState mState = IntakeState.IDLE;
 
-    private final CANSparkMax mMaster;
+    // private final CANSparkMax mMaster;
 
-    ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+ //   ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     Color detectedColor;
 
     public Intake() {
-        mMaster = new CANSparkMax(Constants.RobotMap.intake, MotorType.kBrushless);
-        mMaster.setIdleMode(IdleMode.kCoast);
-        mMaster.setInverted(true);
-        mDeploySolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RobotMap.intakeDeploy);
+        // mMaster = new CANSparkMax(Constants.RobotMap.intake, MotorType.kBrushless);
+        // mMaster.setIdleMode(IdleMode.kCoast);
+        // mMaster.setInverted(true);
+        // mDeploySolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RobotMap.intakeDeploy);
     }
 
     public synchronized static Intake getInstance() {
@@ -47,7 +42,7 @@ public class Intake extends SubsystemBase {
     }
 
     public synchronized void setOpenLoop(double percentage) {
-        mMaster.set(percentage);
+        // mMaster.set(percentage);
     }
 
     public void setState(IntakeState wanted_state) {
@@ -64,22 +59,22 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        detectedColor = colorSensor.getColor();
+        detectedColor = Color.kRed;
 
         synchronized (Intake.this) {
             switch (getState()) {
                 case IDLE:
-                    mDeploySolenoid.set(false);
+                    // mDeploySolenoid.set(false);
                     setOpenLoop(0);
                     break;
                 case INTAKING:
                     if (Indexer.getInstance().getState().equals(IndexerState.ACTIVE_INDEXING))
-                        mDeploySolenoid.set(true);
+                        // mDeploySolenoid.set(true);
                     setOpenLoop(.35);
                     break;
                 case OUTTAKING:
                     if (!Indexer.getInstance().getState().equals(IndexerState.ACTIVE_INDEXING))
-                        mDeploySolenoid.set(true);
+                        // mDeploySolenoid.set(true);
                     setOpenLoop(-.25);
                     break;
                 default:

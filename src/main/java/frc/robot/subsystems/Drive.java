@@ -26,7 +26,7 @@ import frc.lib.util.InterpolatingDouble;
 import frc.lib.util.InterpolatingTreeMap;
 import frc.lib.util.RigidTransform2;
 import frc.robot.Constants;
-import frc.robot.SwerveModule;
+// import frc.robot.SwerveModule;
 
 public class Drive extends SubsystemBase {
 
@@ -44,8 +44,8 @@ public class Drive extends SubsystemBase {
     private final InterpolatingTreeMap<InterpolatingDouble, RigidTransform2> latencyCompensationMap = new InterpolatingTreeMap<>();
 
     public SwerveDriveOdometry swerveOdometry;
-    public SwerveModule[] mSwerveMods;
-    public PigeonIMU gyro;
+    // public SwerveModule[] mSwerveMods;
+    // public PigeonIMU gyro;
 
     public ProfiledPIDController snapPIDController;
 
@@ -56,9 +56,9 @@ public class Drive extends SubsystemBase {
     public boolean isAltCenter;
 
     public Drive() {
-        gyro = new PigeonIMU(Constants.RobotMap.pigeonID);
-        gyro.configFactoryDefault();
-        zeroGyro();
+        // gyro = new PigeonIMU(Constants.RobotMap.pigeonID);
+        // gyro.configFactoryDefault();
+        // zeroGyro();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw());
 
@@ -68,12 +68,12 @@ public class Drive extends SubsystemBase {
 
         snapPIDController = new ProfiledPIDController(KP_SNAP, KI_SNAP, KD_SNAP, thetaController);
 
-        mSwerveMods = new SwerveModule[] {
-                new SwerveModule(0, Constants.Swerve.Mod0.constants),
-                new SwerveModule(1, Constants.Swerve.Mod1.constants),
-                new SwerveModule(2, Constants.Swerve.Mod2.constants),
-                new SwerveModule(3, Constants.Swerve.Mod3.constants)
-        };
+        // mSwerveMods = new SwerveModule[] {
+                // new SwerveModule(0, Constants.Swerve.Mod0.constants),
+                // new SwerveModule(1, Constants.Swerve.Mod1.constants),
+                // new SwerveModule(2, Constants.Swerve.Mod2.constants),
+                // new SwerveModule(3, Constants.Swerve.Mod3.constants)
+        // };
 
         isSnapping = false;
         isHighGear = false;
@@ -113,9 +113,9 @@ public class Drive extends SubsystemBase {
                                 rotation));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
-        for (SwerveModule mod : mSwerveMods) {
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-        }
+        // for (SwerveModule mod : mSwerveMods) {
+            // mod.setDesiredState(swerveModuleStates[m/od.moduleNumber], isOpenLoop);
+        // }
     }
 
     public void checkStopSnap(boolean force) {
@@ -155,9 +155,9 @@ public class Drive extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
 
-        for (SwerveModule mod : mSwerveMods) {
-            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
-        }
+        // for (SwerveModule mod : mSwerveMods) {
+            // mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+        // }
     }
 
     public Pose2d getPose() {
@@ -172,21 +172,21 @@ public class Drive extends SubsystemBase {
         swerveOdometry.resetPosition(pose, getYaw());
     }
 
-    public SwerveModuleState[] getStates() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveModule mod : mSwerveMods) {
-            states[mod.moduleNumber] = mod.getState();
-        }
-        return states;
-    }
+    // public SwerveModuleState[] getStates() {
+        // SwerveModuleState[] states = new SwerveModuleState[4];
+        // for (SwerveModule mod : mSwerveMods) {
+            // states[mod.moduleNumber] = mod.getState();
+        // }
+        // return states;
+    // }
 
     public void zeroGyro() {
-        gyro.setYaw(0);
+        // gyro.setYaw(0);
     }
 
     public Rotation2d getYaw() {
         double[] ypr = new double[3];
-        gyro.getYawPitchRoll(ypr);
+   //     gyro.getYawPitchRoll(ypr);
         return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
     }
 
@@ -201,7 +201,7 @@ public class Drive extends SubsystemBase {
     public void periodic() {
         switch (getState()) {
             case AUTO:
-                swerveOdometry.update(getYaw(), getStates());
+                // swerveOdometry.update(getYaw(), getStates());
                 isAltCenter = false;
                 break;
             case DEFENSE:
@@ -222,10 +222,10 @@ public class Drive extends SubsystemBase {
                 break;
         }
 
-        for (SwerveModule mod : mSwerveMods) {
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-        }
+        // for (SwerveModule mod : mSwerveMods) {
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+        // }
     }
 }

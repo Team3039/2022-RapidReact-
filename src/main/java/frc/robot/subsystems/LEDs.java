@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDs extends SubsystemBase {
   /** Creates a new LEDs. */
-  DigitalOutput[] mOutputs = {
-    new DigitalOutput(1), 
-    new DigitalOutput(2)
-  };
+  // DigitalOutput[] mOutputs = {
+    // new DigitalOutput(1), 
+    // new DigitalOutput(2)
+  // };
 
   public boolean[] isIdle = {false, false};
   public boolean[] isIntaking = {true, false};
@@ -24,30 +24,30 @@ public class LEDs extends SubsystemBase {
   public LEDs() {
   }
 
-  @Override
-  public void periodic() {
-    switch (Superstructure.getInstance().getState()) {
-      case CLIMBING:
-        mStates = isClimbInitiated;
-        break;
-      case IDLE:
-        mStates = isIdle;
-        break;
-      case INTAKING:
-        mStates = isIntaking;
-        break;
-      case SHOOTING:
-        mStates = isTargetFound;
-        break;
-      case UNJAMMING:
-        mStates = isIntaking;
-        break;
-      default:
-        mStates = isIdle;
-        break;
-    }
-    for (int i = 0; i < 2; i++) {
-      mOutputs[i].set(mStates[i]);
-    }
-  }
+  // @Override
+  // public void periodic() {
+  //   switch (Superstructure.getInstance().getState()) {
+  //     case CLIMBING:
+  //       mStates = isClimbInitiated;
+  //       break;
+  //     case IDLE:
+  //       mStates = isIdle;
+  //       break;
+  //     case INTAKING:
+  //       mStates = isIntaking;
+  //       break;
+  //     case SHOOTING:
+  //       mStates = isTargetFound;
+  //       break;
+  //     case UNJAMMING:
+  //       mStates = isIntaking;
+  //       break;
+  //     default:
+  //       mStates = isIdle;
+  //       break;
+  //   }
+  //   for (int i = 0; i < 2; i++) {
+  //     // mOutputs[i].set(mStates[i]);
+  //   }
+  // }
 }
