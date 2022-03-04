@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Indexer.IndexerState;
 
-public class SetPassiveIndexing extends CommandBase {
+public class FeedCargo extends CommandBase {
   /** Creates a new SetPassiveIndexing. */
-  public SetPassiveIndexing() {
+  public FeedCargo() {
     addRequirements(RobotContainer.indexer);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -22,13 +22,13 @@ public class SetPassiveIndexing extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.indexer.setState(IndexerState.PASSIVE_INDEXING);
+    RobotContainer.indexer.setState(IndexerState.SHOOTING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.indexer.setState(IndexerState.PASSIVE_INDEXING);
+    RobotContainer.indexer.setState(IndexerState.IDLE);
   }
 
   // Returns true when the command should end.

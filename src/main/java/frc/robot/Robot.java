@@ -42,6 +42,8 @@ public class Robot extends TimedRobot {
   public static Trajectory mTrajectory = new Trajectory();
 
   private Command m_autonomousCommand;
+  
+  @SuppressWarnings("unused")
   private RobotContainer m_robotContainer;
 
   SendableChooser<Command> autonTaskChooser = new SendableChooser<>();

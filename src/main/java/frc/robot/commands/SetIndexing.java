@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Indexer.IndexerState;
 
-public class SetActiveIndexing extends CommandBase {
+public class SetIndexing extends CommandBase {
   /** Creates a new SetActiveIndexing. */
-  public SetActiveIndexing() {
+  public SetIndexing() {
     addRequirements(RobotContainer.indexer);
   }
 
@@ -22,7 +22,7 @@ public class SetActiveIndexing extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.indexer.setState(IndexerState.ACTIVE_INDEXING);
+    RobotContainer.indexer.setState(IndexerState.INDEXING);
   }
 
   // Called once the command ends or is interrupted.

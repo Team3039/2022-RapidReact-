@@ -20,11 +20,11 @@ public final class Constants {
         public static final int intake = 1;
         public static final int intakeDeploy = 1;
 
-        public static final int hopperFeeder = 1;
-        public static final int hopperGripper = 1;
+        public static final int secondStage = 1;
+        public static final int firstStage = 1;
 
-        public static final int hopperFeederGate = 0;
-        public static final int hopperGripperGate = 1;
+        public static final int secondStageGate = 0;
+        public static final int firstStageGate = 1;
 
         public static final int shooter = 1;
 

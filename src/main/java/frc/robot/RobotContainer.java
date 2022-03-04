@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.SetActiveIndexing;
+import frc.robot.commands.SetIndexing;
 import frc.robot.commands.SetGear;
-import frc.robot.commands.SetPassiveIndexing;
+import frc.robot.commands.FeedCargo;
 import frc.robot.commands.SetSnap;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.TeleopSwerve;
@@ -49,6 +49,8 @@ public class RobotContainer {
   private final JoystickButton driverX = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
   private final JoystickButton driverSquare = new JoystickButton(driver, PS4Gamepad.BUTTON_Square);
   private final JoystickButton driverTriangle = new JoystickButton(driver, PS4Gamepad.BUTTON_Triangle);
+  
+  @SuppressWarnings("unused") 
   private final JoystickButton driverCircle = new JoystickButton(driver, PS4Gamepad.BUTTON_Circle);
 
   private final JoystickButton driverDPadUp = new JoystickButton(driver, PS4Gamepad.DPAD_UP);
@@ -58,6 +60,7 @@ public class RobotContainer {
    
   private final JoystickButton driverR1 = new JoystickButton(driver, PS4Gamepad.BUTTON_R1);
 
+  @SuppressWarnings("unused") 
   private final JoystickButton driverOptions = new JoystickButton(driver, PS4Gamepad.BUTTON_OPTIONS);
   private final JoystickButton driverShare = new JoystickButton(driver, PS4Gamepad.BUTTON_SHARE);
   /**
@@ -98,8 +101,8 @@ public class RobotContainer {
     driverR1.whileHeld(new SetGear(true));
     driverR1.whenReleased(new SetGear(false));
 
-    driverSquare.whileHeld(new SetActiveIndexing());
-    driverX.whileHeld(new SetPassiveIndexing());
+    driverSquare.whileHeld(new SetIndexing());
+    driverX.whileHeld(new FeedCargo());
     driverShare.whileHeld(new SetUnjamming());
   }
 
