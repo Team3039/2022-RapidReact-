@@ -6,9 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,10 +18,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 // import frc.robot.auto.routines.RightFarFourBallAuto;
 // import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
-<<<<<<< HEAD
-=======
-import frc.robot.subsystems.Turret.TurretMode;
->>>>>>> parent of 4fcc90b (-Minor Edits)
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -65,14 +61,6 @@ public class Robot extends TimedRobot {
     // autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Drive.getInstance()));
 
     SmartDashboard.putData("Autonomous", autonTaskChooser);
-<<<<<<< HEAD
-=======
-    // field.setRobotPose(Swerve.getInstance().getPose());
-    // SmartDashboard.putData("Field", field);
-    
-    RobotContainer.turret.setCamMode(false);
-    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
->>>>>>> parent of 4fcc90b (-Minor Edits)
   }
 
   /**
@@ -101,12 +89,6 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-<<<<<<< HEAD
-=======
-    RobotContainer.turret.turretAngle = 0;
-    RobotContainer.turret.setTurretMode(TurretMode.DRIVE);
-
->>>>>>> parent of 4fcc90b (-Minor Edits)
   }
 
   @Override

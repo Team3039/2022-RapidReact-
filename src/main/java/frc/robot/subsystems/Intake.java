@@ -16,7 +16,7 @@ public class Intake extends SubsystemBase {
     // private Solenoid mDeploySolenoid;
 
     public enum IntakeState {
-        IDLE, INTAKING, REJECTION, INDEXING,
+        IDLE, INTAKING, OUTTAKING, INDEXING,
     }
 
     private IntakeState mState = IntakeState.IDLE;
@@ -25,7 +25,6 @@ public class Intake extends SubsystemBase {
 
  //   ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     Color detectedColor;
-    boolean isWrongBall;
 
     public Intake() {
         // mMaster = new CANSparkMax(Constants.RobotMap.intake, MotorType.kBrushless);
@@ -50,14 +49,8 @@ public class Intake extends SubsystemBase {
         mState = wanted_state;
     }
 
-<<<<<<< HEAD
     public boolean isWrongBall() {
         if (!Robot.isRedAlliance && detectedColor.red >= 0.4)
-=======
-    //Checks if the color sensor detects the opponent's ball
-    public boolean wrongBallCheck() {
-        if (!Robot.isRedAlliance && detectedColor.red >= 0.4) 
->>>>>>> parent of 4fcc90b (-Minor Edits)
             return true;
         else if (Robot.isRedAlliance && detectedColor.blue >= 0.4)
             return true;
@@ -66,7 +59,6 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-<<<<<<< HEAD
         detectedColor = Color.kRed;
 
         synchronized (Intake.this) {
@@ -89,29 +81,5 @@ public class Intake extends SubsystemBase {
                     break;
             }
         }
-=======
-        detectedColor = colorSensor.getColor();
-
-      synchronized (Intake.this) {
-          switch(getState()) {
-            case IDLE:
-                mDeploySolenoid.set(false);
-                mMaster.set(ControlMode.PercentOutput, 0.0);
-                break;
-            case INTAKING:
-                if (!Indexer.getInstance().isFeeding)
-                    mDeploySolenoid.set(true);
-                mMaster.set(ControlMode.PercentOutput, 0.75);
-                break;
-            case REJECTION:
-                if (!Indexer.getInstance().isFeeding)
-                    mDeploySolenoid.set(true);
-                mMaster.set(ControlMode.PercentOutput, -0.25);
-                break;
-            default:
-                break;
-          }
-      }
->>>>>>> parent of 4fcc90b (-Minor Edits)
     }
 }
