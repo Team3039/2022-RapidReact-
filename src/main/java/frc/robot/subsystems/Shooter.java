@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -67,8 +68,13 @@ public class Shooter extends SubsystemBase {
     leader.set(ControlMode.Velocity, RPMToVelocity(rpm));
   }
 
+  public void setShooterPercent(double percent) {
+    leader.set(ControlMode.PercentOutput, percent);
+  }
+
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Shooter RPM", velocityToRPM(leader.getSelectedSensorVelocity()));
     switch (getState()) {
       case IDLE:
         leader.set(ControlMode.PercentOutput, 0);

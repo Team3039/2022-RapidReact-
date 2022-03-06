@@ -14,7 +14,7 @@ public class SetSnap extends CommandBase {
 
   /** Creates a new SetSnap. */
   public SetSnap(double snapAngle) {
-    this.snapAngle = snapAngle;
+  //  this.snapAngle = snapAngle;
   }
 
   // Called when the command is initially scheduled.

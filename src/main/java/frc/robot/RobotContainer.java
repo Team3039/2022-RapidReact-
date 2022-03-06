@@ -4,16 +4,19 @@
 
 package frc.robot;
 
+import java.security.spec.RSAKeyGenParameterSpec;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.SetIndexing;
-import frc.robot.commands.SetGear;
 import frc.robot.commands.FeedCargo;
+import frc.robot.commands.RunIntake;
+import frc.robot.commands.SetGear;
+import frc.robot.commands.SetIndexing;
+import frc.robot.commands.SetShooterPercent;
 import frc.robot.commands.SetSnap;
-import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
@@ -36,14 +39,14 @@ import frc.robot.subsystems.Turret;
  */
 public class RobotContainer {
   /* Subsystems */
+  public static final Indexer indexer = new Indexer();
   public static final Drive drive = new Drive();
   public static final Intake intake = new Intake();
-  public static final Indexer indexer = new Indexer();
   public static final Shooter shooter = new Shooter();
   public static final Turret turret = new Turret();
   
   /* Controllers */
-  private final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(0);
+  private final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(1);
 
   /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
@@ -98,12 +101,15 @@ public class RobotContainer {
     driverDPadLeft.whileHeld(new SetSnap(90));
     driverDPadRight.whileHeld(new SetSnap(270));
 
-    driverR1.whileHeld(new SetGear(true));
-    driverR1.whenReleased(new SetGear(false));
+   // driverR1.whileHeld(new SetGear(true));
+  //  driverR1.whenReleased(new SetGear(false));
 
-    driverSquare.whileHeld(new SetIndexing());
-    driverX.whileHeld(new FeedCargo());
-    driverShare.whileHeld(new SetUnjamming());
+    // driverSquare.whileHeld(new SetIndexing());
+   driverX.toggleWhenPressed(new RunIntake());
+    // driverShare.whileHeld(new SetUnjamming());
+
+    driverCircle.toggleWhenPressed(new SetShooterPercent(.8));
+
   }
 
   /**

@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -18,12 +20,10 @@ public class Intake extends SubsystemBase {
     }
 
     private IntakeState state = IntakeState.IDLE;
-    private final TalonFX roller;
+    private CANSparkMax roller;
 
     public Intake() {
-        roller = new TalonFX(Constants.RobotMap.intake);
-        roller.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
-        roller.setInverted(true);
+        roller = new CANSparkMax(Constants.RobotMap.intake, MotorType.kBrushless);
         deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RobotMap.intakeDeploy);
     }
 
@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setOpenLoop(double percentage) {
-        roller.set(ControlMode.PercentOutput, percentage);
+        roller.set(percentage);
     }
 
     public void setState(IntakeState wanted_state) {
@@ -48,20 +48,19 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-
       synchronized (Intake.this) {
           switch(getState()) {
             case IDLE:
-                deploy.set(false);
-                roller.set(ControlMode.PercentOutput, 0.0);
+              deploy.set(false);
+              roller.set(0.0);
                 break;
             case INTAKING:
-                deploy.set(true);
-                roller.set(ControlMode.PercentOutput, 0.80);
+              deploy.set(true);
+              roller.set(0.50);
                 break;
             case OUTTAKING:
-                deploy.set(true);
-                roller.set(ControlMode.PercentOutput, -0.25);
+              deploy.set(true);
+              roller.set(-0.25);
                 break;
             default:
                 break;

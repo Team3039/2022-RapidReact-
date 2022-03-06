@@ -22,6 +22,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.SwerveModule;
 
 public class Drive extends SubsystemBase {
@@ -37,11 +38,11 @@ public class Drive extends SubsystemBase {
     public static Trajectory trajectory = new Trajectory();
     public static TrapezoidProfile.Constraints thetaController;
 
-    public boolean isSnapping;
-    public boolean isHighGear;
+    public boolean isSnapping = false;
+    public boolean isHighGear = false;
 
     public Drive() {
-        gyro = new PigeonIMU(Constants.RobotMap.pigeonID);
+        gyro = new PigeonIMU(RobotContainer.indexer.firstStage);
         gyro.configFactoryDefault();
         zeroGyro();
 
@@ -172,6 +173,8 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getYaw(), getStates());
+
+        SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
 
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());

@@ -6,31 +6,28 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake.IntakeState;
 
-public class SetIndexing extends CommandBase {
-  /** Creates a new SetActiveIndexing. */
-  public SetIndexing() {
-    addRequirements(RobotContainer.indexer);
+public class RunIntake extends CommandBase {
+  /** Creates a new RunIntake. */
+  public RunIntake() {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.intake.setState(IntakeState.INTAKING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    RobotContainer.indexer.setState(IndexerState.INDEXING);
-    RobotContainer.intake.setState(IntakeState.INTAKING);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.indexer.setState(IndexerState.IDLE);
     RobotContainer.intake.setState(IntakeState.IDLE);
   }
 

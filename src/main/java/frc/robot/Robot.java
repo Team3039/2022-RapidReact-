@@ -5,8 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -91,12 +89,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    if(DriverStation.getAlliance().equals(Alliance.Red)) {
-      isRedAlliance = true;
-    }
-    else if(DriverStation.getAlliance().equals(Alliance.Blue)) {
-      isRedAlliance = false;
-    }
+    
+    SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.secondStageGate.get());
+    SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.indexer.firstStageGate.get());
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

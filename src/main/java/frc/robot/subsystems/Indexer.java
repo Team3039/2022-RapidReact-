@@ -3,12 +3,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake.IntakeState;
 
 public class Indexer extends SubsystemBase {
 
@@ -16,11 +16,11 @@ public class Indexer extends SubsystemBase {
         IDLE, SHOOTING, INDEXING, CLIMBING, HELLA_ZOOMING, UNJAMMING,
     }
 
-    private final TalonFX firstStage;
-    private final TalonFX secondStage;
+    public final TalonSRX firstStage;
+    public final TalonSRX secondStage;
 
-    private final DigitalInput secondStageGate;
-    private final DigitalInput firstStageGate;
+    public final DigitalInput secondStageGate;
+    public final DigitalInput firstStageGate;
 
     private IndexerState state = IndexerState.IDLE;
 
@@ -30,8 +30,8 @@ public class Indexer extends SubsystemBase {
   
 
     public Indexer() {
-        firstStage = new TalonFX(Constants.RobotMap.firstStage);
-        secondStage = new TalonFX(Constants.RobotMap.secondStage);
+        firstStage = new TalonSRX(Constants.RobotMap.firstStage);
+        secondStage = new TalonSRX(Constants.RobotMap.secondStage);
 
         firstStageGate = new DigitalInput(Constants.RobotMap.firstStageGate);
         secondStageGate = new DigitalInput(Constants.RobotMap.secondStageGate);
@@ -65,24 +65,6 @@ public class Indexer extends SubsystemBase {
         setOpenLoop(0, 0);
     }
 
-    //Index Help to Index Balls
-    public void indexIntake() {
-        switch (getState()) {
-            case INDEXING:
-                if (!hasTwoBalls) {
-                    Intake.getInstance().setState(IntakeState.INTAKING);
-                }
-                else {
-                    Intake.getInstance().setState(IntakeState.IDLE);
-                }
-                break;
-            case SHOOTING:
-                Intake.getInstance().setState(IntakeState.INTAKING);
-            default:
-                break;
-        } 
-    }
-
     @Override
     public void periodic() {
         hasOneBall = !secondStageGate.get();
@@ -97,12 +79,11 @@ public class Indexer extends SubsystemBase {
             case SHOOTING:
                 isFeeding = true;
                 setOpenLoop(0.5, 0.5);
-                indexIntake();
                 break;
             case INDEXING:
                 isFeeding = false;
                 if (!hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.75, 0.75); 
+                    setOpenLoop(0.40, 0.40); 
                 }
                 else if (hasOneBall && !hasTwoBalls) {
                     setOpenLoop(0.25, 0);
@@ -110,7 +91,6 @@ public class Indexer extends SubsystemBase {
                 else if (hasTwoBalls) {
                     setOpenLoop(0, 0);
                 }
-                indexIntake();
                 break;
             case CLIMBING:
                 firstStage.set(ControlMode.Disabled, 0);
