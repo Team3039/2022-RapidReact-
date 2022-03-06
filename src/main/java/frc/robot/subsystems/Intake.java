@@ -57,11 +57,11 @@ public class Intake extends SubsystemBase {
                 mMaster.set(ControlMode.PercentOutput, 0.0);
                 break;
             case INTAKING:
-                deploy.set(true);
+                deploy.set(!RobotContainer.indexer.isFeeding);
                 mMaster.set(ControlMode.PercentOutput, 0.80);
                 break;
             case OUTTAKING:
-                deploy.set(true);
+                deploy.set(!RobotContainer.indexer.isFeeding);
                 mMaster.set(ControlMode.PercentOutput, -0.25);
                 break;
             default:
