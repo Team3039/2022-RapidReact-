@@ -12,8 +12,8 @@ import frc.robot.subsystems.Intake.IntakeState;
 public class SetUnjamming extends CommandBase {
   /** Creates a new SetUnjamming. */
   public SetUnjamming() {
-    addRequirements(RobotContainer.indexer);
-    addRequirements(RobotContainer.intake);
+    addRequirements(RobotContainer.mIndexer);
+    addRequirements(RobotContainer.mIntake);
   }
 
   // Called when the command is initially scheduled.
@@ -24,15 +24,15 @@ public class SetUnjamming extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.indexer.setState(IndexerState.UNJAMMING);
-    RobotContainer.intake.setState(IntakeState.OUTTAKING);
+    RobotContainer.mIndexer.setState(IndexerState.UNJAMMING);
+    RobotContainer.mIntake.setState(IntakeState.OUTTAKING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.indexer.setState(IndexerState.IDLE);
-    RobotContainer.intake.setState(IntakeState.IDLE);
+    RobotContainer.mIndexer.setState(IndexerState.IDLE);
+    RobotContainer.mIntake.setState(IntakeState.IDLE);
   }
 
   // Returns true when the command should end.

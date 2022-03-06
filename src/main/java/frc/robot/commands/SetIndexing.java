@@ -11,7 +11,7 @@ import frc.robot.subsystems.Indexer.IndexerState;
 public class SetIndexing extends CommandBase {
   /** Creates a new SetActiveIndexing. */
   public SetIndexing() {
-    addRequirements(RobotContainer.indexer);
+    addRequirements(RobotContainer.mIndexer);
   }
 
   // Called when the command is initially scheduled.
@@ -22,13 +22,13 @@ public class SetIndexing extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.indexer.setState(IndexerState.INDEXING);
+    RobotContainer.mIndexer.setState(IndexerState.INDEXING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.indexer.setState(IndexerState.IDLE);
+    RobotContainer.mIndexer.setState(IndexerState.IDLE);
   }
 
   // Returns true when the command should end.

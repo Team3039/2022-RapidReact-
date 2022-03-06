@@ -16,13 +16,13 @@ public class Indexer extends SubsystemBase {
         IDLE, SHOOTING, INDEXING, CLIMBING, HELLA_ZOOMING, UNJAMMING,
     }
 
-    private final TalonFX firstStage;
-    private final TalonFX secondStage;
+    private final TalonFX mFirstStageMaster;
+    private final TalonFX mSecondStageMaster;
 
-    private final DigitalInput secondStageGate;
-    private final DigitalInput firstStageGate;
+    private final DigitalInput mFirstStageGate;
+    private final DigitalInput mSecondStageGate;
 
-    private IndexerState state = IndexerState.IDLE;
+    private IndexerState mState = IndexerState.IDLE;
 
     private boolean hasOneBall;
     private boolean hasTwoBalls;
@@ -30,42 +30,41 @@ public class Indexer extends SubsystemBase {
   
 
     public Indexer() {
-        firstStage = new TalonFX(Constants.RobotMap.firstStage);
-        secondStage = new TalonFX(Constants.RobotMap.secondStage);
+        mFirstStageMaster = new TalonFX(Constants.Ports.FIRST_STAGE);
+        mSecondStageMaster = new TalonFX(Constants.Ports.SECOND_STAGE);
 
-        firstStageGate = new DigitalInput(Constants.RobotMap.firstStageGate);
-        secondStageGate = new DigitalInput(Constants.RobotMap.secondStageGate);
+        mFirstStageGate = new DigitalInput(Constants.Ports.FIRST_STAGE_GATE);
+        mSecondStageGate = new DigitalInput(Constants.Ports.SECOND_STAGE_GATE);
 
-        firstStage.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
-        secondStage.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
+        mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
+        mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
 
-        firstStage.configVoltageCompSaturation(12.0);
-        firstStage.enableVoltageCompensation(true);
-        secondStage.configVoltageCompSaturation(12.0);
-        secondStage.enableVoltageCompensation(true);
+        mFirstStageMaster.configVoltageCompSaturation(12.0);
+        mFirstStageMaster.enableVoltageCompensation(true);
+        mSecondStageMaster.configVoltageCompSaturation(12.0);
+        mSecondStageMaster.enableVoltageCompensation(true);
 
-        firstStage.setNeutralMode(NeutralMode.Brake);
-        secondStage.setNeutralMode(NeutralMode.Brake);
+        mFirstStageMaster.setNeutralMode(NeutralMode.Brake);
+        mSecondStageMaster.setNeutralMode(NeutralMode.Brake);
     }
 
     public synchronized IndexerState getState() {
-        return state;
+        return mState;
     }
 
     public void setState(IndexerState wanted_state) {
-        state = wanted_state;
+        mState = wanted_state;
     }
 
     public void setOpenLoop(double firstStageOuput, double secondStageOutput) {
-       firstStage.set(ControlMode.PercentOutput, firstStageOuput);
-       secondStage.set(ControlMode.PercentOutput, secondStageOutput);
+       mFirstStageMaster.set(ControlMode.PercentOutput, firstStageOuput);
+       mSecondStageMaster.set(ControlMode.PercentOutput, secondStageOutput);
     }
 
     public void stop() {
         setOpenLoop(0, 0);
     }
 
-    //Index Help to Index Balls
     public void indexIntake() {
         switch (getState()) {
             case INDEXING:
@@ -85,10 +84,10 @@ public class Indexer extends SubsystemBase {
 
     @Override
     public void periodic() {
-        hasOneBall = !secondStageGate.get();
-        hasTwoBalls = hasOneBall && !firstStageGate.get();
+        hasOneBall = !mSecondStageGate.get();
+        hasTwoBalls = hasOneBall && !mFirstStageGate.get();
 
-        switch (state) {
+        switch (mState) {
             case HELLA_ZOOMING:
                 System.out.println("Zoomies");
             case IDLE:
@@ -113,8 +112,8 @@ public class Indexer extends SubsystemBase {
                 indexIntake();
                 break;
             case CLIMBING:
-                firstStage.set(ControlMode.Disabled, 0);
-                secondStage.set(ControlMode.Disabled, 0);
+                mFirstStageMaster.set(ControlMode.Disabled, 0);
+                mSecondStageMaster.set(ControlMode.Disabled, 0);
                 break;
             case UNJAMMING:
                     setOpenLoop(-0.25, -0.25);

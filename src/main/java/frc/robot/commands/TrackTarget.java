@@ -18,7 +18,7 @@ public class TrackTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.turret.setState(TurretState.TRACKING);
+    RobotContainer.mTurret.setState(TurretState.TRACKING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

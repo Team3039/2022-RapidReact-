@@ -18,13 +18,14 @@ public class Intake extends SubsystemBase {
     }
 
     private IntakeState state = IntakeState.IDLE;
-    private final TalonFX roller;
+    private final TalonFX mMaster;
 
     public Intake() {
-        roller = new TalonFX(Constants.RobotMap.intake);
-        roller.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
-        roller.setInverted(true);
-        deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RobotMap.intakeDeploy);
+        mMaster = new TalonFX(Constants.Ports.INTAKE);
+        mMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
+
+        mMaster.setInverted(true);
+        deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.INTAKE_SOLENOID);
     }
 
     public synchronized static Intake getInstance() {
@@ -39,7 +40,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setOpenLoop(double percentage) {
-        roller.set(ControlMode.PercentOutput, percentage);
+        mMaster.set(ControlMode.PercentOutput, percentage);
     }
 
     public void setState(IntakeState wanted_state) {
@@ -53,15 +54,15 @@ public class Intake extends SubsystemBase {
           switch(getState()) {
             case IDLE:
                 deploy.set(false);
-                roller.set(ControlMode.PercentOutput, 0.0);
+                mMaster.set(ControlMode.PercentOutput, 0.0);
                 break;
             case INTAKING:
                 deploy.set(true);
-                roller.set(ControlMode.PercentOutput, 0.80);
+                mMaster.set(ControlMode.PercentOutput, 0.80);
                 break;
             case OUTTAKING:
                 deploy.set(true);
-                roller.set(ControlMode.PercentOutput, -0.25);
+                mMaster.set(ControlMode.PercentOutput, -0.25);
                 break;
             default:
                 break;

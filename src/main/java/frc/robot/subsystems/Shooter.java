@@ -6,41 +6,47 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.InterpolatingDouble;
+import frc.lib.util.InterpolatingTreeMap;
+import frc.lib.util.Vector2;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+
 
 public class Shooter extends SubsystemBase {
 
-  public static Shooter instance = new Shooter();
-  public static ShooterState state = ShooterState.IDLE;
+  public static Shooter INSTANCE = new Shooter();
+  public static ShooterState mState = ShooterState.IDLE;
 
-  public TalonFX leader = new TalonFX(Constants.RobotMap.shooterA);
-  public TalonFX follower = new TalonFX(Constants.RobotMap.shooterB);
+  public TalonFX mMaster = new TalonFX(Constants.Ports.SHOOTER_MASTER);
+  public TalonFX mSlave = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
 
-  public double setpoint = 0;
-  public boolean atSetpoint = false;
+  public static InterpolatingTreeMap<InterpolatingDouble, Vector2> mShooterMap = new InterpolatingTreeMap();
 
 
   /** Creates a new Shotoer. */
   public Shooter() {
-    leader.setInverted(true);
-    leader.setNeutralMode(NeutralMode.Coast);
+    mMaster.setInverted(true);
+    mMaster.setNeutralMode(NeutralMode.Coast);
 
-    follower.follow(leader);
+    mSlave.follow(mMaster);
 
-    leader.config_kP(0, 0.5);
-    leader.config_kI(0, 0);
-    leader.config_kD(0, 0);
+    mMaster.config_kP(0, 0.5);
+    mMaster.config_kI(0, 0);
+    mMaster.config_kD(0, 0);
 
+    mShooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
   }
 
   public static Shooter getInstance() {
-    return instance;
+    return INSTANCE;
   }
 
-  public static enum ShooterState {
+  public enum ShooterState {
     IDLE,
     SPIN_UP,
     UNJAMMING,
@@ -48,11 +54,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public static ShooterState getState() {
-    return state;
+    return mState;
   }
 
   public void setState(ShooterState traverseState) {
-    state = traverseState;
+    mState = traverseState;
   }
 
   public double velocityToRPM(double velocity) {
@@ -64,23 +70,22 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterRPM(double rpm) {
-    leader.set(ControlMode.Velocity, RPMToVelocity(rpm));
+    mMaster.set(ControlMode.Velocity, RPMToVelocity(rpm));
   }
 
   @Override
   public void periodic() {
-    switch (getState()) {
+    switch (Shooter.getInstance().getState()) {
       case IDLE:
-        leader.set(ControlMode.PercentOutput, 0);
+        mMaster.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
-        setShooterRPM(1000);
+        mMaster.set(TalonFXControlMode.Velocity, RPMToVelocity(mShooterMap.getInterpolated(new InterpolatingDouble(RobotContainer.mLimelight.getDistanceToTarget().getAsDouble())).x));
         break;
       case SPIN_UP:
-        leader.set(ControlMode.PercentOutput, 0.5);
         break;
       case UNJAMMING:
-        leader.set(ControlMode.PercentOutput, -0.45);
+        mMaster.set(ControlMode.PercentOutput, 0.45);
       default:
         break;
     }
