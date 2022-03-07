@@ -12,7 +12,7 @@ public class SpinShooter extends CommandBase {
   /** Creates a new SpinShooter. */
   public SpinShooter() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.shooter);
+    addRequirements(RobotContainer.mShooter);
   }
 
   // Called when the command is initially scheduled.
@@ -22,13 +22,13 @@ public class SpinShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.shooter.setState(ShooterState.SHOOTING);
+    RobotContainer.mShooter.setState(ShooterState.SHOOTING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.shooter.setState(ShooterState.IDLE);
+    RobotContainer.mShooter.setState(ShooterState.IDLE);
   }
 
   // Returns true when the command should end.

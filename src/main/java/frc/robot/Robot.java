@@ -90,8 +90,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     
-    SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.secondStageGate.get());
-    SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.indexer.firstStageGate.get());
+    SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.mIndexer.mSecondStageGate.get());
+    SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.mIndexer.mFirstStageGate.get());
 
   }
 
