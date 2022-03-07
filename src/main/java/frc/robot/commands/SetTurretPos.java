@@ -21,8 +21,8 @@ public class SetTurretPos extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.turret.turretAngle = angle;
-    RobotContainer.turret.setState(TurretState.DRIVE);
+    RobotContainer.mTurret.turretAngle = angle;
+    RobotContainer.mTurret.setState(TurretState.DRIVE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

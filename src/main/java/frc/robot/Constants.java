@@ -11,32 +11,29 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
-
-    public static final class RobotMap {
-
+    
+    public static final class Ports {
+        
+        // CAN
         public static final int pigeonID = 9;
+        public static final int INTAKE = 14;
+        public static final int FIRST_STAGE = 9;
+        public static final int SECOND_STAGE = 10;
+        public static final int SHOOTER_MASTER = 11;
+        public static final int SHOOTER_SLAVE = 12;
+        public static final int CLIMB_MASTER = 1;
+        public static final int CLIMB_SLAVE = 1;
+        public static final int TURRET = 8;
+        
+        // DIO
+        public static final int FIRST_STAGE_GATE = 0;
+        public static final int SECOND_STAGE_GATE = 1;
+        
+        // PCM
+        public static final int INTAKE_SOLENOID = 3;
 
-        /* change these later when robot is fully wired */
-        public static final int intake = 14;
-        public static final int intakeDeploy = 3;
-
-        public static final int secondStage = 10;
-        public static final int firstStage = 9;
-
-        public static final int secondStageGate = 1;
-        public static final int firstStageGate = 0;
-
-        public static final int shooterA = 11;
-        public static final int shooterB = 12;
-
-        public static final int climberRaiseA = 1;
-        public static final int climberRaiseB = 1;
-
-        public static final int climberTiltA = 1;
-        public static final int climberTiltB = 1;
-
-        public static final int turret = 8;
-
+        public static final int CLIMB_ACTUATOR = 1;
+        public static final int CLIMB_SHIFTER = 1;
     }
 
     public static final class Shooter {
@@ -49,14 +46,9 @@ public final class Constants {
         public static final double kP_TURRET_RESET_POS = 0.015;
     }
 
-    public static final class Indexer {
-        //Change later
-        public static final double JAMMING_CURRENT_THRESHOLD = 30;
-    }
     public static final class Swerve {
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
-
-        /* Drivetrain Constants */
+        
         public static final double TRACK_WIDTH = Units.inchesToMeters(22.80);
         public static final double WHEEL_BASE = Units.inchesToMeters(22.80);
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.99);
@@ -126,7 +118,6 @@ public final class Constants {
         public static final boolean CANCONDER_INVERT = false;
 
         /* Snap Constants */
-
         public static final double KP_SNAP = 3.0;
         public static final double KI_SNAP = 0;
         public static final double KD_SNAP = 0.0;

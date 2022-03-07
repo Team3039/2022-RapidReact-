@@ -21,6 +21,9 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.InterpolatingDouble;
+import frc.lib.util.InterpolatingTreeMap;
+import frc.lib.util.RigidTransform2;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.SwerveModule;
@@ -33,6 +36,8 @@ public class Drive extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
 
+    private final InterpolatingTreeMap<InterpolatingDouble, RigidTransform2> latencyCompensationMap = new InterpolatingTreeMap<>();
+
     public ProfiledPIDController snapPIDController;
 
     public static Trajectory trajectory = new Trajectory();
@@ -42,7 +47,7 @@ public class Drive extends SubsystemBase {
     public boolean isHighGear = false;
 
     public Drive() {
-        gyro = new PigeonIMU(RobotContainer.indexer.firstStage);
+        gyro = new PigeonIMU(Constants.Ports.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
 
@@ -168,6 +173,13 @@ public class Drive extends SubsystemBase {
         double[] ypr = new double[3];
         gyro.getYawPitchRoll(ypr);
         return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
+    }
+
+    public RigidTransform2 getPoseAtTime(double timestamp) {
+            if (latencyCompensationMap.isEmpty()) {
+                return RigidTransform2.ZERO;
+            }
+            return latencyCompensationMap.getInterpolated(new InterpolatingDouble(timestamp));
     }
 
     @Override

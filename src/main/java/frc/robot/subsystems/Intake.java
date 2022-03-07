@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -10,6 +7,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
     private static Intake instance;
@@ -23,8 +21,8 @@ public class Intake extends SubsystemBase {
     private CANSparkMax roller;
 
     public Intake() {
-        roller = new CANSparkMax(Constants.RobotMap.intake, MotorType.kBrushless);
-        deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.RobotMap.intakeDeploy);
+        roller = new CANSparkMax(Constants.Ports.INTAKE, MotorType.kBrushless);
+        deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.INTAKE_SOLENOID);
     }
 
     public synchronized static Intake getInstance() {
@@ -55,14 +53,12 @@ public class Intake extends SubsystemBase {
               roller.set(0.0);
                 break;
             case INTAKING:
-              deploy.set(true);
+              deploy.set(!RobotContainer.mIndexer.isFeeding);
               roller.set(0.50);
                 break;
             case OUTTAKING:
-              deploy.set(true);
+              deploy.set(!RobotContainer.mIndexer.isFeeding);
               roller.set(-0.25);
-                break;
-            default:
                 break;
           }
       }

@@ -23,7 +23,7 @@ public class Turret extends SubsystemBase {
   public static double turretAngle = 0;
   private TurretState turretState = TurretState.DRIVE;
 
-  TalonSRX turret = new TalonSRX(Constants.RobotMap.turret);
+  TalonSRX turret = new TalonSRX(Constants.Ports.TURRET);
 
   public static double targetValid; // Whether the limelight has any valid targets (0 or 1)
   public static double targetX; // HorizontalDR Offset From Crosshair To Target (-27 degrees to 27 degrees

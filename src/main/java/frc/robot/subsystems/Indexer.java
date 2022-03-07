@@ -16,13 +16,13 @@ public class Indexer extends SubsystemBase {
         IDLE, SHOOTING, INDEXING, CLIMBING, HELLA_ZOOMING, UNJAMMING,
     }
 
-    public final TalonSRX firstStage;
-    public final TalonSRX secondStage;
+    private final TalonSRX mFirstStageMaster;
+    private final TalonSRX mSecondStageMaster;
 
-    public final DigitalInput secondStageGate;
-    public final DigitalInput firstStageGate;
+    public final DigitalInput mFirstStageGate;
+    public final DigitalInput mSecondStageGate;
 
-    private IndexerState state = IndexerState.IDLE;
+    private IndexerState mState = IndexerState.IDLE;
 
     private boolean hasOneBall;
     private boolean hasTwoBalls;
@@ -30,27 +30,30 @@ public class Indexer extends SubsystemBase {
   
 
     public Indexer() {
-        firstStage = new TalonSRX(Constants.RobotMap.firstStage);
-        secondStage = new TalonSRX(Constants.RobotMap.secondStage);
+        mFirstStageMaster = new TalonSRX(Constants.Ports.FIRST_STAGE);
+        mSecondStageMaster = new TalonSRX(Constants.Ports.SECOND_STAGE);
 
-        firstStageGate = new DigitalInput(Constants.RobotMap.firstStageGate);
-        secondStageGate = new DigitalInput(Constants.RobotMap.secondStageGate);
+        mFirstStageGate = new DigitalInput(Constants.Ports.FIRST_STAGE_GATE);
+        mSecondStageGate = new DigitalInput(Constants.Ports.SECOND_STAGE_GATE);
 
-        firstStage.setNeutralMode(NeutralMode.Brake);
-        secondStage.setNeutralMode(NeutralMode.Brake);
+        mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
+        mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
+        
+        mFirstStageMaster.setNeutralMode(NeutralMode.Brake);
+        mSecondStageMaster.setNeutralMode(NeutralMode.Brake);
     }
 
     public synchronized IndexerState getState() {
-        return state;
+        return mState;
     }
 
     public void setState(IndexerState wanted_state) {
-        state = wanted_state;
+        mState = wanted_state;
     }
 
-    public void setOpenLoop(double firstStageOutput, double secondStageOutput) {
-       firstStage.set(ControlMode.PercentOutput, firstStageOutput);
-       secondStage.set(ControlMode.PercentOutput, secondStageOutput);
+    public void setOpenLoop(double firstStageOuput, double secondStageOutput) {
+       mFirstStageMaster.set(ControlMode.PercentOutput, firstStageOuput);
+       mSecondStageMaster.set(ControlMode.PercentOutput, secondStageOutput);
     }
 
     public void stop() {
@@ -59,10 +62,10 @@ public class Indexer extends SubsystemBase {
 
     @Override
     public void periodic() {
-        hasOneBall = !secondStageGate.get();
-        hasTwoBalls = hasOneBall && !firstStageGate.get();
+        hasOneBall = !mSecondStageGate.get();
+        hasTwoBalls = hasOneBall && !mFirstStageGate.get();
 
-        switch (state) {
+        switch (mState) {
             case HELLA_ZOOMING:
                 System.out.println("Zoomies");
             case IDLE:
@@ -85,8 +88,8 @@ public class Indexer extends SubsystemBase {
                 }
                 break;
             case CLIMBING:
-                firstStage.set(ControlMode.Disabled, 0);
-                secondStage.set(ControlMode.Disabled, 0);
+                mFirstStageMaster.set(ControlMode.Disabled, 0);
+                mSecondStageMaster.set(ControlMode.Disabled, 0);
                 break;
             case UNJAMMING:
                     setOpenLoop(-0.25, -0.25);

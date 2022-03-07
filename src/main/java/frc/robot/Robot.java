@@ -67,11 +67,11 @@ public class Robot extends TimedRobot {
     // field.setRobotPose(Swerve.getInstance().getPose());
     // SmartDashboard.putData("Field", field);
     
-    RobotContainer.turret.setCamMode(false);
-    RobotContainer.turret.setState(TurretState.DRIVE);
+    RobotContainer.mTurret.setCamMode(false);
+    RobotContainer.mTurret.setState(TurretState.DRIVE);
 
-    RobotContainer.indexer.setState(IndexerState.IDLE);
-    RobotContainer.intake.setState(IntakeState.IDLE);
+    RobotContainer.mIndexer.setState(IndexerState.IDLE);
+    RobotContainer.mIntake.setState(IntakeState.IDLE);
   }
 
   /**
@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    RobotContainer.turret.setState(TurretState.DRIVE);
+    RobotContainer.mTurret.setState(TurretState.DRIVE);
   }
 
   @Override
