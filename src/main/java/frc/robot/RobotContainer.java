@@ -15,8 +15,8 @@ import frc.robot.commands.FeedCargo;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetGear;
 import frc.robot.commands.SetIndexing;
-import frc.robot.commands.SetShooterPercent;
 import frc.robot.commands.SetSnap;
+import frc.robot.commands.SpinShooter;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
@@ -104,11 +104,12 @@ public class RobotContainer {
    // driverR1.whileHeld(new SetGear(true));
   //  driverR1.whenReleased(new SetGear(false));
 
-    // driverSquare.whileHeld(new SetIndexing());
-   driverX.toggleWhenPressed(new RunIntake());
+    driverSquare.whileHeld(new SetIndexing());
+   driverX.whileHeld(new FeedCargo());
     // driverShare.whileHeld(new SetUnjamming());
 
-    driverCircle.toggleWhenPressed(new SetShooterPercent(.8));
+    driverCircle.toggleWhenPressed(new SpinShooter());
+
 
   }
 

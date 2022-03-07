@@ -6,30 +6,29 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter.ShooterState;
 
-public class SetShooterPercent extends CommandBase {
-
-  double percent;
-  /** Creates a new SetShooterPercent. */
-  public SetShooterPercent(double percent) {
+public class SpinShooter extends CommandBase {
+  /** Creates a new SpinShooter. */
+  public SpinShooter() {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.percent = percent;
+    addRequirements(RobotContainer.shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    RobotContainer.shooter.setShooterPercent(percent);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    RobotContainer.shooter.setState(ShooterState.SHOOTING);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.shooter.setShooterPercent(0);
+    RobotContainer.shooter.setState(ShooterState.IDLE);
   }
 
   // Returns true when the command should end.

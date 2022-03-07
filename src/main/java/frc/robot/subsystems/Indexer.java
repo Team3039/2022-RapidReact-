@@ -36,14 +36,6 @@ public class Indexer extends SubsystemBase {
         firstStageGate = new DigitalInput(Constants.RobotMap.firstStageGate);
         secondStageGate = new DigitalInput(Constants.RobotMap.secondStageGate);
 
-        firstStage.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
-        secondStage.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
-
-        firstStage.configVoltageCompSaturation(12.0);
-        firstStage.enableVoltageCompensation(true);
-        secondStage.configVoltageCompSaturation(12.0);
-        secondStage.enableVoltageCompensation(true);
-
         firstStage.setNeutralMode(NeutralMode.Brake);
         secondStage.setNeutralMode(NeutralMode.Brake);
     }
@@ -56,8 +48,8 @@ public class Indexer extends SubsystemBase {
         state = wanted_state;
     }
 
-    public void setOpenLoop(double firstStageOuput, double secondStageOutput) {
-       firstStage.set(ControlMode.PercentOutput, firstStageOuput);
+    public void setOpenLoop(double firstStageOutput, double secondStageOutput) {
+       firstStage.set(ControlMode.PercentOutput, firstStageOutput);
        secondStage.set(ControlMode.PercentOutput, secondStageOutput);
     }
 
@@ -78,15 +70,15 @@ public class Indexer extends SubsystemBase {
                 break;
             case SHOOTING:
                 isFeeding = true;
-                setOpenLoop(0.5, 0.5);
+                setOpenLoop(0.6, 0.75);
                 break;
             case INDEXING:
                 isFeeding = false;
                 if (!hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.40, 0.40); 
+                    setOpenLoop(0.60, 0.40); 
                 }
                 else if (hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.25, 0);
+                    setOpenLoop(0.60, 0);
                 }
                 else if (hasTwoBalls) {
                     setOpenLoop(0, 0);

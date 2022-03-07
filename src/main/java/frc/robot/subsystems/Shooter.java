@@ -26,15 +26,17 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shotoer. */
   public Shooter() {
-    leader.setInverted(true);
+    leader.setInverted(false);
     leader.setNeutralMode(NeutralMode.Coast);
 
-    follower.follow(leader);
+    follower.setInverted(true);
+    follower.setNeutralMode(NeutralMode.Coast);
 
     leader.config_kP(0, 0.5);
     leader.config_kI(0, 0);
     leader.config_kD(0, 0);
 
+    follower.follow(leader);
   }
 
   public static Shooter getInstance() {
@@ -80,7 +82,7 @@ public class Shooter extends SubsystemBase {
         leader.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
-        setShooterRPM(1000);
+        setShooterPercent(.65);
         break;
       case SPIN_UP:
         leader.set(ControlMode.PercentOutput, 0.5);

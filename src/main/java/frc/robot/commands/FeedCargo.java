@@ -13,6 +13,7 @@ public class FeedCargo extends CommandBase {
   /** Creates a new SetPassiveIndexing. */
   public FeedCargo() {
     addRequirements(RobotContainer.indexer);
+    addRequirements(RobotContainer.intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,13 +25,14 @@ public class FeedCargo extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.indexer.setState(IndexerState.SHOOTING);
-    RobotContainer.intake.setState(IntakeState.INTAKING);
+  //  RobotContainer.intake.setState(IntakeState.INTAKING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     RobotContainer.indexer.setState(IndexerState.IDLE);
+  //  RobotContainer.intake.setState(IntakeState.IDLE);
   }
 
   // Returns true when the command should end.
