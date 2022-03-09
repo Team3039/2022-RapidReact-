@@ -24,12 +24,14 @@ public class FeedCargo extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.mIndexer.setState(IndexerState.SHOOTING);
+   // RobotContainer.mIntake.setState(IntakeState.INTAKING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     RobotContainer.mIndexer.setState(IndexerState.IDLE);
+ //   RobotContainer.mIntake.setState(IntakeState.IDLE);
   }
 
   // Returns true when the command should end.

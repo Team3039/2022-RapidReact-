@@ -47,7 +47,7 @@ public class Drive extends SubsystemBase {
     public boolean isHighGear = false;
 
     public Drive() {
-        gyro = new PigeonIMU(Constants.Ports.pigeonID);
+        gyro = new PigeonIMU(RobotContainer.mIndexer.mFirstStageMaster);
         gyro.configFactoryDefault();
         zeroGyro();
 

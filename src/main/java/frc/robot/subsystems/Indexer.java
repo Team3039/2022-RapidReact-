@@ -16,8 +16,8 @@ public class Indexer extends SubsystemBase {
         IDLE, SHOOTING, INDEXING, CLIMBING, HELLA_ZOOMING, UNJAMMING,
     }
 
-    private final TalonSRX mFirstStageMaster;
-    private final TalonSRX mSecondStageMaster;
+    public final TalonSRX mFirstStageMaster;
+    public final TalonSRX mSecondStageMaster;
 
     public final DigitalInput mFirstStageGate;
     public final DigitalInput mSecondStageGate;
@@ -78,10 +78,10 @@ public class Indexer extends SubsystemBase {
             case INDEXING:
                 isFeeding = false;
                 if (!hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.60, 0.40); 
+                    setOpenLoop(0.70, 0.40); 
                 }
                 else if (hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.60, 0);
+                    setOpenLoop(0.70, 0);
                 }
                 else if (hasTwoBalls) {
                     setOpenLoop(0, 0);

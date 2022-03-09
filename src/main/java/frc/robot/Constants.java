@@ -11,7 +11,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
-    
+
     public static final class Ports {
         
         // CAN

@@ -23,10 +23,8 @@ public class Limelight implements Subsystem {
 
     private static final double TARGET_ALLOWABLE_ERROR = Math.toRadians(2.5);
 
-    private static final frc.lib.util.Limelight LIMELIGHT = new frc.lib.util.Limelight("shooter");
+    private static final frc.lib.util.Limelight LIMELIGHT = new frc.lib.util.Limelight();
 
-    private boolean intakeHasTarget = false;
-    private double intakeDistanceToTarget = Double.NaN;
     private double xFromTarget = Double.NaN;
     private double yFromTarget = Double.NaN;
 
@@ -65,12 +63,6 @@ public class Limelight implements Subsystem {
                 .withPosition(6, 0)
                 .withSize(1, 1);
 
-        tab.addBoolean("Intake Has Target", () -> intakeHasTarget)
-                .withPosition(0, 1)
-                .withSize(1, 1);
-        tab.addNumber("Intake Distance to Target", () -> intakeDistanceToTarget)
-                .withPosition(1, 1)
-                .withSize(1, 1);
         tab.addNumber("X-Coord Distance to Target", () -> xFromTarget)
                 .withPosition(2, 1)
                 .withSize(1, 1);
@@ -117,14 +109,8 @@ public class Limelight implements Subsystem {
         return position;
     }
 
-    public boolean doesIntakeHaveTarget(){
-        return intakeHasTarget;
-    }
-
     @Override
     public void periodic() {
-        // Shooter limelight
-        // Determine whether the Limelight has a target or not
         hasTarget = LIMELIGHT.hasTarget();
         if (hasTarget) {
             // Calculate the distance to the outer target

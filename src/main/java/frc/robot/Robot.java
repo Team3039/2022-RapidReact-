@@ -67,8 +67,9 @@ public class Robot extends TimedRobot {
     // field.setRobotPose(Swerve.getInstance().getPose());
     // SmartDashboard.putData("Field", field);
     
-    RobotContainer.mTurret.setCamMode(false);
-    RobotContainer.mTurret.setState(TurretState.DRIVE);
+
+     RobotContainer.mTurret.setState(TurretState.TRACKING);
+
 
     RobotContainer.mIndexer.setState(IndexerState.IDLE);
     RobotContainer.mIntake.setState(IntakeState.IDLE);
@@ -89,7 +90,6 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    
     SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.mIndexer.mSecondStageGate.get());
     SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.mIndexer.mFirstStageGate.get());
 
@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    RobotContainer.mTurret.setState(TurretState.DRIVE);
+ //   RobotContainer.mTurret.setState(TurretState.DRIVE);
   }
 
   @Override

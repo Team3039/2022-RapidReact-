@@ -26,9 +26,7 @@ public class Shooter extends SubsystemBase {
   public TalonFX mLeader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
   public TalonFX mFollower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
 
-  public static InterpolatingTreeMap<InterpolatingDouble, Vector2> mShooterMap = new InterpolatingTreeMap();
-
-
+  public static InterpolatingTreeMap<InterpolatingDouble, Vector2> mShooterMap;
   /** Creates a new Shotoer. */
   public Shooter() {
     mLeader.setInverted(false);
@@ -42,7 +40,9 @@ public class Shooter extends SubsystemBase {
     mLeader.config_kD(0, 0);
 
     mFollower.follow(mLeader);
-    // mShooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
+
+    mShooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
+    mShooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
   }
 
   public static Shooter getInstance() {
@@ -87,7 +87,7 @@ public class Shooter extends SubsystemBase {
         mLeader.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
-        setShooterPercent(.65);
+        setShooterPercent(0.75);
        // mMaster.set(TalonFXControlMode.Velocity, RPMToVelocity(mShooterMap.getInterpolated(new InterpolatingDouble(RobotContainer.mLimelight.getDistanceToTarget().getAsDouble())).x));
         break;
       case SPIN_UP:

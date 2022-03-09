@@ -4,23 +4,26 @@
 
 package frc.robot;
 
-import java.security.spec.RSAKeyGenParameterSpec;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.FeedCargo;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.SetGear;
 import frc.robot.commands.SetIndexing;
 import frc.robot.commands.SetSnap;
+import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TrackTarget;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 
 
 /**
@@ -34,17 +37,17 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
   /* Subsystems */
-  public static final Drive mDrive = new Drive();
   public static final Intake mIntake = new Intake();
   public static final Indexer mIndexer = new Indexer();
+  public static final Drive mDrive = new Drive();
   public static final Shooter mShooter = new Shooter();
   public static final Turret mTurret = new Turret();
-  public static final LEDs mLEDs = new LEDs();
+  // public static final LEDs mLEDs = new LEDs();
   public static final Limelight mLimelight = new Limelight(mDrive);
   
   /* Controllers */
-  private final InterpolatedPS4Gamepad mDriver = new InterpolatedPS4Gamepad(0);
-  private final InterpolatedPS4Gamepad mOperator = new InterpolatedPS4Gamepad(1);
+  private final InterpolatedPS4Gamepad mDriver = new InterpolatedPS4Gamepad(1);
+  private final InterpolatedPS4Gamepad mOperator = new InterpolatedPS4Gamepad(2);
 
   /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(mDriver, PS4Gamepad.BUTTON_X);
@@ -57,6 +60,7 @@ public class RobotContainer {
   private final JoystickButton driverDPadLeft = new JoystickButton(mDriver, PS4Gamepad.DPAD_LEFT);
   private final JoystickButton driverDPadRight = new JoystickButton(mDriver, PS4Gamepad.DPAD_RIGHT);
    
+  private final JoystickButton driverL1 = new JoystickButton(mDriver, PS4Gamepad.BUTTON_L1);
   private final JoystickButton driverR1 = new JoystickButton(mDriver, PS4Gamepad.BUTTON_R1);
   private final JoystickButton driverShare = new JoystickButton(mDriver, PS4Gamepad.BUTTON_SHARE);
   /**
@@ -86,14 +90,18 @@ public class RobotContainer {
     /* Driver Buttons */
     driverTriangle.whenPressed(new InstantCommand(() -> Drive.getInstance().zeroGyro()));
     
-    driverDPadUp.whenPressed(new SetSnap(0));
+    driverDPadUp.whileHeld(new SetSnap(0));
+    driverDPadRight.whileHeld(new SetSnap(90));
+    driverDPadLeft.whileHeld(new SetSnap(-90));
 
    // driverR1.whileHeld(new SetGear(true));
   //  driverR1.whenReleased(new SetGear(false));
 
-    driverSquare.whileHeld(new SetIndexing());
+    driverL1.whileHeld(new SetIndexing());
    driverX.whileHeld(new FeedCargo());
-    // driverShare.whileHeld(new SetUnjamming());
+    driverShare.whileHeld(new SetUnjamming());
+
+    driverR1.toggleWhenPressed(new TrackTarget());
 
     driverCircle.toggleWhenPressed(new SpinShooter());
 
