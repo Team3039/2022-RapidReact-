@@ -17,7 +17,7 @@ public class Limelight implements Subsystem {
     private static final double INNER_TARGET_RANGE_ANGLE = Math.toRadians(10.0); // "Theoretical": 18.0
     private static final double INNER_TARGET_DEPTH = 29.25;
     // The distance from the inner target to the apex of the triangle we use to find the distance
-    private static final double DISTANCE_FROM_INNER_TO_APEX = 16.92;
+    private static final double DISTANCE_FROINNER_TO_APEX = 16.92;
 
     private static final double LIMELIGHT_MOUNTING_ANGLE = Math.toRadians(29.0);
 
@@ -128,10 +128,10 @@ public class Limelight implements Subsystem {
             // Calculate the distance to the inner target
             double dXInner = dXOuter + INNER_TARGET_DEPTH;
             double distanceToInnerTarget = Math.hypot(dXInner, dYOuter);
-            // Add DISTANCE_FROM_INNER_TO_APEX to dXInner here because we want if we did it when we defined dXInner
+            // Add DISTANCE_FROINNER_TO_APEX to dXInner here because we want if we did it when we defined dXInner
             // distanceToInnerTarget would be incorrect, and we only need this extra bit to determine if we can see
             // the inner target
-            double angleToApex = Math.atan(dYOuter / (dXInner + DISTANCE_FROM_INNER_TO_APEX));
+            double angleToApex = Math.atan(dYOuter / (dXInner + DISTANCE_FROINNER_TO_APEX));
             if (angleToApex < 0.0) {
                 angleToApex += 2 * Math.PI;
             }

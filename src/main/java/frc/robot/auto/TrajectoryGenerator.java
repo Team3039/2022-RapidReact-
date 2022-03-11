@@ -2,7 +2,7 @@ package frc.robot.auto;
 
 import java.util.List;
 
-import javax.management.MalformedObjectNameException;
+// import javax.management.MalformedObjectNameException;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,7 +18,7 @@ public class TrajectoryGenerator {
         public static TrajectoryGenerator INSTANCE = new TrajectoryGenerator();
 
         public static TrajectoryConfig configFast = new TrajectoryConfig(
-                        Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND - 1,
+                        Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND,
                         Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
                                         .setKinematics(Constants.Swerve.SWERVE_KINEMATICS);
         // .setReversed(true);

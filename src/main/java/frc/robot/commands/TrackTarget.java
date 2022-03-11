@@ -18,7 +18,7 @@ public class TrackTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.mTurret.setState(TurretState.TRACKING);
+    RobotContainer.turret.setState(TurretState.TRACKING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -29,7 +29,7 @@ public class TrackTarget extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.mTurret.setState(TurretState.DRIVE);
+    RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   // Returns true when the command should end.

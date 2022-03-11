@@ -2,23 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drive;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter.ShooterState;
 
-public class SetGear extends CommandBase {
-  /** Creates a new SetGear. */
-  boolean isHighGear;
-  public SetGear(boolean isHighGear) {
+public class SetShooterIdleMode extends CommandBase {
+  /** Creates a new SetShooterIdleMode. */
+  public SetShooterIdleMode() {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.isHighGear = isHighGear;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Drive.getInstance().setGear(isHighGear);
+    RobotContainer.shooter.setState(ShooterState.IDLE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,6 +31,6 @@ public class SetGear extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

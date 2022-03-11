@@ -6,43 +6,45 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.InterpolatingDouble;
 import frc.lib.util.InterpolatingTreeMap;
 import frc.lib.util.Vector2;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 
 public class Shooter extends SubsystemBase {
 
   public static Shooter INSTANCE = new Shooter();
-  public static ShooterState mState = ShooterState.IDLE;
+  public static ShooterState state = ShooterState.IDLE;
 
-  public TalonFX mLeader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
-  public TalonFX mFollower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
+  public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
+  public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
 
-  public static InterpolatingTreeMap<InterpolatingDouble, Vector2> mShooterMap;
+  // public Servo mHoodLeader = new Servo(Constants.Ports.HOOD_LEADER);
+  // public Servo mHoodFollower = new Servo(Constants.Ports.HOOD_FOLLOWER);
+
+  public static InterpolatingTreeMap<InterpolatingDouble, Vector2> shooterMap;
   /** Creates a new Shotoer. */
   public Shooter() {
-    mLeader.setInverted(false);
-    mLeader.setNeutralMode(NeutralMode.Coast);
+    leader.setInverted(false);
+    leader.setNeutralMode(NeutralMode.Coast);
 
-    mFollower.setInverted(true);
-    mFollower.setNeutralMode(NeutralMode.Coast);
+    follower.setInverted(true);
+    follower.setNeutralMode(NeutralMode.Coast);
 
-    mLeader.config_kP(0, 0.5);
-    mLeader.config_kI(0, 0);
-    mLeader.config_kD(0, 0);
+    leader.config_kP(0, 0.4);
+    leader.config_kI(0, 0);
+    leader.config_kD(0, 6);
 
-    mFollower.follow(mLeader);
+    follower.follow(leader);
 
-    mShooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
-    mShooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
+    shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
   }
 
   public static Shooter getInstance() {
@@ -53,15 +55,16 @@ public class Shooter extends SubsystemBase {
     IDLE,
     SPIN_UP,
     UNJAMMING,
-    SHOOTING
+    SHOOTING,
+    CLIMBING
   }
 
   public static ShooterState getState() {
-    return mState;
+    return state;
   }
 
   public void setState(ShooterState traverseState) {
-    mState = traverseState;
+    state = traverseState;
   }
 
   public double velocityToRPM(double velocity) {
@@ -73,27 +76,38 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterRPM(double rpm) {
-    mLeader.set(ControlMode.Velocity, RPMToVelocity(rpm));
+    leader.set(ControlMode.Velocity, RPMToVelocity(rpm));
   }
 
   public void setShooterPercent(double percent) {
-    mLeader.set(ControlMode.PercentOutput, percent);
+    leader.set(ControlMode.PercentOutput, percent);
   }
 
   @Override
   public void periodic() {
-    switch (Shooter.getInstance().getState()) {
+    SmartDashboard.putNumber("Shooter SetPoint Velocity", RPMToVelocity(4500));
+    SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter Percent Speed", leader.getMotorOutputPercent());
+    SmartDashboard.putNumber("Shooter RPM", velocityToRPM(leader.getSelectedSensorVelocity()));
+
+    switch (getState()) {
       case IDLE:
-        mLeader.set(ControlMode.PercentOutput, 0);
+        leader.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
-        setShooterPercent(0.75);
-       // mMaster.set(TalonFXControlMode.Velocity, RPMToVelocity(mShooterMap.getInterpolated(new InterpolatingDouble(RobotContainer.mLimelight.getDistanceToTarget().getAsDouble())).x));
+        leader.set(ControlMode.Velocity, RPMToVelocity(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y));
+        // mHoodLeader.setAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
+        // mHoodFollower.setAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
         break;
       case SPIN_UP:
+        leader.set(ControlMode.Velocity, RPMToVelocity(4500));
         break;
       case UNJAMMING:
-        mLeader.set(ControlMode.PercentOutput, 0.45);
+        leader.set(ControlMode.PercentOutput, 0.45);
+        break;
+      case CLIMBING:
+        leader.set(ControlMode.Disabled, 0);
+        break;
       default:
         break;
     }

@@ -17,7 +17,7 @@ public class RunIndexer extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.mIndexer.setState(IndexerState.INDEXING);
+    RobotContainer.indexer.setState(IndexerState.INDEXING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -27,7 +27,7 @@ public class RunIndexer extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.mIndexer.setState(IndexerState.IDLE);
+    RobotContainer.indexer.setState(IndexerState.IDLE);
   }
 
   // Returns true when the command should end.

@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,11 +16,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.lib.math.FieldOrientedTurretHelper;
+import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
+import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Shooter.ShooterState;
 import frc.robot.subsystems.Turret.TurretState;
 
 /**
@@ -39,12 +46,15 @@ public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
   public static Trajectory mTrajectory = new Trajectory();
 
-  private Command m_autonomousCommand;
+  public static FieldOrientedTurretHelper mFieldOrientedTurretHelper;
+
+  private Command autonomousCommand;
 
   @SuppressWarnings("unused")
-  private RobotContainer m_robotContainer;
+  private RobotContainer robotContainer;
 
   SendableChooser<Command> autonTaskChooser = new SendableChooser<>();
+  SendableChooser<FieldOrientedTurretHelper.Start_Pose> mStartPoseChooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -54,7 +64,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
-    m_robotContainer = new RobotContainer();
+    robotContainer = new RobotContainer();
 
     autonTaskChooser = new SendableChooser<>();
 
@@ -62,17 +72,28 @@ public class Robot extends TimedRobot {
 
     autonTaskChooser.addOption("Right Far Four Ball", new RightFarFourBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Drive.getInstance()));
+    autonTaskChooser.addOption("Drive Straight", new DriveStraight(Drive.getInstance()));
 
     SmartDashboard.putData("Autonomous", autonTaskChooser);
     // field.setRobotPose(Swerve.getInstance().getPose());
     // SmartDashboard.putData("Field", field);
-    
 
-     RobotContainer.mTurret.setState(TurretState.TRACKING);
+    mStartPoseChooser.addOption("Left Far Start Pose", Start_Pose.LEFT_FAR);
+    mStartPoseChooser.addOption("Left Near Start Pose", Start_Pose.LEFT_NEAR);
+    mStartPoseChooser.addOption("Right Far Start Pose", Start_Pose.RIGHT_FAR);
+    mStartPoseChooser.addOption("Right Near Start Pose", Start_Pose.RIGHT_NEAR);
 
+    mStartPoseChooser.setDefaultOption("Left Far Start Pose", Start_Pose.LEFT_FAR);
 
-    RobotContainer.mIndexer.setState(IndexerState.IDLE);
-    RobotContainer.mIntake.setState(IntakeState.IDLE);
+    SmartDashboard.putData("Start Pose Chooser", mStartPoseChooser);
+
+    UsbCamera usbCamera = CameraServer.startAutomaticCapture();
+    usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 320, 180, 60);
+
+     RobotContainer.turret.setState(TurretState.DRIVE);
+     RobotContainer.shooter.setState(ShooterState.IDLE);
+    RobotContainer.indexer.setState(IndexerState.IDLE);
+    RobotContainer.intake.setState(IntakeState.IDLE);
   }
 
   /**
@@ -88,17 +109,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
+    mFieldOrientedTurretHelper = new FieldOrientedTurretHelper(mStartPoseChooser.getSelected());
+    
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.mIndexer.mSecondStageGate.get());
-    SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.mIndexer.mFirstStageGate.get());
-
+    SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.mSecondStageGate.get());
+    SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.indexer.mFirstStageGate.get());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
- //   RobotContainer.mTurret.setState(TurretState.DRIVE);
+ //   RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   @Override
@@ -107,11 +130,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = autonTaskChooser.getSelected();
+    autonomousCommand = autonTaskChooser.getSelected();
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
     }
   }
 
@@ -126,9 +149,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    CommandScheduler.getInstance().cancelAll();
   }
 
   /** This function is called periodically during operator control. */

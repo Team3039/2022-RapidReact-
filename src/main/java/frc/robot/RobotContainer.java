@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.FeedCargo;
 import frc.robot.commands.SetIndexing;
-import frc.robot.commands.SetSnap;
+import frc.robot.commands.SetTurretManualMode;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.TeleopSwerve;
@@ -37,32 +37,58 @@ import frc.robot.subsystems.Turret;
  */
 public class RobotContainer {
   /* Subsystems */
-  public static final Intake mIntake = new Intake();
-  public static final Indexer mIndexer = new Indexer();
-  public static final Drive mDrive = new Drive();
-  public static final Shooter mShooter = new Shooter();
-  public static final Turret mTurret = new Turret();
+  public static final Intake intake = new Intake();
+  public static final Indexer indexer = new Indexer();
+  public static final Drive drive = new Drive();
+  public static final Shooter shooter = new Shooter();
+  public static final Turret turret = new Turret();
+  // public static final Climber mClimber = new Climber();
   // public static final LEDs mLEDs = new LEDs();
-  public static final Limelight mLimelight = new Limelight(mDrive);
+  public static final Limelight limelight = new Limelight(drive);
   
   /* Controllers */
-  private final InterpolatedPS4Gamepad mDriver = new InterpolatedPS4Gamepad(1);
-  private final InterpolatedPS4Gamepad mOperator = new InterpolatedPS4Gamepad(2);
+  private static final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(1);
+  private static final InterpolatedPS4Gamepad operator = new InterpolatedPS4Gamepad(2);
 
   /* Driver Buttons */
-  private final JoystickButton driverX = new JoystickButton(mDriver, PS4Gamepad.BUTTON_X);
-  private final JoystickButton driverSquare = new JoystickButton(mDriver, PS4Gamepad.BUTTON_Square);
-  private final JoystickButton driverTriangle = new JoystickButton(mDriver, PS4Gamepad.BUTTON_Triangle);
-  private final JoystickButton driverCircle = new JoystickButton(mDriver, PS4Gamepad.BUTTON_Circle);
+  private final JoystickButton driverX = new JoystickButton(driver, PS4Gamepad.BUTTON_X);
+  private final JoystickButton driverSquare = new JoystickButton(driver, PS4Gamepad.BUTTON_Square);
+  private final JoystickButton driverTriangle = new JoystickButton(driver, PS4Gamepad.BUTTON_Triangle);
+  private final JoystickButton driverCircle = new JoystickButton(driver, PS4Gamepad.BUTTON_Circle);
 
-  private final JoystickButton driverDPadUp = new JoystickButton(mDriver, PS4Gamepad.DPAD_UP);
-  private final JoystickButton driverDPadDown = new JoystickButton(mDriver, PS4Gamepad.DPAD_DOWN);
-  private final JoystickButton driverDPadLeft = new JoystickButton(mDriver, PS4Gamepad.DPAD_LEFT);
-  private final JoystickButton driverDPadRight = new JoystickButton(mDriver, PS4Gamepad.DPAD_RIGHT);
+  private final JoystickButton driverDPadUp = new JoystickButton(driver, PS4Gamepad.DPAD_UP);
+  private final JoystickButton driverDPadDown = new JoystickButton(driver, PS4Gamepad.DPAD_DOWN);
+  private final JoystickButton driverDPadLeft = new JoystickButton(driver, PS4Gamepad.DPAD_LEFT);
+  private final JoystickButton driverDPadRight = new JoystickButton(driver, PS4Gamepad.DPAD_RIGHT);
    
-  private final JoystickButton driverL1 = new JoystickButton(mDriver, PS4Gamepad.BUTTON_L1);
-  private final JoystickButton driverR1 = new JoystickButton(mDriver, PS4Gamepad.BUTTON_R1);
-  private final JoystickButton driverShare = new JoystickButton(mDriver, PS4Gamepad.BUTTON_SHARE);
+  private final JoystickButton driverL1 = new JoystickButton(driver, PS4Gamepad.BUTTON_L1);
+  private final JoystickButton driverR1 = new JoystickButton(driver, PS4Gamepad.BUTTON_R1);
+
+  private final JoystickButton driverL2 = new JoystickButton(driver, PS4Gamepad.BUTTON_L2);
+  private final JoystickButton driverR2 = new JoystickButton(driver, PS4Gamepad.BUTTON_R2);
+
+  private final JoystickButton driverPadButton = new JoystickButton(driver, PS4Gamepad.BUTTON_PAD);
+  private final JoystickButton driverStart = new JoystickButton(driver, PS4Gamepad.BUTTON_START);
+
+
+  /* Operator Buttons */
+  private final JoystickButton operatorX = new JoystickButton(operator, PS4Gamepad.BUTTON_X);
+  private final JoystickButton operatorSquare = new JoystickButton(operator, PS4Gamepad.BUTTON_Square);
+  private final JoystickButton operatorTriangle = new JoystickButton(operator, PS4Gamepad.BUTTON_Triangle);
+  private final JoystickButton operatorCircle = new JoystickButton(operator, PS4Gamepad.BUTTON_Circle);
+
+  private final JoystickButton operatorDPadUp = new JoystickButton(operator, PS4Gamepad.DPAD_UP);
+  private final JoystickButton operatorDPadDown = new JoystickButton(operator, PS4Gamepad.DPAD_DOWN);
+  private final JoystickButton operatorDPadLeft = new JoystickButton(operator, PS4Gamepad.DPAD_LEFT);
+  private final JoystickButton operatorDPadRight = new JoystickButton(operator, PS4Gamepad.DPAD_RIGHT)
+  ;
+   
+  private final JoystickButton operatorL1 = new JoystickButton(operator, PS4Gamepad.BUTTON_L1);
+  private final JoystickButton operatorR1 = new JoystickButton(operator, PS4Gamepad.BUTTON_R1);
+
+  private final JoystickButton operatorL2 = new JoystickButton(operator, PS4Gamepad.BUTTON_L2);
+  private final JoystickButton operatorR2 = new JoystickButton(operator, PS4Gamepad.BUTTON_R2);
+  private final JoystickButton operatorR3 = new JoystickButton(operator, PS4Gamepad.BUTTON_R3);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -70,7 +96,7 @@ public class RobotContainer {
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
           Drive.getInstance(),
-                mDriver,
+                driver,
           true,
           true)
     );
@@ -90,22 +116,21 @@ public class RobotContainer {
     /* Driver Buttons */
     driverTriangle.whenPressed(new InstantCommand(() -> Drive.getInstance().zeroGyro()));
     
-    driverDPadUp.whileHeld(new SetSnap(0));
-    driverDPadRight.whileHeld(new SetSnap(90));
-    driverDPadLeft.whileHeld(new SetSnap(-90));
+    // driverDPadUp.whileHeld(new SetSnap(0));
+    // driverDPadRight.whileHeld(new SetSnap(90));
+    // driverDPadLeft.whileHeld(new SetSnap(-90));
 
-   // driverR1.whileHeld(new SetGear(true));
-  //  driverR1.whenReleased(new SetGear(false));
-
-    driverL1.whileHeld(new SetIndexing());
-   driverX.whileHeld(new FeedCargo());
-    driverShare.whileHeld(new SetUnjamming());
-
+    // driverR1.whileHeld(new SetGear(true));
+    // driverR1.whenReleased(new SetGear(false));
     driverR1.toggleWhenPressed(new TrackTarget());
 
-    driverCircle.toggleWhenPressed(new SpinShooter());
-
-
+    operatorL1.whileHeld(new SetIndexing());
+    operatorR2.whileHeld(new FeedCargo());
+    operatorL2.whileHeld(new SetUnjamming());
+    operatorR1.whileHeld(new SpinShooter());
+    operatorR3.toggleWhenPressed(new SetTurretManualMode());
+    // operatorSquare.toggleWhenPressed(new SetClimberActuateMode());
+    // operatorStart.whenPressed(new SetSubsystemsClimbMode());
   }
 
   /**
@@ -113,7 +138,15 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+
+   public static InterpolatedPS4Gamepad getDriver() {
+     return driver;
+   }
+   public static InterpolatedPS4Gamepad getOperator() {
+     return operator;
+   }
+
+   public Command getAutonomousCommand() {
       return null;
   }
 }

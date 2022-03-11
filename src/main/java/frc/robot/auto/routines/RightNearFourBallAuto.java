@@ -12,6 +12,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.auto.commands.SetIndexingFeedMode;
+import frc.robot.auto.commands.SetIndexingIdleMode;
+import frc.robot.auto.commands.SetIndexingIntakeMode;
+import frc.robot.auto.commands.SetShooterIdleMode;
+import frc.robot.auto.commands.SetShooterSpinUpMode;
+import frc.robot.auto.commands.SetTurretDriveMode;
+import frc.robot.auto.commands.SetTurretTrackMode;
 import frc.robot.auto.commands.StopTrajectory;
 import frc.robot.subsystems.Drive;
 
@@ -68,20 +75,34 @@ public class RightNearFourBallAuto extends SequentialCommandGroup {
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(180),
+                Drive.getSwerveHeadingSupplier(0),
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
+                new SetShooterSpinUpMode(),
+                new SetIndexingIntakeMode(),
                 fourBallCommandOne,
                 new StopTrajectory(),
+                new SetTurretTrackMode(),
+                new SetIndexingFeedMode(),
+                new WaitCommand(1.5),
+                new SetTurretDriveMode(),
+                new SetIndexingIntakeMode(),
                 fourBallCommandTwo,
                 new StopTrajectory(),
-                new WaitCommand(1),
                 fourBallCommandThree,
                 new StopTrajectory(),
                 fourBallCommandFour,
-                new StopTrajectory());
+                new StopTrajectory(),
+                new SetTurretTrackMode(),
+                new SetIndexingFeedMode(),
+                new WaitCommand(1.5),
+                new SetTurretDriveMode(),
+                new SetShooterIdleMode(),
+                new SetIndexingIdleMode()
+                );
+                
     }
 }

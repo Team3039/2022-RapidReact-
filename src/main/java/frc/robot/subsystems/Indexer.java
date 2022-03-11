@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,10 +22,10 @@ public class Indexer extends SubsystemBase {
     public final DigitalInput mFirstStageGate;
     public final DigitalInput mSecondStageGate;
 
-    private IndexerState mState = IndexerState.IDLE;
+    private IndexerState state = IndexerState.IDLE;
 
-    private boolean hasOneBall;
-    private boolean hasTwoBalls;
+    public boolean hasOneBall;
+    public boolean hasTwoBalls;
     public boolean isFeeding;
   
 
@@ -44,11 +44,11 @@ public class Indexer extends SubsystemBase {
     }
 
     public synchronized IndexerState getState() {
-        return mState;
+        return state;
     }
 
     public void setState(IndexerState wanted_state) {
-        mState = wanted_state;
+        state = wanted_state;
     }
 
     public void setOpenLoop(double firstStageOuput, double secondStageOutput) {
@@ -65,7 +65,7 @@ public class Indexer extends SubsystemBase {
         hasOneBall = !mSecondStageGate.get();
         hasTwoBalls = hasOneBall && !mFirstStageGate.get();
 
-        switch (mState) {
+        switch (state) {
             case HELLA_ZOOMING:
                 System.out.println("Zoomies");
             case IDLE:
@@ -78,21 +78,21 @@ public class Indexer extends SubsystemBase {
             case INDEXING:
                 isFeeding = false;
                 if (!hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.70, 0.40); 
+                    setOpenLoop(0.95, 0.40); 
                 }
                 else if (hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.70, 0);
+                    setOpenLoop(0.95, 0);
                 }
                 else if (hasTwoBalls) {
                     setOpenLoop(0, 0);
                 }
                 break;
+            case UNJAMMING:
+                    setOpenLoop(-0.60, -0.35);
+                break;
             case CLIMBING:
                 mFirstStageMaster.set(ControlMode.Disabled, 0);
                 mSecondStageMaster.set(ControlMode.Disabled, 0);
-                break;
-            case UNJAMMING:
-                    setOpenLoop(-0.25, -0.25);
                 break;
             default:
                 System.out.println("Fell through on Indexer states!");

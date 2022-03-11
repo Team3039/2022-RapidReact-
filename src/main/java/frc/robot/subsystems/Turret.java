@@ -6,14 +6,16 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Limelight.CamMode;
+import frc.lib.util.Limelight.LedMode;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class Turret extends SubsystemBase {
@@ -21,6 +23,8 @@ public class Turret extends SubsystemBase {
   public enum TurretState {
     TRACKING,
     DRIVE,
+    MANUAL,
+    CLIMBING
   }
 
   public static double targetValid; // Whether the limelight has any valid targets (0 or 1)
@@ -30,21 +34,23 @@ public class Turret extends SubsystemBase {
 
   private TurretState turretState = TurretState.DRIVE;
 
-  TalonSRX turret = new TalonSRX(Constants.Ports.TURRET);
+  public TalonSRX turret = new TalonSRX(Constants.Ports.TURRET);
 
   /** Creates a new Turret. */
   public Turret() {
     turret.setSelectedSensorPosition(0);
     turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
-    turret.configForwardSoftLimitThreshold(degreesToTicks(90));
-    turret.configReverseSoftLimitThreshold(degreesToTicks(-90));
+    turret.configForwardSoftLimitThreshold(degreesToTicks(60));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(-60));
 
     turret.configForwardSoftLimitEnable(true);
     turret.configReverseSoftLimitEnable(true);
+
+    turret.setNeutralMode(NeutralMode.Coast);
   
-    turret.config_kP(0, 0.275);
-    turret.config_kD(0, 0.124);
+   turret.config_kP(0, 3);
+   turret.config_kD(0, 2);
   }
 
   public void setState(TurretState state) {
@@ -56,66 +62,83 @@ public class Turret extends SubsystemBase {
   }
 
   public void trackTarget() {
-    double correctionX = -1 * targetX;
-    setTurretPosition(correctionX + getCurrentAngle());
+    // double correctionX = -1 * targetX;
+    // setTurretPosition(correctionX + ticksToDegrees());
+    turret.set(ControlMode.PercentOutput, -1 * targetX * Constants.Turret.kP_TURRET_TRACK);
     }
-
-  public void stop() {
-    turret.set(ControlMode.PercentOutput, 0);
-    RobotContainer.mLimelight.setCamMode(CamMode.DRIVER);
-  }
 
   //Assuming 0 is facing the opposite of the intake .
   //Start match turret facing backwards; 180 is facing the intake.
-  public double getCurrentAngle() {
-    return (turret.getSelectedSensorPosition() / 22320) * 360;
-  }
 
   // rotate turret to specified angle
   public void setTurretPosition(double targetAngle) {
-    // if (targetAngle < -90 || targetAngle > 90) {
-    //   System.out.println("Turret Stop");
-    //   turret.set(ControlMode.PercentOutput, 0);
-    // }
-    //  else {
-      turret.set(ControlMode.Position, targetAngle);
-    // }
+    if (targetAngle < -90 || targetAngle > 90) {
+      System.out.println("Turret Stop");
+      turret.set(ControlMode.PercentOutput, 0);
+    }
+     else {
+      turret.set(ControlMode.Position, degreesToTicks(targetAngle));
+     }
   }
 
+  public void stop() {
+    turret.set(ControlMode.PercentOutput, 0);
+    RobotContainer.limelight.setCamMode(CamMode.DRIVER);
+  }
 
   public double degreesToTicks(double theta) {
     return theta * (22320 / 360.0);
   }
 
+  public double getCurrentAngle() {
+    return (turret.getSelectedSensorPosition() / 22320) * 360;
+  }
+
+  public void setTurretPercentOutput() {
+    turret.set(ControlMode.PercentOutput, -1 * RobotContainer.getOperator().getLeftXAxis() / 3);
+  }
+
   @Override
   public void periodic() {
+    System.out.println(Robot.mFieldOrientedTurretHelper.getAngleToTarget(RobotContainer.drive.getPose()).getDegrees());
+
+    setTurretPercentOutput();
+
     SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
     SmartDashboard.putNumber("Desired Value", degreesToTicks(90));
 
     SmartDashboard.putNumber("Current Angle", getCurrentAngle());
-    SmartDashboard.putNumber("Error Angle", targetX);
-
-    RobotContainer.mLimelight.setCamMode(CamMode.VISION);
-    setTurretPosition(-targetX);
+    // SmartDashboard.putNumber("TargetX", RobotContainer.limelight.getAngleToTarget().getAsDouble());
 
     targetValid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
     targetX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     targetY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
     targetArea = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
 
-    // TurretState currentMode = getTurretState();
-    // switch (currentMode) {
-    //   case TRACKING:
-    //     RobotContainer.mLimelight.setCamMode(frc.lib.util.Limelight.CamMode.VISION);
-    //     trackTarget();
-    //     break;
-    //   case DRIVE:
-    //     RobotContainer.mLimelight.setCamMode(frc.lib.util.Limelight.CamMode.DRIVER);
-    //     setTurretPosition(0);
-    //     break;
-    //   default:
-    //     RobotContainer.mLimelight.setCamMode(frc.lib.util.Limelight.CamMode.VISION);
-    //     stop();
-    // }
+  //  turret.set(ControlMode.PercentOutput, targetX * Constants.Turret.kP_TURRET_TRACK);
+
+    TurretState currentMode = getTurretState();
+    
+    switch (currentMode) {
+      case TRACKING:
+        RobotContainer.limelight.setCamMode(CamMode.VISION);
+        RobotContainer.limelight.setLedMode(LedMode.ON);
+        trackTarget();
+        break;
+      case DRIVE:
+        RobotContainer.limelight.setCamMode(CamMode.DRIVER);
+        RobotContainer.limelight.setLedMode(LedMode.OFF);
+    //  turret.set(ControlMode.Position, degreesToTicks(RobotContainer.drive.getYaw().getDegrees() * -1));
+        setTurretPosition(0);
+        break;
+      case MANUAL:
+        turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * 0.25);
+      case CLIMBING:
+        turret.set(ControlMode.Disabled, 0);
+        break;
+      default:
+        RobotContainer.limelight.setCamMode(CamMode.DRIVER);
+        // stop();
+    }
   }
 }

@@ -15,25 +15,35 @@ public final class Constants {
     public static final class Ports {
         
         // CAN
-        public static final int pigeonID = 9;
         public static final int INTAKE = 14;
+
         public static final int FIRST_STAGE = 9;
         public static final int SECOND_STAGE = 10;
+
         public static final int SHOOTER_MASTER = 11;
         public static final int SHOOTER_SLAVE = 12;
-        public static final int CLIMB_MASTER = 1;
-        public static final int CLIMB_SLAVE = 1;
+
+        public static final int CLIMB_MASTER = 13;
+        public static final int CLIMB_SLAVE = 15;
+
         public static final int TURRET = 8;
         
         // DIO
         public static final int FIRST_STAGE_GATE = 0;
         public static final int SECOND_STAGE_GATE = 1;
+
+        public static final int LED_OUTPUT_A = 2;
+        public static final int LED_OUTPUT_B = 3;
         
         // PCM
         public static final int INTAKE_SOLENOID = 3;
 
-        public static final int CLIMB_ACTUATOR = 1;
-        public static final int CLIMB_SHIFTER = 1;
+        public static final int CLIMB_ACTUATOR_A = 0;
+        public static final int CLIMB_ACTUATOR_B = 1;
+
+        // PWM
+        public static final int HOOD_LEADER = 0;
+        public static final int HOOD_FOLLOWER = 1;
     }
 
     public static final class Shooter {
@@ -42,10 +52,13 @@ public final class Constants {
     }
 
     public static final class Turret {
-        public static final double kP_TURRET_TRACK = 0.03;
+        public static final double kP_TURRET_TRACK = 0.05;
         public static final double kP_TURRET_RESET_POS = 0.015;
     }
 
+    public static final class Climber {
+        public static final double TELESCOPING_ENCODER_LIMIT = 1000000000;
+    }
     public static final class Swerve {
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
         

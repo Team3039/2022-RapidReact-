@@ -7,12 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.Turret.TurretState;
 
 public class SpinShooter extends CommandBase {
   /** Creates a new SpinShooter. */
   public SpinShooter() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.mShooter);
+    addRequirements(RobotContainer.shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -22,13 +23,15 @@ public class SpinShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.mShooter.setState(ShooterState.SHOOTING);
+    RobotContainer.shooter.setState(ShooterState.SPIN_UP);
+    RobotContainer.turret.setState(TurretState.TRACKING);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.mShooter.setState(ShooterState.IDLE);
+    RobotContainer.shooter.setState(ShooterState.IDLE);
+    RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   // Returns true when the command should end.

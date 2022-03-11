@@ -12,13 +12,13 @@ public class RunIntake extends CommandBase {
   /** Creates a new RunIntake. */
   public RunIntake() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.mIntake);
+    addRequirements(RobotContainer.intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.mIntake.setState(IntakeState.INTAKING);
+    RobotContainer.intake.setState(IntakeState.INTAKING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -28,7 +28,7 @@ public class RunIntake extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.mIntake.setState(IntakeState.IDLE);
+    RobotContainer.intake.setState(IntakeState.IDLE);
   }
 
   // Returns true when the command should end.
