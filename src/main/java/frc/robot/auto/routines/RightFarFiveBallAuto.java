@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.SetIndexingFeedMode;
 import frc.robot.auto.commands.SetIndexingIdleMode;
@@ -25,18 +26,17 @@ import frc.robot.subsystems.Drive;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class RightNearFourBallAuto extends SequentialCommandGroup {
+public class RightFarFiveBallAuto extends SequentialCommandGroup {
     
-    /** Creates a new ThreeBallMidWallAuto. */
-    public RightNearFourBallAuto(Drive s_Swerve) {
+    public RightFarFiveBallAuto(Drive s_Swerve) {
 
         var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
                 Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand grabMidBallCommand = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightNearStartToFirstBall(),
+        SwerveControllerCommand grabFarBallCommand = new SwerveControllerCommand(
+                frc.robot.auto.TrajectoryGenerator.getRightFarStartToFirstBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
@@ -46,63 +46,65 @@ public class RightNearFourBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand grabFarBallCommand = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightNearFirstBallToSecondBall(),
+        SwerveControllerCommand grabMidBallCommand = new SwerveControllerCommand(
+                frc.robot.auto.TrajectoryGenerator.getRightFarShootingPointToSecondBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(60),
+                Drive.getSwerveHeadingSupplier(-120),
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
         SwerveControllerCommand grabTerminalBallCommand = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightNearSecondBallToThirdBall(),
+                frc.robot.auto.TrajectoryGenerator.getRightFarSecondBallToThirdBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(-20),
+                // Swerve.getSwerveHeadingSupplier(-25),
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
         SwerveControllerCommand goToShootingPointCommand = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightNearThirdBallToFinish(),
+                frc.robot.auto.TrajectoryGenerator.getRightFarThirdBallToFinish(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(0),
+                Drive.getSwerveHeadingSupplier(135),
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
+        // Add your commands in the addCommands() call, e.g.
+        // addCommands(new FooCommand(), new BarCommand());
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
                 new SetShooterSpinUpMode(),
                 new SetIndexingIntakeMode(),
-                grabMidBallCommand,
+                grabFarBallCommand,
+                new StopTrajectory(),
+                new WaitCommand(1),
+                goToStartCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
                 new SetIndexingFeedMode(),
                 new WaitCommand(1.5),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
-                grabFarBallCommand,
-                new StopTrajectory(),
+                grabMidBallCommand,
                 grabTerminalBallCommand,
                 new StopTrajectory(),
                 goToShootingPointCommand,
                 new StopTrajectory(),
-                new SetTurretTrackMode(),
                 new SetIndexingFeedMode(),
                 new WaitCommand(1.5),
-                new SetTurretDriveMode(),
                 new SetShooterIdleMode(),
+                new SetTurretDriveMode(),
                 new SetIndexingIdleMode()
-                );
-                
+        );
     }
 }

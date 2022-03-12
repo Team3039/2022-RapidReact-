@@ -5,21 +5,25 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class LEDs extends SubsystemBase {
     /** Creates a new LEDs. */
-    DigitalOutput[] mOutputs = {
+    DigitalOutput[] outputs = {
             new DigitalOutput(Constants.Ports.LED_OUTPUT_A),
             new DigitalOutput(Constants.Ports.LED_OUTPUT_B)
     };
-
-    public boolean[] isIdle = {false, false};
-    public boolean[] isIntaking = {true, false};
-    public boolean[] isTargetFound = {false, true};
-    public boolean[] isClimbInitiated = {true, true};
+    // Active when the robot is disabled or when the shooter is spinning up
+    public boolean[] isAwaiting = { true, true };
+    // Active when the shooter is at the correct speed and the turret is in the right position
+    public boolean[] isAtShooterSetpoint = { false, true };
+    // Active when the robot is climbing
+    public boolean[] isClimbInitiated = { false, true };
+    // Active whenever the robot is enabled and does not meet the above cases
+    public boolean[] isIdle = { false, false };
 
     public boolean[] states;
 
@@ -28,28 +32,40 @@ public class LEDs extends SubsystemBase {
 
     @Override
     public void periodic() {
-        switch (RobotContainer.indexer.getState()) {
-            case CLIMBING:
-                states = isClimbInitiated;
-                break;
-            case IDLE:
-                states = isIdle;
-                break;
-            case INDEXING:
-                states = isIntaking;
-                break;
-            case SHOOTING:
-                states = isTargetFound;
-                break;
-            case UNJAMMING:
-                states = isIntaking;
-                break;
-            default:
-                states = isIdle;
-                break;
+        if (!DriverStation.isDisabled()) {
+            switch (Shooter.getState()) {
+                case CLIMBING:
+                    states = isClimbInitiated;
+                    break;
+                case IDLE:
+                    states = isIdle;
+                    break;
+                case SHOOTING:
+                    if (Shooter.isAtSetPoint && Turret.isAtTargetPosition) {
+                        states = isAtShooterSetpoint;
+                    } else {
+                        states = isAwaiting;
+                    }
+                    break;
+                case SPIN_UP:
+                    if (Shooter.isAtSetPoint && Turret.isAtTargetPosition) {
+                        states = isAtShooterSetpoint;
+                    } else {
+                        states = isAwaiting;
+                    }
+                    break;
+                case UNJAMMING:
+                    states = isIdle;
+                    break;
+                default:
+                    states = isIdle;
+                    break;
+            }
+        } else {
+            states = isAwaiting;
         }
         for (int i = 0; i < 2; i++) {
-            mOutputs[i].set(states[i]);
+            outputs[i].set(states[i]);
         }
     }
 }

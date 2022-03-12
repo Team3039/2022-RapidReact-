@@ -13,7 +13,7 @@ public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
 
     public static final class Ports {
-        
+
         // CAN
         public static final int INTAKE = 14;
 
@@ -27,14 +27,14 @@ public final class Constants {
         public static final int CLIMB_SLAVE = 15;
 
         public static final int TURRET = 8;
-        
+
         // DIO
         public static final int FIRST_STAGE_GATE = 0;
         public static final int SECOND_STAGE_GATE = 1;
 
         public static final int LED_OUTPUT_A = 2;
         public static final int LED_OUTPUT_B = 3;
-        
+
         // PCM
         public static final int INTAKE_SOLENOID = 3;
 
@@ -53,15 +53,15 @@ public final class Constants {
 
     public static final class Turret {
         public static final double kP_TURRET_TRACK = 0.05;
-        public static final double kP_TURRET_RESET_POS = 0.015;
     }
 
     public static final class Climber {
-        public static final double TELESCOPING_ENCODER_LIMIT = 1000000000;
+        public static final int TELESCOPING_ENCODER_LIMIT = 1000000000;
     }
+
     public static final class Swerve {
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
-        
+
         public static final double TRACK_WIDTH = Units.inchesToMeters(22.80);
         public static final double WHEEL_BASE = Units.inchesToMeters(22.80);
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.99);

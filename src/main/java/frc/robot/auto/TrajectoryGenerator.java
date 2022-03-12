@@ -97,6 +97,22 @@ public class TrajectoryGenerator {
                 return new Trajectory();
         }
 
+        public static Trajectory getRightFarFirstBallToSecondBall() throws MalformedSplineException {
+                try {
+                        return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+                                        List.of(
+                                                        Waypoints.rightFarRightBall,
+                                                        new Pose2d()),
+                                        configFast);
+                } catch (MalformedSplineException e) {
+                        e.printStackTrace();
+                        System.out.println("Spline Malformed");
+                        CommandScheduler.getInstance().cancelAll();
+                        System.out.println("Autonomous Canceled");
+                }
+                return new Trajectory();
+        }
+
         public static Trajectory getRightFarShootingPointToSecondBall() throws MalformedSplineException {
                 try {
                         return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(

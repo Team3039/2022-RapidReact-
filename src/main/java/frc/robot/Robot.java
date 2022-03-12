@@ -90,8 +90,8 @@ public class Robot extends TimedRobot {
     UsbCamera usbCamera = CameraServer.startAutomaticCapture();
     usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 320, 180, 60);
 
-     RobotContainer.turret.setState(TurretState.DRIVE);
-     RobotContainer.shooter.setState(ShooterState.IDLE);
+    RobotContainer.turret.setState(TurretState.DRIVE);
+    RobotContainer.shooter.setState(ShooterState.IDLE);
     RobotContainer.indexer.setState(IndexerState.IDLE);
     RobotContainer.intake.setState(IntakeState.IDLE);
   }
@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
 
     mFieldOrientedTurretHelper = new FieldOrientedTurretHelper(mStartPoseChooser.getSelected());
-    
+
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.mSecondStageGate.get());
@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
- //   RobotContainer.turret.setState(TurretState.DRIVE);
+    // RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   @Override
@@ -141,10 +141,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     addPeriodic(
-      () -> Drive.getInstance().swerveOdometry.update(
-          Drive.getInstance().getYaw(),
-          Drive.getInstance().getStates()),
-      0.01);
+        () -> Drive.getInstance().swerveOdometry.update(
+            Drive.getInstance().getYaw(),
+            Drive.getInstance().getStates()),
+        0.001);
   }
 
   @Override

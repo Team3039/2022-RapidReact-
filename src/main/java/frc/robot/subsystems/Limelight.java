@@ -16,7 +16,8 @@ public class Limelight implements Subsystem {
 
     private static final double INNER_TARGET_RANGE_ANGLE = Math.toRadians(10.0); // "Theoretical": 18.0
     private static final double INNER_TARGET_DEPTH = 29.25;
-    // The distance from the inner target to the apex of the triangle we use to find the distance
+    // The distance from the inner target to the apex of the triangle we use to find
+    // the distance
     private static final double DISTANCE_FROINNER_TO_APEX = 16.92;
 
     private static final double LIMELIGHT_MOUNTING_ANGLE = Math.toRadians(29.0);
@@ -56,13 +57,12 @@ public class Limelight implements Subsystem {
                 .withPosition(5, 0)
                 .withSize(1, 1);
         tab.addNumber("Horizontal Target Error", () -> {
-                    double gyroAngle = drivetrain.getPose().getRotation().getRadians();
-                    return getDistanceToTarget().orElse(0.0) *
-                            (Math.sin(gyroAngle - getAngleToTarget().orElse(0.0)) / Math.sin(Math.PI / 2.0 - gyroAngle));
-                })
+            double gyroAngle = drivetrain.getPose().getRotation().getRadians();
+            return getDistanceToTarget().orElse(0.0) *
+                    (Math.sin(gyroAngle - getAngleToTarget().orElse(0.0)) / Math.sin(Math.PI / 2.0 - gyroAngle));
+        })
                 .withPosition(6, 0)
                 .withSize(1, 1);
-
         tab.addNumber("X-Coord Distance to Target", () -> xFromTarget)
                 .withPosition(2, 1)
                 .withSize(1, 1);
@@ -104,7 +104,7 @@ public class Limelight implements Subsystem {
         return isInnerTargetVisible;
     }
 
-    public Vector2 getPredictedPostition(){
+    public Vector2 getPredictedPostition() {
         Vector2 position = new Vector2(xFromTarget, yFromTarget);
         return position;
     }
@@ -119,7 +119,10 @@ public class Limelight implements Subsystem {
             double distanceToOuterTarget = (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / Math.tan(theta);
 
             // Get the field oriented angle for the outer target, with latency compensation
-            double angleToOuter = drivetrain.getPoseAtTime(Timer.getFPGATimestamp() - LIMELIGHT.getPipelineLatency() / 1000.0).rotation.toRadians() - targetPosition.x;
+            double angleToOuter = drivetrain
+                    .getPoseAtTime(Timer.getFPGATimestamp() - LIMELIGHT.getPipelineLatency() / 1000.0).rotation
+                            .toRadians()
+                    - targetPosition.x;
             double dYOuter = distanceToOuterTarget * Math.sin(angleToOuter);
             double dXOuter = distanceToOuterTarget * Math.cos(angleToOuter);
             dXOuterEntry.setDouble(dXOuter);
@@ -128,8 +131,10 @@ public class Limelight implements Subsystem {
             // Calculate the distance to the inner target
             double dXInner = dXOuter + INNER_TARGET_DEPTH;
             double distanceToInnerTarget = Math.hypot(dXInner, dYOuter);
-            // Add DISTANCE_FROINNER_TO_APEX to dXInner here because we want if we did it when we defined dXInner
-            // distanceToInnerTarget would be incorrect, and we only need this extra bit to determine if we can see
+            // Add DISTANCE_FROINNER_TO_APEX to dXInner here because we want if we did it
+            // when we defined dXInner
+            // distanceToInnerTarget would be incorrect, and we only need this extra bit to
+            // determine if we can see
             // the inner target
             double angleToApex = Math.atan(dYOuter / (dXInner + DISTANCE_FROINNER_TO_APEX));
             if (angleToApex < 0.0) {
@@ -141,7 +146,8 @@ public class Limelight implements Subsystem {
             }
 
             // Check whether we can see the inner target
-            isInnerTargetVisible = angleToApex <= INNER_TARGET_RANGE_ANGLE || angleToApex >= 2 * Math.PI - INNER_TARGET_RANGE_ANGLE;
+            isInnerTargetVisible = angleToApex <= INNER_TARGET_RANGE_ANGLE
+                    || angleToApex >= 2 * Math.PI - INNER_TARGET_RANGE_ANGLE;
             if (isInnerTargetVisible) {
                 distanceToTarget = OptionalDouble.of(distanceToInnerTarget);
             } else {
@@ -169,8 +175,7 @@ public class Limelight implements Subsystem {
         return MathUtils.epsilonEquals(
                 delta,
                 0,
-                TARGET_ALLOWABLE_ERROR
-        );
+                TARGET_ALLOWABLE_ERROR);
     }
 
     public void setLedMode(frc.lib.util.Limelight.LedMode mode) {

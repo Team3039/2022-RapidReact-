@@ -21,10 +21,10 @@ import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -43,9 +43,9 @@ public class RobotContainer {
   public static final Shooter shooter = new Shooter();
   public static final Turret turret = new Turret();
   // public static final Climber mClimber = new Climber();
-  // public static final LEDs mLEDs = new LEDs();
+  public static final LEDs mLEDs = new LEDs();
   public static final Limelight limelight = new Limelight(drive);
-  
+
   /* Controllers */
   private static final InterpolatedPS4Gamepad driver = new InterpolatedPS4Gamepad(1);
   private static final InterpolatedPS4Gamepad operator = new InterpolatedPS4Gamepad(2);
@@ -60,7 +60,7 @@ public class RobotContainer {
   private final JoystickButton driverDPadDown = new JoystickButton(driver, PS4Gamepad.DPAD_DOWN);
   private final JoystickButton driverDPadLeft = new JoystickButton(driver, PS4Gamepad.DPAD_LEFT);
   private final JoystickButton driverDPadRight = new JoystickButton(driver, PS4Gamepad.DPAD_RIGHT);
-   
+
   private final JoystickButton driverL1 = new JoystickButton(driver, PS4Gamepad.BUTTON_L1);
   private final JoystickButton driverR1 = new JoystickButton(driver, PS4Gamepad.BUTTON_R1);
 
@@ -69,7 +69,6 @@ public class RobotContainer {
 
   private final JoystickButton driverPadButton = new JoystickButton(driver, PS4Gamepad.BUTTON_PAD);
   private final JoystickButton driverStart = new JoystickButton(driver, PS4Gamepad.BUTTON_START);
-
 
   /* Operator Buttons */
   private final JoystickButton operatorX = new JoystickButton(operator, PS4Gamepad.BUTTON_X);
@@ -80,26 +79,25 @@ public class RobotContainer {
   private final JoystickButton operatorDPadUp = new JoystickButton(operator, PS4Gamepad.DPAD_UP);
   private final JoystickButton operatorDPadDown = new JoystickButton(operator, PS4Gamepad.DPAD_DOWN);
   private final JoystickButton operatorDPadLeft = new JoystickButton(operator, PS4Gamepad.DPAD_LEFT);
-  private final JoystickButton operatorDPadRight = new JoystickButton(operator, PS4Gamepad.DPAD_RIGHT)
-  ;
-   
+  private final JoystickButton operatorDPadRight = new JoystickButton(operator, PS4Gamepad.DPAD_RIGHT);
+
   private final JoystickButton operatorL1 = new JoystickButton(operator, PS4Gamepad.BUTTON_L1);
   private final JoystickButton operatorR1 = new JoystickButton(operator, PS4Gamepad.BUTTON_R1);
 
   private final JoystickButton operatorL2 = new JoystickButton(operator, PS4Gamepad.BUTTON_L2);
   private final JoystickButton operatorR2 = new JoystickButton(operator, PS4Gamepad.BUTTON_R2);
   private final JoystickButton operatorR3 = new JoystickButton(operator, PS4Gamepad.BUTTON_R3);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
-          Drive.getInstance(),
-                driver,
-          true,
-          true)
-    );
+            Drive.getInstance(),
+            driver,
+            true,
+            true));
 
     configureButtonBindings();
   }
@@ -115,7 +113,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     driverTriangle.whenPressed(new InstantCommand(() -> Drive.getInstance().zeroGyro()));
-    
+
     // driverDPadUp.whileHeld(new SetSnap(0));
     // driverDPadRight.whileHeld(new SetSnap(90));
     // driverDPadLeft.whileHeld(new SetSnap(-90));
@@ -139,14 +137,15 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
-   public static InterpolatedPS4Gamepad getDriver() {
-     return driver;
-   }
-   public static InterpolatedPS4Gamepad getOperator() {
-     return operator;
-   }
+  public static InterpolatedPS4Gamepad getDriver() {
+    return driver;
+  }
 
-   public Command getAutonomousCommand() {
-      return null;
+  public static InterpolatedPS4Gamepad getOperator() {
+    return operator;
+  }
+
+  public Command getAutonomousCommand() {
+    return null;
   }
 }

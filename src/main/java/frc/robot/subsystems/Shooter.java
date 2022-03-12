@@ -4,18 +4,22 @@
 
 package frc.robot.subsystems;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.InterpolatingDouble;
 import frc.lib.util.InterpolatingTreeMap;
+import frc.lib.util.MathUtils;
 import frc.lib.util.Vector2;
 import frc.robot.Constants;
-
+import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
 
@@ -28,7 +32,11 @@ public class Shooter extends SubsystemBase {
   // public Servo mHoodLeader = new Servo(Constants.Ports.HOOD_LEADER);
   // public Servo mHoodFollower = new Servo(Constants.Ports.HOOD_FOLLOWER);
 
+  public static double mSetPoint;
+  public static boolean isAtSetPoint;
+
   public static InterpolatingTreeMap<InterpolatingDouble, Vector2> shooterMap;
+
   /** Creates a new Shotoer. */
   public Shooter() {
     leader.setInverted(false);
@@ -85,6 +93,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     SmartDashboard.putNumber("Shooter SetPoint Velocity", RPMToVelocity(4500));
     SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Shooter Percent Speed", leader.getMotorOutputPercent());
@@ -95,15 +104,40 @@ public class Shooter extends SubsystemBase {
         leader.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
-        leader.set(ControlMode.Velocity, RPMToVelocity(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y));
-        // mHoodLeader.setAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
-        // mHoodFollower.setAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
+        mSetPoint = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y; 
+        leader.set(ControlMode.Velocity,
+            RPMToVelocity(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y));
+
+        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), mSetPoint, 500);
+        SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
+        // mHoodLeader.setAngle(shooterMap.geInterpolated(new
+        // InterpolatingDouble(Turret.targetY)).x);
+        // mHoodFollower.setAngle(shooterMap.getInterpolated(new
+        // InterpolatingDouble(Turret.targetY)).x);
+        if(isAtSetPoint) {
+          RobotContainer.getOperator().setRumble(RumbleType.kRightRumble, 0.5);
+          RobotContainer.getOperator().setRumble(RumbleType.kLeftRumble, 0.5);
+        }
+        else {
+          RobotContainer.getOperator().setRumble(RumbleType.kRightRumble, 0);
+          RobotContainer.getOperator().setRumble(RumbleType.kLeftRumble, 0);
+        }
         break;
       case SPIN_UP:
+        mSetPoint = 4500;
         leader.set(ControlMode.Velocity, RPMToVelocity(4500));
+        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), mSetPoint, 500);
+        if(isAtSetPoint) {
+          RobotContainer.getOperator().setRumble(RumbleType.kRightRumble, 0.5);
+          RobotContainer.getOperator().setRumble(RumbleType.kLeftRumble, 0.5);
+        }
+        else {
+          RobotContainer.getOperator().setRumble(RumbleType.kRightRumble, 0);
+          RobotContainer.getOperator().setRumble(RumbleType.kLeftRumble, 0);
+        }
         break;
       case UNJAMMING:
-        leader.set(ControlMode.PercentOutput, 0.45);
+        leader.set(ControlMode.PercentOutput, -0.45);
         break;
       case CLIMBING:
         leader.set(ControlMode.Disabled, 0);

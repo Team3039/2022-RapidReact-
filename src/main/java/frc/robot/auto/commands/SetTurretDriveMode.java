@@ -17,7 +17,7 @@ public class SetTurretDriveMode extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.mTurret.setState(TurretState.DRIVE);
+    RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

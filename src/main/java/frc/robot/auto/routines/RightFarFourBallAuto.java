@@ -11,7 +11,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
+import frc.robot.auto.commands.SetIndexingFeedMode;
+import frc.robot.auto.commands.SetIndexingIdleMode;
+import frc.robot.auto.commands.SetIndexingIntakeMode;
+import frc.robot.auto.commands.SetShooterIdleMode;
+import frc.robot.auto.commands.SetShooterSpinUpMode;
+import frc.robot.auto.commands.SetTurretDriveMode;
+import frc.robot.auto.commands.SetTurretTrackMode;
 import frc.robot.auto.commands.StopTrajectory;
 import frc.robot.subsystems.Drive;
 
@@ -20,7 +28,6 @@ import frc.robot.subsystems.Drive;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class RightFarFourBallAuto extends SequentialCommandGroup {
     
-    /** Creates a new FourBallBottomAuto. */
     public RightFarFourBallAuto(Drive s_Swerve) {
 
         var thetaController = new ProfiledPIDController(
@@ -28,7 +35,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand fourBallCommandOne = new SwerveControllerCommand(
+        SwerveControllerCommand grabFarBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightFarStartToFirstBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -39,7 +46,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand fourBallCommandTwo = new SwerveControllerCommand(
+        SwerveControllerCommand goToStartCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightFarFirstBallToShootingPoint(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -50,7 +57,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand fourBallCommandThree = new SwerveControllerCommand(
+        SwerveControllerCommand grabMidBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightFarShootingPointToSecondBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -61,7 +68,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand fourBallCommandFour = new SwerveControllerCommand(
+        SwerveControllerCommand grabTerminalBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightFarSecondBallToThirdBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -72,7 +79,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand fourBallCommandFive = new SwerveControllerCommand(
+        SwerveControllerCommand goToShootingPointCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightFarThirdBallToFinish(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -87,15 +94,28 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-                fourBallCommandOne,
+                new SetShooterSpinUpMode(),
+                new SetIndexingIntakeMode(),
+                grabFarBallCommand,
                 new StopTrajectory(),
                 new WaitCommand(1),
-                fourBallCommandTwo,
+                goToStartCommand,
                 new StopTrajectory(),
-                fourBallCommandThree,
-                fourBallCommandFour,
+                new SetTurretTrackMode(),
+                new SetIndexingFeedMode(),
+                new WaitCommand(1.5),
+                new SetTurretDriveMode(),
+                new SetIndexingIntakeMode(),
+                grabMidBallCommand,
+                grabTerminalBallCommand,
                 new StopTrajectory(),
-                fourBallCommandFive,
-                new StopTrajectory());
+                goToShootingPointCommand,
+                new StopTrajectory(),
+                new SetIndexingFeedMode(),
+                new WaitCommand(1.5),
+                new SetShooterIdleMode(),
+                new SetTurretDriveMode(),
+                new SetIndexingIdleMode()
+        );
     }
 }

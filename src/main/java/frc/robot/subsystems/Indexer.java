@@ -27,7 +27,6 @@ public class Indexer extends SubsystemBase {
     public boolean hasOneBall;
     public boolean hasTwoBalls;
     public boolean isFeeding;
-  
 
     public Indexer() {
         mFirstStageMaster = new TalonSRX(Constants.Ports.FIRST_STAGE);
@@ -38,7 +37,7 @@ public class Indexer extends SubsystemBase {
 
         mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
         mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 125);
-        
+
         mFirstStageMaster.setNeutralMode(NeutralMode.Brake);
         mSecondStageMaster.setNeutralMode(NeutralMode.Brake);
     }
@@ -52,8 +51,8 @@ public class Indexer extends SubsystemBase {
     }
 
     public void setOpenLoop(double firstStageOuput, double secondStageOutput) {
-       mFirstStageMaster.set(ControlMode.PercentOutput, firstStageOuput);
-       mSecondStageMaster.set(ControlMode.PercentOutput, secondStageOutput);
+        mFirstStageMaster.set(ControlMode.PercentOutput, firstStageOuput);
+        mSecondStageMaster.set(ControlMode.PercentOutput, secondStageOutput);
     }
 
     public void stop() {
@@ -78,17 +77,15 @@ public class Indexer extends SubsystemBase {
             case INDEXING:
                 isFeeding = false;
                 if (!hasOneBall && !hasTwoBalls) {
-                    setOpenLoop(0.95, 0.40); 
-                }
-                else if (hasOneBall && !hasTwoBalls) {
+                    setOpenLoop(0.95, 0.40);
+                } else if (hasOneBall && !hasTwoBalls) {
                     setOpenLoop(0.95, 0);
-                }
-                else if (hasTwoBalls) {
+                } else if (hasTwoBalls) {
                     setOpenLoop(0, 0);
                 }
                 break;
             case UNJAMMING:
-                    setOpenLoop(-0.60, -0.35);
+                setOpenLoop(-0.60, -0.35);
                 break;
             case CLIMBING:
                 mFirstStageMaster.set(ControlMode.Disabled, 0);
@@ -96,6 +93,6 @@ public class Indexer extends SubsystemBase {
                 break;
             default:
                 System.out.println("Fell through on Indexer states!");
-            }
+        }
     }
 }
