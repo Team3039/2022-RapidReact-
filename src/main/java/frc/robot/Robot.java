@@ -19,7 +19,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.math.FieldOrientedTurretHelper;
 import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
 import frc.robot.auto.routines.DriveStraight;
+import frc.robot.auto.routines.RightFarFiveBallAuto;
 import frc.robot.auto.routines.RightFarFourBallAuto;
+import frc.robot.auto.routines.RightNearFiveBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer.IndexerState;
@@ -72,6 +74,9 @@ public class Robot extends TimedRobot {
 
     autonTaskChooser.addOption("Right Far Four Ball", new RightFarFourBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Drive.getInstance()));
+    autonTaskChooser.addOption("Right Far Five Ball", new RightFarFiveBallAuto(Drive.getInstance()));
+    autonTaskChooser.addOption("Right Near Five Ball", new RightNearFiveBallAuto(Drive.getInstance()));
+    
     autonTaskChooser.addOption("Drive Straight", new DriveStraight(Drive.getInstance()));
 
     SmartDashboard.putData("Autonomous", autonTaskChooser);
@@ -136,6 +141,8 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
+
+    RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   @Override
@@ -144,12 +151,13 @@ public class Robot extends TimedRobot {
         () -> Drive.getInstance().swerveOdometry.update(
             Drive.getInstance().getYaw(),
             Drive.getInstance().getStates()),
-        0.001);
+        0.01);
   }
 
   @Override
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
+    RobotContainer.turret.setState(TurretState.DRIVE);
   }
 
   /** This function is called periodically during operator control. */

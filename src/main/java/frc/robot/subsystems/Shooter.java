@@ -94,10 +94,13 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
 
-    SmartDashboard.putNumber("Shooter SetPoint Velocity", RPMToVelocity(4500));
-    SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Shooter Percent Speed", leader.getMotorOutputPercent());
+ //   SmartDashboard.putNumber("Shooter SetPoint Velocity", RPMToVelocity(4500));
+    // SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());
+    // SmartDashboard.putNumber("Shooter Percent Speed", leader.getMotorOutputPercent());
     SmartDashboard.putNumber("Shooter RPM", velocityToRPM(leader.getSelectedSensorVelocity()));
+
+    SmartDashboard.putString("Shooter State", String.valueOf(getState()));
+    SmartDashboard.putBoolean("Is at Target RPM", isAtSetPoint);
 
     switch (getState()) {
       case IDLE:
@@ -124,8 +127,8 @@ public class Shooter extends SubsystemBase {
         }
         break;
       case SPIN_UP:
-        mSetPoint = 4500;
-        leader.set(ControlMode.Velocity, RPMToVelocity(4500));
+        mSetPoint = 4125;
+        leader.set(ControlMode.Velocity, RPMToVelocity(4125));
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), mSetPoint, 500);
         if(isAtSetPoint) {
           RobotContainer.getOperator().setRumble(RumbleType.kRightRumble, 0.5);

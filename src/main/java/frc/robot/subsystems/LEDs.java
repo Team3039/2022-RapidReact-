@@ -21,7 +21,7 @@ public class LEDs extends SubsystemBase {
     // Active when the shooter is at the correct speed and the turret is in the right position
     public boolean[] isAtShooterSetpoint = { false, true };
     // Active when the robot is climbing
-    public boolean[] isClimbInitiated = { false, true };
+    public boolean[] isClimbInitiated = { true, false };
     // Active whenever the robot is enabled and does not meet the above cases
     public boolean[] isIdle = { false, false };
 
@@ -32,7 +32,7 @@ public class LEDs extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!DriverStation.isDisabled()) {
+   //     if (!DriverStation.isDisabled()) {
             switch (Shooter.getState()) {
                 case CLIMBING:
                     states = isClimbInitiated;
@@ -44,26 +44,23 @@ public class LEDs extends SubsystemBase {
                     if (Shooter.isAtSetPoint && Turret.isAtTargetPosition) {
                         states = isAtShooterSetpoint;
                     } else {
-                        states = isAwaiting;
+                        states = isIdle;
                     }
                     break;
                 case SPIN_UP:
                     if (Shooter.isAtSetPoint && Turret.isAtTargetPosition) {
                         states = isAtShooterSetpoint;
                     } else {
-                        states = isAwaiting;
+                        states = isIdle;
                     }
                     break;
                 case UNJAMMING:
                     states = isIdle;
                     break;
-                default:
-                    states = isIdle;
-                    break;
             }
-        } else {
-            states = isAwaiting;
-        }
+        // } else {
+        //     states = isAwaiting;
+        // }
         for (int i = 0; i < 2; i++) {
             outputs[i].set(states[i]);
         }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.spline.SplineParameterizer.MalformedSplineException;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -50,13 +51,17 @@ public class TrajectoryGenerator {
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearRightBall = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(10), Units.inchesToMeters(60)),
+                                new Translation2d(Units.inchesToMeters(11), Units.inchesToMeters(62)),
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearTerminalBall = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(150), Units.inchesToMeters(-75)),
+                                new Translation2d(Units.inchesToMeters(150), Units.inchesToMeters(-77)),
                                 new Rotation2d(0));
 
+                public static Pose2d rightNearShootPositionFinal = new Pose2d(
+                                new Translation2d(Units.inchesToMeters(20), Units.inchesToMeters(-15)),
+                                new Rotation2d(0));
+        
                 // Left Far Four Ball Waypoints
                 public static Pose2d LeftFarLeftBall = new Pose2d(
                                 new Translation2d(Units.inchesToMeters(35), Units.inchesToMeters(3.5)),
@@ -102,7 +107,7 @@ public class TrajectoryGenerator {
                         return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
                                         List.of(
                                                         Waypoints.rightFarRightBall,
-                                                        new Pose2d()),
+                                                        Waypoints.rightFarMidBall),
                                         configFast);
                 } catch (MalformedSplineException e) {
                         e.printStackTrace();
@@ -194,6 +199,38 @@ public class TrajectoryGenerator {
                 return new Trajectory();
         }
 
+        public static Trajectory getRightNearSecondBallToStart() throws MalformedSplineException {
+                try {
+                        return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+                                        List.of(
+                                                        Waypoints.rightNearRightBall,
+                                                        new Pose2d()),
+                                        configFast);
+                } catch (MalformedSplineException e) {
+                        e.printStackTrace();
+                        System.out.println("Spline Malformed");
+                        CommandScheduler.getInstance().cancelAll();
+                        System.out.println("Autonomous Canceled");
+                }
+                return new Trajectory();
+        }
+
+        public static Trajectory getRightNearStartToThirdBall() throws MalformedSplineException {
+                try {
+                        return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+                                        List.of(
+                                                        new Pose2d(),
+                                                        Waypoints.rightNearTerminalBall),
+                                        configFast);
+                } catch (MalformedSplineException e) {
+                        e.printStackTrace();
+                        System.out.println("Spline Malformed");
+                        CommandScheduler.getInstance().cancelAll();
+                        System.out.println("Autonomous Canceled");
+                }
+                return new Trajectory();
+        }
+
         public static Trajectory getRightNearSecondBallToThirdBall() throws MalformedSplineException {
                 try {
                         return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
@@ -216,7 +253,7 @@ public class TrajectoryGenerator {
                         return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
                                         List.of(
                                                         Waypoints.rightNearTerminalBall,
-                                                        Waypoints.rightNearMidBall),
+                                                        Waypoints.rightNearShootPositionFinal),
                                         configFast);
                 } catch (MalformedSplineException e) {
                         e.printStackTrace();

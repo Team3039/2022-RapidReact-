@@ -34,7 +34,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand grabMidBall = new SwerveControllerCommand(
+        SwerveControllerCommand grabMidBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightNearStartToFirstBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -45,7 +45,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand grabFarBall = new SwerveControllerCommand(
+        SwerveControllerCommand grabRightBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightNearFirstBallToSecondBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -56,7 +56,18 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand grabTerminalBall = new SwerveControllerCommand(
+        SwerveControllerCommand goToStartCommand = new SwerveControllerCommand(
+                frc.robot.auto.TrajectoryGenerator.getRightNearSecondBallToStart(),
+                s_Swerve::getPose,
+                Constants.Swerve.SWERVE_KINEMATICS,
+                new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
+                new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
+                thetaController,
+                Drive.getSwerveHeadingSupplier(0),
+                s_Swerve::setModuleStates,
+                s_Swerve);
+
+        SwerveControllerCommand grabTerminalBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightNearSecondBallToThirdBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -67,7 +78,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand goToShootingPoint = new SwerveControllerCommand(
+        SwerveControllerCommand goToShootingPointCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightNearThirdBallToFinish(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -83,25 +94,28 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 new SetTurretTrackMode(),
                 new SetShooterSpinUpMode(),
                 new SetIndexingFeedMode(),
-                new WaitCommand(1.5),
+                new WaitCommand(0.5),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
-                grabMidBall,
+                grabMidBallCommand,
                 new StopTrajectory(),
-                grabFarBall,
+                grabRightBallCommand,
+                new StopTrajectory(),
+                goToStartCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
                 new SetIndexingFeedMode(),
-                new WaitCommand(1.5),
+                new WaitCommand(0.5),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
-                grabTerminalBall,
+                grabTerminalBallCommand,
                 new StopTrajectory(),
-                goToShootingPoint,
+                new WaitCommand(0.5),
+                goToShootingPointCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
                 new SetIndexingFeedMode(),
-                new WaitCommand(1.5),
+                new WaitCommand(0.5),
                 new SetTurretDriveMode(),
                 new SetIndexingIdleMode(),
                 new SetShooterIdleMode()

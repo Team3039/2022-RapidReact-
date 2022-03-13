@@ -13,7 +13,7 @@ public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
 
     public static final class Ports {
-
+        
         // CAN
         public static final int INTAKE = 14;
 
@@ -27,14 +27,14 @@ public final class Constants {
         public static final int CLIMB_SLAVE = 15;
 
         public static final int TURRET = 8;
-
+        
         // DIO
         public static final int FIRST_STAGE_GATE = 0;
         public static final int SECOND_STAGE_GATE = 1;
 
         public static final int LED_OUTPUT_A = 2;
         public static final int LED_OUTPUT_B = 3;
-
+        
         // PCM
         public static final int INTAKE_SOLENOID = 3;
 
@@ -61,7 +61,7 @@ public final class Constants {
 
     public static final class Swerve {
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW-
-
+        
         public static final double TRACK_WIDTH = Units.inchesToMeters(22.80);
         public static final double WHEEL_BASE = Units.inchesToMeters(22.80);
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.99);
@@ -179,8 +179,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double K_MAX_SPEED_METERS_PER_SECOND = 3;
-        public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3.5;
+        public static final double K_MAX_SPEED_METERS_PER_SECOND = 3.5;
+        public static final double K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 4.25;
         public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double K_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
 

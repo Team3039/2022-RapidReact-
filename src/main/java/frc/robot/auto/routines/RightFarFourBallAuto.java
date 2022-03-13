@@ -35,7 +35,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand grabFarBallCommand = new SwerveControllerCommand(
+        SwerveControllerCommand grabRightBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightFarStartToFirstBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -96,7 +96,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
                 new SetShooterSpinUpMode(),
                 new SetIndexingIntakeMode(),
-                grabFarBallCommand,
+                grabRightBallCommand,
                 new StopTrajectory(),
                 new WaitCommand(1),
                 goToStartCommand,
@@ -107,6 +107,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
                 grabMidBallCommand,
+                new StopTrajectory(),
                 grabTerminalBallCommand,
                 new StopTrajectory(),
                 goToShootingPointCommand,

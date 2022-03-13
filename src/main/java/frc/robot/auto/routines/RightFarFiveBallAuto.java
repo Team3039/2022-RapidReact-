@@ -35,7 +35,7 @@ public class RightFarFiveBallAuto extends SequentialCommandGroup {
                 Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand grabFarBallCommand = new SwerveControllerCommand(
+        SwerveControllerCommand grabRightBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightFarStartToFirstBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -47,7 +47,7 @@ public class RightFarFiveBallAuto extends SequentialCommandGroup {
                 s_Swerve);
 
         SwerveControllerCommand grabMidBallCommand = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightFarShootingPointToSecondBall(),
+                frc.robot.auto.TrajectoryGenerator.getRightFarFirstBallToSecondBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
@@ -84,18 +84,22 @@ public class RightFarFiveBallAuto extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
                 new SetShooterSpinUpMode(),
-                new SetIndexingIntakeMode(),
-                grabFarBallCommand,
+                new SetTurretTrackMode(),
+                new SetIndexingFeedMode(),
+                new WaitCommand(1.5),
+                new SetTurretDriveMode(),
+                new SetIndexingIdleMode(),
+                grabRightBallCommand,
                 new StopTrajectory(),
                 new WaitCommand(1),
-                goToStartCommand,
+                grabMidBallCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
                 new SetIndexingFeedMode(),
                 new WaitCommand(1.5),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
-                grabMidBallCommand,
+                new StopTrajectory(),
                 grabTerminalBallCommand,
                 new StopTrajectory(),
                 goToShootingPointCommand,

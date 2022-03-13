@@ -46,7 +46,7 @@ public class RightNearFourBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand grabFarBallCommand = new SwerveControllerCommand(
+        SwerveControllerCommand grabRightBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightNearFirstBallToSecondBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -87,10 +87,10 @@ public class RightNearFourBallAuto extends SequentialCommandGroup {
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
                 new SetIndexingFeedMode(),
-                new WaitCommand(1.5),
+                new WaitCommand(0.75),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
-                grabFarBallCommand,
+                grabRightBallCommand,
                 new StopTrajectory(),
                 grabTerminalBallCommand,
                 new StopTrajectory(),
@@ -98,7 +98,7 @@ public class RightNearFourBallAuto extends SequentialCommandGroup {
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
                 new SetIndexingFeedMode(),
-                new WaitCommand(1.5),
+                new WaitCommand(0.75),
                 new SetTurretDriveMode(),
                 new SetShooterIdleMode(),
                 new SetIndexingIdleMode()

@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -63,6 +64,8 @@ public class Indexer extends SubsystemBase {
     public void periodic() {
         hasOneBall = !mSecondStageGate.get();
         hasTwoBalls = hasOneBall && !mFirstStageGate.get();
+
+        SmartDashboard.putString("Indexer State", String.valueOf(getState()));
 
         switch (state) {
             case HELLA_ZOOMING:

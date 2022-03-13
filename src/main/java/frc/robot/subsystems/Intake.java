@@ -48,7 +48,8 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Intake Amps", roller.getOutputCurrent());
+  //  SmartDashboard.putNumber("Intake Amps", roller.getOutputCurrent());
+    SmartDashboard.putString("Intake State", String.valueOf(getState()));
 
     synchronized (Intake.this) {
       switch (getState()) {

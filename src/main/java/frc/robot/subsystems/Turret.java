@@ -24,7 +24,6 @@ public class Turret extends SubsystemBase {
   public enum TurretState {
     TRACKING,
     DRIVE,
-    MANUAL,
     CLIMBING
   }
 
@@ -44,23 +43,23 @@ public class Turret extends SubsystemBase {
     turret.setSelectedSensorPosition(0);
     turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
-    turret.configForwardSoftLimitThreshold(degreesToTicks(60));
-    turret.configReverseSoftLimitThreshold(degreesToTicks(-60));
+    turret.setNeutralMode(NeutralMode.Coast);
+
+    turret.configForwardSoftLimitThreshold(degreesToTicks(45));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(-45));
 
     turret.configForwardSoftLimitEnable(true);
     turret.configReverseSoftLimitEnable(true);
 
-    turret.setNeutralMode(NeutralMode.Coast);
-
-    turret.config_kP(0, 3);
-    turret.config_kD(0, 2);
+    turret.config_kP(0, 1);
+    // turret.config_kD(0, 2);
   }
 
   public void setState(TurretState state) {
     this.turretState = state;
   }
 
-  public TurretState getTurretState() {
+  public TurretState getState() {
     return turretState;
   }
 
@@ -96,22 +95,17 @@ public class Turret extends SubsystemBase {
     return (turret.getSelectedSensorPosition() / 22320) * 360;
   }
 
-  public void setTurretPercentOutput() {
-    turret.set(ControlMode.PercentOutput, -1 * RobotContainer.getOperator().getLeftXAxis() / 3);
-  }
-
   @Override
   public void periodic() {
-    System.out.println(Robot.mFieldOrientedTurretHelper.getAngleToTarget(RobotContainer.drive.getPose()).getDegrees());
-
-    setTurretPercentOutput();
-
-    SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Desired Value", degreesToTicks(90));
+    // SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
+    // SmartDashboard.putNumber("Desired Value", degreesToTicks(90));
 
     SmartDashboard.putNumber("Current Angle", getCurrentAngle());
     // SmartDashboard.putNumber("TargetX",
     // RobotContainer.limelight.getAngleToTarget().getAsDouble());
+
+    SmartDashboard.putString("Turret State", String.valueOf(getState()));
+    SmartDashboard.putBoolean("Is At Target Position", isAtTargetPosition);
 
     targetValid = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
     targetX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
@@ -121,14 +115,14 @@ public class Turret extends SubsystemBase {
     // turret.set(ControlMode.PercentOutput, targetX *
     // Constants.Turret.kP_TURRET_TRACK);
 
-    TurretState currentMode = getTurretState();
+    TurretState currentMode = getState();
 
     switch (currentMode) {
       case TRACKING:
         RobotContainer.limelight.setCamMode(CamMode.VISION);
         RobotContainer.limelight.setLedMode(LedMode.ON);
         trackTarget();
-        isAtTargetPosition = MathUtils.epsilonEquals(targetX, 0, 0.2);
+        isAtTargetPosition = MathUtils.epsilonEquals(targetX, 0, 1);
         break;
       case DRIVE:
         RobotContainer.limelight.setCamMode(CamMode.DRIVER);
@@ -137,8 +131,6 @@ public class Turret extends SubsystemBase {
         // degreesToTicks(RobotContainer.drive.getYaw().getDegrees() * -1));
         setTurretPosition(0);
         break;
-      case MANUAL:
-        turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * 0.25);
       case CLIMBING:
         turret.set(ControlMode.Disabled, 0);
         break;

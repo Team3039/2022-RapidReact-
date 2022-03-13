@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.FeedCargo;
 import frc.robot.commands.SetIndexing;
-import frc.robot.commands.SetTurretManualMode;
+import frc.robot.commands.SetSubsystemsClimbMode;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.TeleopSwerve;
@@ -88,6 +88,8 @@ public class RobotContainer {
   private final JoystickButton operatorR2 = new JoystickButton(operator, PS4Gamepad.BUTTON_R2);
   private final JoystickButton operatorR3 = new JoystickButton(operator, PS4Gamepad.BUTTON_R3);
 
+  private final JoystickButton operatorStart = new JoystickButton(operator, PS4Gamepad.BUTTON_START);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -125,10 +127,9 @@ public class RobotContainer {
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
-    operatorR1.whileHeld(new SpinShooter());
-    operatorR3.toggleWhenPressed(new SetTurretManualMode());
+    operatorR1.toggleWhenPressed(new SpinShooter());
     // operatorSquare.toggleWhenPressed(new SetClimberActuateMode());
-    // operatorStart.whenPressed(new SetSubsystemsClimbMode());
+    operatorStart.toggleWhenPressed(new SetSubsystemsClimbMode());
   }
 
   /**
