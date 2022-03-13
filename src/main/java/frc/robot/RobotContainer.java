@@ -132,12 +132,6 @@ public class RobotContainer {
     operatorStart.toggleWhenPressed(new SetSubsystemsClimbMode());
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-
   public static InterpolatedPS4Gamepad getDriver() {
     return driver;
   }
@@ -146,6 +140,11 @@ public class RobotContainer {
     return operator;
   }
 
+    /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
     return null;
   }

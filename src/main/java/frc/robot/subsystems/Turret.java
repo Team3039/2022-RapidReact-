@@ -24,6 +24,7 @@ public class Turret extends SubsystemBase {
   public enum TurretState {
     TRACKING,
     DRIVE,
+    MANUAL,
     CLIMBING
   }
 
@@ -130,6 +131,9 @@ public class Turret extends SubsystemBase {
         // turret.set(ControlMode.Position,
         // degreesToTicks(RobotContainer.drive.getYaw().getDegrees() * -1));
         setTurretPosition(0);
+        break;
+      case MANUAL:
+
         break;
       case CLIMBING:
         turret.set(ControlMode.Disabled, 0);

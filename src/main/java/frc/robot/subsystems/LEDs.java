@@ -32,7 +32,6 @@ public class LEDs extends SubsystemBase {
 
     @Override
     public void periodic() {
-   //     if (!DriverStation.isDisabled()) {
             switch (Shooter.getState()) {
                 case CLIMBING:
                     states = isClimbInitiated;
@@ -57,10 +56,7 @@ public class LEDs extends SubsystemBase {
                 case UNJAMMING:
                     states = isIdle;
                     break;
-            }
-        // } else {
-        //     states = isAwaiting;
-        // }
+                }
         for (int i = 0; i < 2; i++) {
             outputs[i].set(states[i]);
         }
