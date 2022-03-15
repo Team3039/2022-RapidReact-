@@ -19,16 +19,19 @@ public class FieldOrientedTurretHelper {
     public FieldOrientedTurretHelper(Start_Pose startPose) {
         switch(startPose) {
             case LEFT_FAR:
+                startAngle = 133.5;
                 hubPose = new Pose2d();
                 break;
             case LEFT_NEAR:
+                startAngle = -178.5;
                 hubPose = new Pose2d();
                 break;
             case RIGHT_FAR:
-         //       startAngle = Rotation2d.fromDegrees(136.5);
+                startAngle = -88.5;
                 hubPose = new Pose2d(Units.inchesToMeters(-93), Units.inchesToMeters(25), Rotation2d.fromDegrees(0));
                 break;
             case RIGHT_NEAR:
+                startAngle = -136.5;
                 hubPose = new Pose2d(Units.inchesToMeters(90), Units.inchesToMeters(3), Rotation2d.fromDegrees(0));
                 break;
             default:

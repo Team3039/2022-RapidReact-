@@ -49,7 +49,7 @@ public class Drive extends SubsystemBase {
     public Drive() {
         gyro = new PigeonIMU(RobotContainer.indexer.mFirstStageMaster);
         gyro.configFactoryDefault();
-        zeroGyro();
+        setGyro(0);
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getYaw());
 
@@ -163,8 +163,8 @@ public class Drive extends SubsystemBase {
         return states;
     }
 
-    public void zeroGyro() {
-        gyro.setYaw(0);
+    public void setGyro(double degrees) {
+        gyro.setYaw(degrees);
     }
 
     // Robot Centric

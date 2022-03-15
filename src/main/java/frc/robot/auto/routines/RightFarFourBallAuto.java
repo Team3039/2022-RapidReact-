@@ -94,7 +94,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
                 new SetShooterSpinUpMode(),
-                new SetIndexingIntakeMode(),
+                // new SetIndexingIntakeMode(),
                 grabRightBallCommand,
                 new StopTrajectory(),
                 new WaitCommand(1),
@@ -104,7 +104,7 @@ public class RightFarFourBallAuto extends SequentialCommandGroup {
                 new SetIndexingFeedMode(),
                 new WaitCommand(1.5),
                 new SetTurretDriveMode(),
-                new SetIndexingIntakeMode(),
+                // new SetIndexingIntakeMode(),
                 grabMidBallCommand,
                 new StopTrajectory(),
                 grabTerminalBallCommand,

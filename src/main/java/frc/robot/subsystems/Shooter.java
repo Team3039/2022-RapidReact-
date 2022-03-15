@@ -25,8 +25,8 @@ public class Shooter extends SubsystemBase {
   public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
   public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
 
-  // public Servo mHoodLeader = new Servo(Constants.Ports.HOOD_LEADER);
-  // public Servo mHoodFollower = new Servo(Constants.Ports.HOOD_FOLLOWER);
+  // public Servo leftActuator = new Servo(Constants.Ports.HOOD_LEADER);
+  // public Servo rightActuator = new Servo(Constants.Ports.HOOD_FOLLOWER);
 
   public static double mSetPoint;
   public static boolean isAtSetPoint;
@@ -90,9 +90,9 @@ public class Shooter extends SubsystemBase {
     leader.set(ControlMode.PercentOutput, percent);
   }
 
-  // public void setServoAngle(double angle) {
-  //   mHoodLeader.setAngle(angle);
-  //   mHoodFollower.setAngle(angle);
+  // public void setHoodAngle(double angle) {
+  //   leftActuator.setAngle(angle);
+  //   rightActuator.setAngle(angle);
   // }
 
   // Alter the setpoint based on observed deviations.
@@ -122,7 +122,7 @@ public class Shooter extends SubsystemBase {
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
 
-        // setServoAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
+        // setHoodAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
     
         break;
       case SPIN_UP:

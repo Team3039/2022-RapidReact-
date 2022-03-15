@@ -112,9 +112,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-
-    mFieldOrientedTurretHelper = new FieldOrientedTurretHelper(mStartPoseChooser.getSelected());
-
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.mSecondStageGate.get());
@@ -123,9 +120,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {
-    // RobotContainer.turret.setState(TurretState.DRIVE);
-  }
+  public void disabledInit() {}
 
   @Override
   public void disabledPeriodic() {
@@ -133,6 +128,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    mFieldOrientedTurretHelper = new FieldOrientedTurretHelper(mStartPoseChooser.getSelected());
     autonomousCommand = autonTaskChooser.getSelected();
 
     // schedule the autonomous command (example)
@@ -156,6 +152,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
     RobotContainer.turret.setState(TurretState.DRIVE);
+    
+    // Should reset the gyro to face forward at the start of teleop
+    RobotContainer.drive.setGyro(-1 * (FieldOrientedTurretHelper.startAngle + RobotContainer.drive.swerveOdometry.getPoseMeters().getRotation().getDegrees()));
   }
 
   /** This function is called periodically during operator control. */

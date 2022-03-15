@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj.PWM.PeriodMultiplier;
  * in the FIRST Kit of Parts in 2008.
  */
 public class Servo extends PWM {
-  private static double kMaxServoAngle = 180.0;
-  private static double kMinServoAngle = 0.0;
+  private static double kMaxServoAngle;
+  private static double kMinServoAngle;  
 
   protected static double kDefaultMaxServoPWM = 2.4;
   protected static double kDefaultMinServoPWM = 0.6;
@@ -35,13 +35,16 @@ public class Servo extends PWM {
    * @param channel The PWM channel to which the servo is attached. 0-9 are on-board, 10-19 are on
    *     the MXP port
    */
-  public Servo(final int channel) {
+  public Servo(final int channel, double minAngle, double maxAngle) {
     super(channel);
     setBounds(kDefaultMaxServoPWM, 0, 0, 0, kDefaultMinServoPWM);
     setPeriodMultiplier(PeriodMultiplier.k4X);
 
     HAL.report(tResourceType.kResourceType_Servo, getChannel() + 1);
     SendableRegistry.setName(this, "Servo", getChannel());
+
+    kMinServoAngle = minAngle;
+    kMaxServoAngle = maxAngle;
   }
 
   /**

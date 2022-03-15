@@ -38,7 +38,7 @@ public final class Constants {
         // PCM
         public static final int INTAKE_SOLENOID = 3;
 
-        public static final int CLIMB_ACTUATOR_A = 0;
+        public static final int CLIMB_ACTUATOR_A = 2;
         public static final int CLIMB_ACTUATOR_B = 1;
 
         // PWM
@@ -56,7 +56,8 @@ public final class Constants {
     }
 
     public static final class Climber {
-        public static final int TELESCOPING_ENCODER_LIMIT = 1000000000;
+        public static final int TRAVELING_BARS_ENCODER_LIMIT = 1000000000;
+        public static final int TELESCOPING_TO_MID_BAR_LIMIT = 999999999;
     }
 
     public static final class Swerve {

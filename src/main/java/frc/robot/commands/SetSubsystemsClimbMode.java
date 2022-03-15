@@ -24,7 +24,6 @@ public class SetSubsystemsClimbMode extends CommandBase {
     RobotContainer.indexer.setState(IndexerState.CLIMBING);
     RobotContainer.turret.setState(TurretState.CLIMBING);
     RobotContainer.shooter.setState(ShooterState.CLIMBING);
-    // RobotContainer.climber.isClimbing = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,7 +37,6 @@ public class SetSubsystemsClimbMode extends CommandBase {
     RobotContainer.indexer.setState(IndexerState.IDLE);
     RobotContainer.turret.setState(TurretState.DRIVE);
     RobotContainer.shooter.setState(ShooterState.IDLE);
-    // RobotContainer.climber.isClimbing = false;
   }
 
   // Returns true when the command should end.
