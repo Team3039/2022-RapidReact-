@@ -7,7 +7,6 @@ package frc.robot.auto.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter.ShooterState;
-import frc.robot.subsystems.Turret.TurretState;
 
 public class SetShooterSpinUpMode extends CommandBase {
   /** Creates a new SetShooterSpinUpMode. */

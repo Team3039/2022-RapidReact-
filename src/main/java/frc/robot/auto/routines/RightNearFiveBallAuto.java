@@ -85,7 +85,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(0),
+                Drive.getSwerveHeadingSupplier(-20),
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
@@ -110,7 +110,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 new SetIndexingIntakeMode(),
                 grabTerminalBallCommand,
                 new StopTrajectory(),
-                new WaitCommand(0.5),
+                new WaitCommand(0.25),
                 goToShootingPointCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),

@@ -6,7 +6,6 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.spline.SplineParameterizer.MalformedSplineException;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -55,7 +54,8 @@ public class TrajectoryGenerator {
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearTerminalBall = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(150), Units.inchesToMeters(-77)),
+                                // original x was 150, original y was -77
+                        new Translation2d(Units.inchesToMeters(145), Units.inchesToMeters(-75)),
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearShootPositionFinal = new Pose2d(

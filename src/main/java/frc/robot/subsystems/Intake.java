@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -16,7 +15,7 @@ public class Intake extends SubsystemBase {
   private Solenoid deploy;
 
   public enum IntakeState {
-    IDLE, INTAKING, OUTTAKING, INDEXING, CLIMBING
+    IDLE, INTAKING, OUTTAKING, CLIMBING
   }
 
   private IntakeState state = IntakeState.IDLE;
@@ -72,6 +71,8 @@ public class Intake extends SubsystemBase {
           break;
         case CLIMBING:
           roller.disable();
+          break;
+        default:
           break;
       }
     }

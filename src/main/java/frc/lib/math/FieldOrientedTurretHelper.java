@@ -13,30 +13,31 @@ public class FieldOrientedTurretHelper {
         RIGHT_NEAR
     }
     
-    private Start_Pose mStartPose;
-    private Pose2d mTarget;
+    public static double startAngle;
+    public static Pose2d hubPose;
 
     public FieldOrientedTurretHelper(Start_Pose startPose) {
         switch(startPose) {
             case LEFT_FAR:
-                mTarget = new Pose2d();
+                hubPose = new Pose2d();
                 break;
             case LEFT_NEAR:
-                mTarget = new Pose2d();
+                hubPose = new Pose2d();
                 break;
             case RIGHT_FAR:
-                mTarget = new Pose2d(Units.inchesToMeters(-93), Units.inchesToMeters(25), Rotation2d.fromDegrees(0));
+         //       startAngle = Rotation2d.fromDegrees(136.5);
+                hubPose = new Pose2d(Units.inchesToMeters(-93), Units.inchesToMeters(25), Rotation2d.fromDegrees(0));
                 break;
             case RIGHT_NEAR:
-                mTarget = new Pose2d();
+                hubPose = new Pose2d(Units.inchesToMeters(90), Units.inchesToMeters(3), Rotation2d.fromDegrees(0));
                 break;
             default:
                 break;
         }
     }
-    public Rotation2d getAngleToTarget(Pose2d currentPose) {
-        double dX = currentPose.getX() - mTarget.getX();
-        double dY = currentPose.getY() - mTarget.getY();
+    public static Rotation2d getAngleToTarget(Pose2d currentPose) {
+        double dX = currentPose.getX() - hubPose.getX();
+        double dY = currentPose.getY() - hubPose.getY();
         
         return Rotation2d.fromDegrees(Math.tan(dX / dY));
     }
