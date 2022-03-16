@@ -23,6 +23,7 @@ import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.auto.routines.RightNearFiveBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Shooter.ShooterState;
@@ -91,7 +92,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Start Pose Chooser", mStartPoseChooser);
 
     UsbCamera usbCamera = CameraServer.startAutomaticCapture();
-    usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 320, 180, 60);
+    usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 160, 90, 40);
 
     RobotContainer.turret.setState(TurretState.DRIVE);
     RobotContainer.shooter.setState(ShooterState.IDLE);
@@ -116,6 +117,13 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.mSecondStageGate.get());
     SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.indexer.mFirstStageGate.get());
+
+    if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {
+      RobotContainer.compressor.disable();
+    }
+    // else {
+    //   RobotContainer.compressor.enableDigital();
+    // }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

@@ -39,7 +39,6 @@ public final class Constants {
         public static final int INTAKE_SOLENOID = 3;
 
         public static final int CLIMB_ACTUATOR_A = 2;
-        public static final int CLIMB_ACTUATOR_B = 1;
 
         // PWM
         public static final int HOOD_LEADER = 0;

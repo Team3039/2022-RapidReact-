@@ -4,21 +4,20 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.auto.commands.SetClimbSpeed;
 import frc.robot.commands.FeedCargo;
 // import frc.robot.commands.SetClimberActuateMode;
-import frc.robot.commands.SetHoodServoAngle;
+// import frc.robot.commands.SetHoodServoAngle;
 import frc.robot.commands.SetIndexing;
-// import frc.robot.commands.SetLeftClimber;
-// import frc.robot.commands.SetRightClimber;
-import frc.robot.commands.SetSnap;
+import frc.robot.commands.SetLeftClimber;
+import frc.robot.commands.SetRightClimber;
 import frc.robot.commands.SetSubsystemsClimbMode;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.SpinShooter;
@@ -26,6 +25,7 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TrackTarget;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
+import frc.robot.subsystems.Climber;
 // import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer;
@@ -33,7 +33,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterState;
 import frc.robot.subsystems.Turret;
 
 /**
@@ -52,9 +51,11 @@ public class RobotContainer {
   public static final Drive drive = new Drive();
   public static final Shooter shooter = new Shooter();
   public static final Turret turret = new Turret();
-  // public static final Climber climber = new Climber();
+  public static final Climber climber = new Climber();
   public static final LEDs LEDs = new LEDs();
   public static final Limelight limelight = new Limelight(drive);
+
+  public static Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   /* Controllers */
   private static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
@@ -109,6 +110,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    compressor.enableDigital();
+
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
             Drive.getInstance(),
@@ -145,8 +148,8 @@ public class RobotContainer {
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
     operatorR1.toggleWhenPressed(new SpinShooter());
-    operatorTriangle.whileHeld(new SetHoodServoAngle(90));
-    operatorCircle.whileHeld(new SetHoodServoAngle(135));
+    // operatorTriangle.whileHeld(new SetHoodServoAngle(90));
+    // operatorCircle.whileHeld(new SetHoodServoAngle(135));%
 
     // operatorPadButton.toggleWhenPressed(new SetManualTurretMode());
     // }
@@ -154,18 +157,21 @@ public class RobotContainer {
     operatorStart.toggleWhenPressed(new SetSubsystemsClimbMode());
 
     // if (climber.isClimbing) {
-//     driverL1.whileHeld(new SetLeftClimber(.15));
-//     driverL2.whileHeld(new SetLeftClimber(-.15));
+    driverL1.whileHeld(new SetLeftClimber(.15));
+    driverL2.whileHeld(new SetLeftClimber(-.15));
 
-//     driverR1.whileHeld(new SetRightClimber(.15));
-//     driverR2.whileHeld(new SetRightClimber(-.15));
+    driverR1.whileHeld(new SetRightClimber(.15));
+    driverR2.whileHeld(new SetRightClimber(-.15));
   
-//     operatorDPadDown.whileHeld(new SetClimbSpeed(.15));
-//     operatorDPadUp.whileHeld(new SetClimbSpeed(-.15));
+    // operatorDPadDown.whileHeld(new SetClimbSpeed(.15));
+    // operatorDPadUp.whileHeld(new SetClimbSpeed(-.15));
 
-//     operatorSquare.toggleWhenPressed(new SetClimberActuateMode());
-// // }
-    
+    // driverOptions.whileHeld(new InstantCommand(() -> RobotContainer.climber.areSoftLimitsEnabled = true));
+    // driverOptions.whenReleased(new InstantCommand(() -> RobotContainer.climber.areSoftLimitsEnabled = false));
+
+    operatorTriangle.whenPressed(new InstantCommand(() -> climber.actuateClimb(true)));
+    operatorX.whenPressed(new InstantCommand(() -> climber.actuateClimb(false)));
+// }
   }
 
   public static InterpolatedPS4Gamepad getDriver() {

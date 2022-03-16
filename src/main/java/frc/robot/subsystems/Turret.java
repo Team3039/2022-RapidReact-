@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -59,6 +60,8 @@ public class Turret extends SubsystemBase {
     turret.config_kD(1, 0);
 
     turret.selectProfileSlot(0, 0);
+
+    turret.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
   }
 
   public void setState(TurretState state) {

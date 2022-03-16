@@ -6,14 +6,15 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.InterpolatingDouble;
 import frc.lib.util.InterpolatingTreeMap;
 import frc.lib.util.MathUtils;
-import frc.lib.util.Servo;
 import frc.lib.util.Vector2;
 import frc.robot.Constants;
 
@@ -24,9 +25,6 @@ public class Shooter extends SubsystemBase {
 
   public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
   public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
-
-  // public Servo leftActuator = new Servo(Constants.Ports.HOOD_LEADER);
-  // public Servo rightActuator = new Servo(Constants.Ports.HOOD_FOLLOWER);
 
   public static double mSetPoint;
   public static boolean isAtSetPoint;
@@ -50,8 +48,8 @@ public class Shooter extends SubsystemBase {
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
     shooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
 
-    // mHoodLeader.setAngleLimits(0, 180);
-    // mHoodFollower.setAngleLimits(0, 180);
+    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
+    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
   }
 
   public static Shooter getInstance() {
@@ -90,11 +88,6 @@ public class Shooter extends SubsystemBase {
     leader.set(ControlMode.PercentOutput, percent);
   }
 
-  // public void setHoodAngle(double angle) {
-  //   leftActuator.setAngle(angle);
-  //   rightActuator.setAngle(angle);
-  // }
-
   // Alter the setpoint based on observed deviations.
   public double offsetRPM(double setpoint) {
     return setpoint - (setpoint - 3000) / 4;
@@ -121,8 +114,6 @@ public class Shooter extends SubsystemBase {
 
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
-
-        // setHoodAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
     
         break;
       case SPIN_UP:

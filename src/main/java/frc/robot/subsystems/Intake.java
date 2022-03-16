@@ -25,6 +25,8 @@ public class Intake extends SubsystemBase {
   public Intake() {
     roller = new CANSparkMax(Constants.Ports.INTAKE, MotorType.kBrushless);
     deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.INTAKE_SOLENOID);
+
+    roller.setControlFramePeriodMs(200);
   }
 
   public synchronized static Intake getInstance() {
@@ -54,10 +56,12 @@ public class Intake extends SubsystemBase {
     synchronized (Intake.this) {
       switch (getState()) {
         case IDLE:
+          RobotContainer.compressor.enableDigital();
           deploy.set(false);
           roller.set(0.0);
           break;
         case INTAKING:
+          RobotContainer.compressor.disable();
           if (!RobotContainer.indexer.hasTwoBalls) {
             deploy.set(!RobotContainer.indexer.isFeeding);
             roller.set(0.38);
@@ -67,7 +71,7 @@ public class Intake extends SubsystemBase {
           }
           break;
         case OUTTAKING:
-          deploy.set(!RobotContainer.indexer.isFeeding);
+          // deploy.set(!RobotContainer.indexer.isFeeding);
           roller.set(-0.45);
           break;
         case CLIMBING:
