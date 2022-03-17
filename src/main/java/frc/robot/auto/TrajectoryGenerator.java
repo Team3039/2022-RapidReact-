@@ -33,7 +33,7 @@ public class TrajectoryGenerator {
                 // terminal ball is human player station
                 // Right Far Four Ball Waypoints
                 public static Pose2d rightFarRightBall = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(22), Units.inchesToMeters(0)),
+                                new Translation2d(Units.inchesToMeters(24), Units.inchesToMeters(0)),
                                 new Rotation2d());
 
                 public static Pose2d rightFarMidBall = new Pose2d(
@@ -50,12 +50,12 @@ public class TrajectoryGenerator {
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearRightBall = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(11), Units.inchesToMeters(62)),
+                                new Translation2d(Units.inchesToMeters(13), Units.inchesToMeters(60)),
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearTerminalBall = new Pose2d(
                                 // original x was 150, original y was -77
-                        new Translation2d(Units.inchesToMeters(145), Units.inchesToMeters(-75)),
+                        new Translation2d(Units.inchesToMeters(137), Units.inchesToMeters(-82)),
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearShootPositionFinal = new Pose2d(
@@ -69,7 +69,7 @@ public class TrajectoryGenerator {
 
                 // Generic Two Ball Waypoints
                 public static Pose2d genericBall = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(25), Units.inchesToMeters(0)),
+                        new Translation2d(Units.inchesToMeters(30), Units.inchesToMeters(0)),
                         new Rotation2d(0));
 
 

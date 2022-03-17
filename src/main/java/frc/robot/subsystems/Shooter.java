@@ -49,7 +49,7 @@ public class Shooter extends SubsystemBase {
     shooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
 
     leader.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
-    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
   }
 
   public static Shooter getInstance() {
@@ -100,8 +100,7 @@ public class Shooter extends SubsystemBase {
     // SmartDashboard.putNumber("Shooter Percent Speed", leader.getMotorOutputPercent());
     SmartDashboard.putNumber("Shooter RPM", velocityToRPM(leader.getSelectedSensorVelocity()));
 
-    SmartDashboard.putString("Shooter State", String.valueOf(getState()));
-    SmartDashboard.putBoolean("Is at Target RPM", isAtSetPoint);
+    // SmartDashboard.putString("Shooter State", String.valueOf(getState()));
 
     switch (getState()) {
       case IDLE:

@@ -55,8 +55,8 @@ public final class Constants {
     }
 
     public static final class Climber {
-        public static final int TRAVELING_BARS_ENCODER_LIMIT = 1000000000;
-        public static final int TELESCOPING_TO_MID_BAR_LIMIT = 999999999;
+        public static final int TRAVELING_BARS_ENCODER_LIMIT = 99999999;
+        public static final int TELESCOPING_TO_MID_BAR_LIMIT = 219000;
     }
 
     public static final class Swerve {

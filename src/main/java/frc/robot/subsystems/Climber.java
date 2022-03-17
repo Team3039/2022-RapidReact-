@@ -17,8 +17,6 @@ public class Climber extends SubsystemBase {
 
     public TalonFX leftClimber = new TalonFX(Constants.Ports.CLIMB_MASTER);
     public TalonFX rightClimber = new TalonFX(Constants.Ports.CLIMB_SLAVE);
-
-    public boolean areSoftLimitsEnabled = true;
     /** Creates a new Climber. */
     // Green goes down
     public Climber() {
@@ -30,26 +28,20 @@ public class Climber extends SubsystemBase {
         leftClimber.setSelectedSensorPosition(0);
         rightClimber.setSelectedSensorPosition(0);
 
-        // leftClimber.configReverseSoftLimitThreshold(0);
-        leftClimber.configReverseSoftLimitEnable(false);
+        leftClimber.configReverseSoftLimitThreshold(0);
+        leftClimber.configReverseSoftLimitEnable(true);
 
-        // rightClimber.configReverseSoftLimitThreshold(0);
-        rightClimber.configReverseSoftLimitEnable(false);
+        rightClimber.configReverseSoftLimitThreshold(0);
+        rightClimber.configReverseSoftLimitEnable(true);
 
-        // leader.configForwardSoft%LimitThreshold(Constants.Climber.TELESCOPING_ENCODER_LIMIT);
-        // leader.configReverseSoftLimitThreshold(0);
+        rightClimber.configForwardSoftLimitThreshold(Constants.Climber.TELESCOPING_TO_MID_BAR_LIMIT);
+        rightClimber.configReverseSoftLimitEnable(true);
+  
+        leftClimber.configForwardSoftLimitThreshold(Constants.Climber.TELESCOPING_TO_MID_BAR_LIMIT);
+        leftClimber.configForwardSoftLimitEnable(true);
 
-        leftClimber.configForwardSoftLimitEnable(false);
-        // leftClimber.configReverseSoftLimitEnable(true);
-
-        // follower.configForwardSoftLimitThreshold(Constants.Climber.TELESCOPING_ENCODER_LIMIT);
-        // follower.configReverseSoftLimitThreshold(0);
-
-        rightClimber.configForwardSoftLimitEnable(false);
-        // rightClimber.configReverseSoftLimitEnable(true);
-
-        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
-        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
+        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
     }
 
     // public void setClimberOutput(double percent) {
@@ -84,6 +76,11 @@ public class Climber extends SubsystemBase {
     public void setClimberPosition(double encoderPos) {
         leftClimber.set(ControlMode.Position, encoderPos);
         rightClimber.set(ControlMode.Position, encoderPos);
+    }
+
+    public void setClimbEncoders(double value) {
+        leftClimber.setSelectedSensorPosition(value);
+        rightClimber.setSelectedSensorPosition(value);
     }
     
     @Override

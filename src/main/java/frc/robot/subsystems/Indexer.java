@@ -36,8 +36,8 @@ public class Indexer extends SubsystemBase {
         mFirstStageGate = new DigitalInput(Constants.Ports.FIRST_STAGE_GATE);
         mSecondStageGate = new DigitalInput(Constants.Ports.SECOND_STAGE_GATE);
 
-        mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
-        mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
+        mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);
+        mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);
 
         mFirstStageMaster.setNeutralMode(NeutralMode.Brake);
         mSecondStageMaster.setNeutralMode(NeutralMode.Brake);
@@ -73,7 +73,7 @@ public class Indexer extends SubsystemBase {
         hasOneBall = !mSecondStageGate.get();
         hasTwoBalls = hasOneBall && !mFirstStageGate.get();
 
-        SmartDashboard.putString("Indexer State", String.valueOf(getState()));
+        // SmartDashboard.putString("Indexer State", String.valueOf(getState()));
 
         switch (state) {
             case HELLA_ZOOMING:

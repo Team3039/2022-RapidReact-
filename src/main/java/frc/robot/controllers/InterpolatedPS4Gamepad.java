@@ -35,6 +35,6 @@ public class InterpolatedPS4Gamepad extends PS4Gamepad {
     public double interpolatedRightXAxis() {
         if (Math.abs(this.getRightXAxis()) <= 0.05)
             return 0.0;
-        return -(Math.sin(this.getRightXAxis()) * 0.5);
+        return -(Math.sin(this.getRightXAxis()) * 0.75);
     }
 }

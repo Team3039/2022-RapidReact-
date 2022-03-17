@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.math.FieldOrientedTurretHelper;
 import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
@@ -24,7 +25,6 @@ import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.auto.routines.RightNearFiveBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Shooter.ShooterState;
@@ -123,11 +123,13 @@ public class Robot extends TimedRobot {
     // else {
     //   RobotContainer.compressor.enableDigital();
     // }
+    // RobotContainer.limelight.setCamMode(CamMode.VISION);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
   public void disabledPeriodic() {
@@ -152,7 +154,7 @@ public class Robot extends TimedRobot {
         () -> Drive.getInstance().swerveOdometry.update(
             Drive.getInstance().getYaw(),
             Drive.getInstance().getStates()),
-        0.01);
+        0.02);
   }
 
   @Override

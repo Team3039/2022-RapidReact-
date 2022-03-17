@@ -61,7 +61,7 @@ public class Turret extends SubsystemBase {
 
     turret.selectProfileSlot(0, 0);
 
-    turret.setStatusFramePeriod(StatusFrame.Status_1_General, 100);
+    turret.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
   }
 
   public void setState(TurretState state) {
@@ -160,7 +160,7 @@ public class Turret extends SubsystemBase {
         break;
       case MANUAL:
         turret.selectProfileSlot(1, 0);
-        turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis());
+        turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * -1);
         break;
       case CLIMBING:
         turret.set(ControlMode.Disabled, 0);

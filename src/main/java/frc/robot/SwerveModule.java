@@ -34,18 +34,18 @@ public class SwerveModule {
         /* Angle Encoder Config */
         angleEncoder = new CANCoder(moduleConstants.cancoderID);
         configAngleEncoder();
-        angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 10);
+        angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 20);
 
         /* Angle Motor Config */
         mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
         configAngleMotor();
-        mAngleMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
+        mAngleMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 20);
 
         /* Drive Motor Config */
         driveMotor = new TalonFX(moduleConstants.driveMotorID);
         configDriveMotor();
         
-        driveMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
+        driveMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 20);
 
         lastAngle = getState().angle.getDegrees();
     }

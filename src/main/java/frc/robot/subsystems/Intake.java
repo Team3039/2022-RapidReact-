@@ -51,7 +51,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
   //  SmartDashboard.putNumber("Intake Amps", roller.getOutputCurrent());
-    SmartDashboard.putString("Intake State", String.valueOf(getState()));
+    // SmartDashboard.putString("Intake State", String.valueOf(getState()));
 
     synchronized (Intake.this) {
       switch (getState()) {
@@ -64,7 +64,7 @@ public class Intake extends SubsystemBase {
           // RobotContainer.compressor.disable();
           if (!RobotContainer.indexer.hasTwoBalls) {
             deploy.set(!RobotContainer.indexer.isFeeding);
-            roller.set(0.38);
+            roller.set(0.70);
           } else {
             deploy.set(false);
             roller.set(0.0);
