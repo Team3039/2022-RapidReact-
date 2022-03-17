@@ -10,25 +10,33 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.auto.commands.SetIndexingFeedMode;
+import frc.robot.auto.commands.SetIndexingIdleMode;
+import frc.robot.auto.commands.SetIndexingIntakeMode;
+import frc.robot.auto.commands.SetShooterIdleMode;
+import frc.robot.auto.commands.SetShooterSpinUpMode;
+import frc.robot.auto.commands.SetTurretDriveMode;
+import frc.robot.auto.commands.SetTurretTrackMode;
 import frc.robot.auto.commands.StopTrajectory;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class DriveStraight extends SequentialCommandGroup {
+public class GenericTwoBallAuto extends SequentialCommandGroup {
     
-    /** Creates a new DriveStraight. */
-    public DriveStraight(Drive s_Swerve) {
+    /** Creates a new GenericTwoBallAuto. */
+    public GenericTwoBallAuto(Drive s_Swerve) {
 
         var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.KP_THETA_CONTROLLER, 0, 0,
                 Constants.AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand driveStraight = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightFarStartToFirstBall(),
+        SwerveControllerCommand grabBallCommand = new SwerveControllerCommand(
+                frc.robot.auto.TrajectoryGenerator.getGenericStartToFirstBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
@@ -38,13 +46,20 @@ public class DriveStraight extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        // Add your commands in the addCommands() call, e.g.
-        // addCommands(new FooCommand(), new BarCommand());
+
+
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-                driveStraight,
-                new StopTrajectory()
-              );
-
+                new SetTurretDriveMode(),
+                new SetShooterSpinUpMode(4500),
+                new SetIndexingIntakeMode(),
+                grabBallCommand,
+                new SetTurretTrackMode(),
+                new SetIndexingFeedMode(),
+                new WaitCommand(1),
+                new SetTurretDriveMode(),
+                new SetShooterIdleMode(),
+                new SetIndexingIdleMode()
+        );
     }
 }

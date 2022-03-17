@@ -18,8 +18,6 @@ public class SetLeftClimber extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.climber.leftClimber.configForwardSoftLimitEnable(false);
-    RobotContainer.climber.leftClimber.configReverseSoftLimitEnable(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,8 +29,6 @@ public class SetLeftClimber extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.leftClimber.configForwardSoftLimitEnable(true);
-    RobotContainer.climber.leftClimber.configReverseSoftLimitEnable(true);
     RobotContainer.climber.setLeftOutput(0);
   }
 

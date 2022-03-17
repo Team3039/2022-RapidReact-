@@ -6,17 +6,22 @@ package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterState;
 
 public class SetShooterSpinUpMode extends CommandBase {
+
+  double setpoint;
   /** Creates a new SetShooterSpinUpMode. */
-  public SetShooterSpinUpMode() {
+  public SetShooterSpinUpMode(double setpoint) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Shooter.mSetPoint = setpoint;
     RobotContainer.shooter.setState(ShooterState.SPIN_UP);
   }
 

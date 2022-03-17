@@ -66,9 +66,16 @@ public class TrajectoryGenerator {
                 public static Pose2d LeftFarLeftBall = new Pose2d(
                                 new Translation2d(Units.inchesToMeters(35), Units.inchesToMeters(3.5)),
                                 new Rotation2d(0));
+
+                // Generic Two Ball Waypoints
+                public static Pose2d genericBall = new Pose2d(
+                        new Translation2d(Units.inchesToMeters(25), Units.inchesToMeters(0)),
+                        new Rotation2d(0));
+
+
         }
 
-        // Right Far Four Ball Trajectories
+        // Right Far Trajectories
 
         public static Trajectory getRightFarStartToFirstBall() throws MalformedSplineException {
                 try {
@@ -165,7 +172,7 @@ public class TrajectoryGenerator {
                 }
                 return new Trajectory();
         }
-        // Right Near Four Ball Trajectories
+        // Right Near Trajectories
 
         public static Trajectory getRightNearStartToFirstBall() throws MalformedSplineException {
                 try {
@@ -254,6 +261,23 @@ public class TrajectoryGenerator {
                                         List.of(
                                                         Waypoints.rightNearTerminalBall,
                                                         Waypoints.rightNearShootPositionFinal),
+                                        configFast);
+                } catch (MalformedSplineException e) {
+                        e.printStackTrace();
+                        System.out.println("Spline Malformed");
+                        CommandScheduler.getInstance().cancelAll();
+                        System.out.println("Autonomous Canceled");
+                }
+                return new Trajectory();
+        }
+
+        // Generic Two Ball Trajectories
+        public static Trajectory getGenericStartToFirstBall() throws MalformedSplineException {
+                try {
+                        return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
+                                        List.of(
+                                                        new Pose2d(),
+                                                        Waypoints.genericBall),
                                         configFast);
                 } catch (MalformedSplineException e) {
                         e.printStackTrace();

@@ -143,35 +143,28 @@ public class RobotContainer {
     // driverR1.whenReleased(new SetGear(false));
     driverShare.toggleWhenPressed(new TrackTarget());
 
-    // if (!climber.isClimbing) {
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
-    operatorR1.toggleWhenPressed(new SpinShooter());
+    operatorR1.toggleWhenPressed(new SpinShooter(4125));
     // operatorTriangle.whileHeld(new SetHoodServoAngle(90));
     // operatorCircle.whileHeld(new SetHoodServoAngle(135));%
 
     // operatorPadButton.toggleWhenPressed(new SetManualTurretMode());
-    // }
 
-    operatorStart.toggleWhenPressed(new SetSubsystemsClimbMode());
+    driverStart.toggleWhenPressed(new SetSubsystemsClimbMode());
 
-    // if (climber.isClimbing) {
-    driverL1.whileHeld(new SetLeftClimber(.15));
-    driverL2.whileHeld(new SetLeftClimber(-.15));
+    driverL1.whileHeld(new SetLeftClimber(.25));
+    driverL2.whileHeld(new SetLeftClimber(-.50));
 
-    driverR1.whileHeld(new SetRightClimber(.15));
-    driverR2.whileHeld(new SetRightClimber(-.15));
+    driverR1.whileHeld(new SetRightClimber(.25));
+    driverR2.whileHeld(new SetRightClimber(-.50));
   
     // operatorDPadDown.whileHeld(new SetClimbSpeed(.15));
     // operatorDPadUp.whileHeld(new SetClimbSpeed(-.15));
 
     // driverOptions.whileHeld(new InstantCommand(() -> RobotContainer.climber.areSoftLimitsEnabled = true));
     // driverOptions.whenReleased(new InstantCommand(() -> RobotContainer.climber.areSoftLimitsEnabled = false));
-
-    operatorTriangle.whenPressed(new InstantCommand(() -> climber.actuateClimb(true)));
-    operatorX.whenPressed(new InstantCommand(() -> climber.actuateClimb(false)));
-// }
   }
 
   public static InterpolatedPS4Gamepad getDriver() {

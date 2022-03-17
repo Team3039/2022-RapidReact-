@@ -9,20 +9,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Indexer.IndexerState;
 
 public class Climber extends SubsystemBase {
 
     public TalonFX leftClimber = new TalonFX(Constants.Ports.CLIMB_MASTER);
     public TalonFX rightClimber = new TalonFX(Constants.Ports.CLIMB_SLAVE);
-
-    public Solenoid mActuatorA = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.CLIMB_ACTUATOR_A);
 
     public boolean areSoftLimitsEnabled = true;
     /** Creates a new Climber. */
@@ -37,27 +31,25 @@ public class Climber extends SubsystemBase {
         rightClimber.setSelectedSensorPosition(0);
 
         // leftClimber.configReverseSoftLimitThreshold(0);
-        // leftClimber.configReverseSoftLimitEnable(true);
+        leftClimber.configReverseSoftLimitEnable(false);
 
         // rightClimber.configReverseSoftLimitThreshold(0);
-        // rightClimber.configReverseSoftLimitEnable(true);
-
-        // follower.follow(leader);
+        rightClimber.configReverseSoftLimitEnable(false);
 
         // leader.configForwardSoft%LimitThreshold(Constants.Climber.TELESCOPING_ENCODER_LIMIT);
         // leader.configReverseSoftLimitThreshold(0);
 
-        // leftClimber.configForwardSoftLimitEnable(true);
+        leftClimber.configForwardSoftLimitEnable(false);
         // leftClimber.configReverseSoftLimitEnable(true);
 
         // follower.configForwardSoftLimitThreshold(Constants.Climber.TELESCOPING_ENCODER_LIMIT);
         // follower.configReverseSoftLimitThreshold(0);
 
-        // rightClimber.configForwardSoftLimitEnable(true);
+        rightClimber.configForwardSoftLimitEnable(false);
         // rightClimber.configReverseSoftLimitEnable(true);
 
-        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
-        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
+        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
     }
 
     // public void setClimberOutput(double percent) {
@@ -72,32 +64,28 @@ public class Climber extends SubsystemBase {
     // }
 
     public void setLeftOutput(double percent) {
-        if (leftClimber.getSelectedSensorPosition() < 0 && percent <= 0 && areSoftLimitsEnabled) {
-            leftClimber.set(ControlMode.PercentOutput, 0);
-        }
-        else {
+        // if (leftClimber.getSelectedSensorPosition() < 0 && percent <= 0 && areSoftLimitsEnabled) {
+        //     leftClimber.set(ControlMode.PercentOutput, 0);
+        // }
+        // else {
         leftClimber.set(ControlMode.PercentOutput, percent);
-        }
+        // }
     }
 
     public void setRightOutput(double percent) {
-        if (rightClimber.getSelectedSensorPosition() < 0 && percent <= 0 && areSoftLimitsEnabled) {
-            rightClimber.set(ControlMode.PercentOutput, 0);
-        }
-        else {
+        // if (rightClimber.getSelectedSensorPosition() < 0 && percent <= 0 && areSoftLimitsEnabled) {
+        //     rightClimber.set(ControlMode.PercentOutput, 0);
+        // }
+        // else {
         rightClimber.set(ControlMode.PercentOutput, percent);
-        }
+        // }
     }
 
     public void setClimberPosition(double encoderPos) {
         leftClimber.set(ControlMode.Position, encoderPos);
         rightClimber.set(ControlMode.Position, encoderPos);
     }
-
-    public void actuateClimb(boolean isActuated) {
-        mActuatorA.set(isActuated);
-    }
-
+    
     @Override
     public void periodic() {
         // if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {

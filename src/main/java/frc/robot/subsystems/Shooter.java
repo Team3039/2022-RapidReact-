@@ -26,17 +26,17 @@ public class Shooter extends SubsystemBase {
   public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
   public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
 
-  public static double mSetPoint;
+  public static double mSetPoint = 4125;
   public static boolean isAtSetPoint;
 
   public static InterpolatingTreeMap<InterpolatingDouble, Vector2> shooterMap;
 
   /** Creates a new Shotoer. */
   public Shooter() {
-    leader.setInverted(false);
+    leader.setInverted(true);
     leader.setNeutralMode(NeutralMode.Coast);
 
-    follower.setInverted(true);
+    follower.setInverted(false);
     follower.setNeutralMode(NeutralMode.Coast);
 
     leader.config_kP(0, 0.4);
@@ -48,8 +48,8 @@ public class Shooter extends SubsystemBase {
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
     shooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
 
-    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
-    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
+    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
+    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
   }
 
   public static Shooter getInstance() {
@@ -111,14 +111,12 @@ public class Shooter extends SubsystemBase {
         mSetPoint = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y; 
         leader.set(ControlMode.Velocity,
             RPMToVelocity(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y));
-
+            
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
-    
         break;
       case SPIN_UP:
-        mSetPoint = 4125;
-        leader.set(ControlMode.Velocity, RPMToVelocity(4125));
+        leader.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
         break;
       case UNJAMMING:

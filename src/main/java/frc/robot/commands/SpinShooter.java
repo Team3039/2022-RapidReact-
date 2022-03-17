@@ -6,19 +6,24 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterState;
 import frc.robot.subsystems.Turret.TurretState;
 
 public class SpinShooter extends CommandBase {
   /** Creates a new SpinShooter. */
-  public SpinShooter() {
+
+  double setpoint;
+  public SpinShooter(double setpoint) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
+    this.setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Shooter.mSetPoint = setpoint;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

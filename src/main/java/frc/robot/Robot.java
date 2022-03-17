@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.math.FieldOrientedTurretHelper;
 import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
 import frc.robot.auto.routines.DriveStraight;
+import frc.robot.auto.routines.GenericTwoBallAuto;
 import frc.robot.auto.routines.RightFarFourBallAuto;
 import frc.robot.auto.routines.RightNearFiveBallAuto;
 import frc.robot.auto.routines.RightNearFourBallAuto;
@@ -75,12 +76,10 @@ public class Robot extends TimedRobot {
     autonTaskChooser.addOption("Right Far Four Ball", new RightFarFourBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Right Near Five Ball", new RightNearFiveBallAuto(Drive.getInstance()));
-    
+    autonTaskChooser.addOption("Generic Two Ball", new GenericTwoBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Drive Straight", new DriveStraight(Drive.getInstance()));
 
     SmartDashboard.putData("Autonomous", autonTaskChooser);
-    // field.setRobotPose(Swerve.getInstance().getPose());
-    // SmartDashboard.putData("Field", field);
 
     mStartPoseChooser.addOption("Left Far Start Pose", Start_Pose.LEFT_FAR);
     mStartPoseChooser.addOption("Left Near Start Pose", Start_Pose.LEFT_NEAR);
@@ -118,9 +117,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.mSecondStageGate.get());
     SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.indexer.mFirstStageGate.get());
 
-    if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {
-      RobotContainer.compressor.disable();
-    }
+    // if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {
+    //   // RobotContainer.compressor.disable();
+    // }
     // else {
     //   RobotContainer.compressor.enableDigital();
     // }

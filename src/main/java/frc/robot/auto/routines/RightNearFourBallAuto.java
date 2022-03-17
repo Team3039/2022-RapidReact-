@@ -81,7 +81,7 @@ public class RightNearFourBallAuto extends SequentialCommandGroup {
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-                new SetShooterSpinUpMode(),
+                new SetShooterSpinUpMode(4125),
                 new SetIndexingIntakeMode(),
                 grabMidBallCommand,
                 new StopTrajectory(),

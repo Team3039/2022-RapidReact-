@@ -92,7 +92,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
                 new SetTurretTrackMode(),
-                new SetShooterSpinUpMode(),
+                new SetShooterSpinUpMode(4125),
                 new SetIndexingFeedMode(),
                 new WaitCommand(0.5),
                 new SetTurretDriveMode(),

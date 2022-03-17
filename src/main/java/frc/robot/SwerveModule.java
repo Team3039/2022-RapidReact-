@@ -1,9 +1,13 @@
 package frc.robot;
 
+import java.security.cert.CRLReason;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -30,14 +34,18 @@ public class SwerveModule {
         /* Angle Encoder Config */
         angleEncoder = new CANCoder(moduleConstants.cancoderID);
         configAngleEncoder();
+        angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 10);
 
         /* Angle Motor Config */
         mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
         configAngleMotor();
+        mAngleMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
 
         /* Drive Motor Config */
         driveMotor = new TalonFX(moduleConstants.driveMotorID);
         configDriveMotor();
+        
+        driveMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
 
         lastAngle = getState().angle.getDegrees();
     }
