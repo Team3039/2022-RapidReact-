@@ -55,17 +55,6 @@
               "_title": "Indexer State"
             }
           },
-          "8,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Pigeon Reading",
-              "_title": "Pigeon Reading"
-            }
-          },
           "1,2": {
             "size": [
               1,
@@ -198,6 +187,98 @@
               "fps": -1,
               "imageWidth": 0,
               "imageHeight": 0
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climb encoder right",
+              "_title": "Climb encoder right"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climb encoder left",
+              "_title": "Climb encoder left"
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Stream",
+              "_title": "limelight_Stream"
+            }
+          },
+          "8,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
+              "_title": "limelight_PipelineName"
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Disable Climb Soft Limits/running",
+              "_title": "Disable Climb Soft Limits/running",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "8,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Reset Climb Encoders/running",
+              "_title": "Reset Climb Encoders/running",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/limelight_Interface",
+              "_title": "limelight_Interface"
+            }
+          },
+          "8,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pigeon Reading",
+              "_title": "Pigeon Reading"
             }
           }
         }
@@ -511,6 +592,20 @@
                   "_title": "Solenoid[0,0]/Value",
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[0]/Enabled",
+                  "_title": "/LiveWindow/Ungrouped/Compressor[0]/Enabled",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[0]/Pressure switch",
+                  "_title": "/LiveWindow/Ungrouped/Compressor[0]/Pressure switch",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
                 }
               ]
             }
@@ -549,12 +644,23 @@
               "_source0": "network_table:///LiveWindow/Fortes",
               "_title": "Fortes"
             }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Autonomous",
+              "_title": "/SmartDashboard/Autonomous"
+            }
           }
         }
       }
     },
     {
-      "title": "Tab 4",
+      "title": "Vision Cams",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -564,10 +670,10 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "6,0": {
+          "4,0": {
             "size": [
-              3,
-              2
+              5,
+              4
             ],
             "content": {
               "_type": "Camera Stream",
@@ -585,8 +691,8 @@
           },
           "0,0": {
             "size": [
-              3,
-              2
+              4,
+              4
             ],
             "content": {
               "_type": "Camera Stream",
@@ -607,9 +713,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1382.0,
-    "height": 744.0
+    "x": -7.0,
+    "y": 2.0,
+    "width": 1378.0,
+    "height": 733.0
   }
 }

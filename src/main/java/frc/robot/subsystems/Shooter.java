@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase {
     follower.setInverted(false);
     follower.setNeutralMode(NeutralMode.Coast);
 
-    leader.config_kP(0, 0.4);
+    leader.config_kP(0, 0.39);
     leader.config_kI(0, 0);
     leader.config_kD(0, 6);
 

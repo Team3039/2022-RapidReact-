@@ -147,11 +147,11 @@ public class RobotContainer {
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
-    operatorR1.toggleWhenPressed(new SpinShooter(4250));
+    operatorR1.toggleWhenPressed(new SpinShooter(4150));
     // operatorTriangle.whileHeld(new SetHoodServoAngle(90));
-    // operatorCircle.whileHeld(new SetHoodServoAngle(135));%
+    // operatorCircle.whileHeld(new SetHoodServoAngle(135));
 
-    operatorX.toggleWhenPressed(new SetManualTurretMode());
+    operatorR3.toggleWhenPressed(new SetManualTurretMode());
 
     driverStart.toggleWhenPressed(new SetSubsystemsClimbMode());
 

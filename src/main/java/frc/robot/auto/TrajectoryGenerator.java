@@ -46,7 +46,7 @@ public class TrajectoryGenerator {
 
                 // Right Near Four Ball Waypoints
                 public static Pose2d rightNearMidBall = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(40), Units.inchesToMeters(-15)),
+                                new Translation2d(Units.inchesToMeters(40), Units.inchesToMeters(-18)),
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearRightBall = new Pose2d(
@@ -55,7 +55,7 @@ public class TrajectoryGenerator {
 
                 public static Pose2d rightNearTerminalBall = new Pose2d(
                                 // original x was 150, original y was -77
-                        new Translation2d(Units.inchesToMeters(137), Units.inchesToMeters(-82)),
+                        new Translation2d(Units.inchesToMeters(130), Units.inchesToMeters(-86)),
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearShootPositionFinal = new Pose2d(
