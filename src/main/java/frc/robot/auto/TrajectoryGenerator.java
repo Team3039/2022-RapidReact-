@@ -17,6 +17,7 @@ import frc.robot.Constants;
 public class TrajectoryGenerator {
         public static TrajectoryGenerator INSTANCE = new TrajectoryGenerator();
 
+        // before was -0, -0
         public static TrajectoryConfig configFast = new TrajectoryConfig(
                         Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND,
                         Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
@@ -55,11 +56,11 @@ public class TrajectoryGenerator {
 
                 public static Pose2d rightNearTerminalBall = new Pose2d(
                                 // original x was 150, original y was -77
-                        new Translation2d(Units.inchesToMeters(130), Units.inchesToMeters(-86)),
+                        new Translation2d(Units.inchesToMeters(132), Units.inchesToMeters(-86)),
                                 new Rotation2d(0));
 
                 public static Pose2d rightNearShootPositionFinal = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(20), Units.inchesToMeters(-15)),
+                                new Translation2d(Units.inchesToMeters(20), Units.inchesToMeters(-5)),
                                 new Rotation2d(0));
         
                 // Left Far Four Ball Waypoints

@@ -6,35 +6,27 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Indexer.IndexerState;
-// import frc.robot.subsystems.Intake.IntakeState;
 
-public class FeedCargo extends CommandBase {
-  /** Creates a new SetPassiveIndexing. */
-  public FeedCargo() {
-    addRequirements(RobotContainer.indexer);
+public class ActuateClimb extends CommandBase {
+  /** Creates a new ActuateClimb. */
+  public ActuateClimb() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.indexer.isFeeding = true;
-    RobotContainer.indexer.mTimer.start();
+    RobotContainer.climber.actuateClimb(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    RobotContainer.indexer.setState(IndexerState.SHOOTING);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.indexer.setState(IndexerState.IDLE);
-    RobotContainer.indexer.mTimer.stop();
-    RobotContainer.indexer.mTimer.reset();
+    RobotContainer.climber.actuateClimb(false);
   }
 
   // Returns true when the command should end.

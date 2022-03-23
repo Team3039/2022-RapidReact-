@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import javax.lang.model.util.ElementScanner6;
+import javax.swing.Timer;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -25,6 +28,8 @@ public class Indexer extends SubsystemBase {
 
     private IndexerState state = IndexerState.IDLE;
 
+    public edu.wpi.first.wpilibj.Timer mTimer = new edu.wpi.first.wpilibj.Timer();
+
     public boolean hasOneBall;
     public boolean hasTwoBalls;
     public boolean isFeeding;
@@ -36,8 +41,8 @@ public class Indexer extends SubsystemBase {
         mFirstStageGate = new DigitalInput(Constants.Ports.FIRST_STAGE_GATE);
         mSecondStageGate = new DigitalInput(Constants.Ports.SECOND_STAGE_GATE);
 
-        mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);
-        mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);
+        mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 201);
+        mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 211);
 
         mFirstStageMaster.setNeutralMode(NeutralMode.Brake);
         mSecondStageMaster.setNeutralMode(NeutralMode.Brake);
@@ -47,6 +52,8 @@ public class Indexer extends SubsystemBase {
 
         mSecondStageMaster.configPeakCurrentLimit(40);
         mSecondStageMaster.configContinuousCurrentLimit(35);
+
+        mTimer.start();
 
         // mFirstStageMaster.configSupplyCurrentLimit(currLimitConfigs)
     }
@@ -82,8 +89,10 @@ public class Indexer extends SubsystemBase {
                 setOpenLoop(0, 0);
                 break;
             case SHOOTING:
-                isFeeding = true;
-                setOpenLoop(0.6, 0.75);
+                if (mTimer.hasElapsed(2))
+                    setOpenLoop(0.6, 0.75);
+                else
+                    setOpenLoop(0, 0.75);
                 break;
             case INDEXING:
                 isFeeding = false;

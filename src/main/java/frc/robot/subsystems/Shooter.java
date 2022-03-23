@@ -26,6 +26,9 @@ public class Shooter extends SubsystemBase {
   public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
   public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
 
+  //  public Servo leftHood = new Servo(Constants.Ports.LEFT_HOOD);
+  // public Servo rightHood = new Servo(Constants.Ports.RIGHT_HOOD);
+
   public static double mSetPoint = 4125;
   public static boolean isAtSetPoint;
 
@@ -39,17 +42,17 @@ public class Shooter extends SubsystemBase {
     follower.setInverted(false);
     follower.setNeutralMode(NeutralMode.Coast);
 
-    leader.config_kP(0, 0.39);
+    leader.config_kP(0, 0.49);
     leader.config_kI(0, 0);
-    leader.config_kD(0, 6);
+    leader.config_kD(0, 6.5);
 
     follower.follow(leader);
 
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
     shooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
 
-    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
-    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 50);
+    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 67);
+    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 79);
   }
 
   public static Shooter getInstance() {
@@ -92,6 +95,12 @@ public class Shooter extends SubsystemBase {
   public double offsetRPM(double setpoint) {
     return setpoint - (setpoint - 3000) / 4;
   }
+
+  public void setHoodAngle(double angle) {
+    // leftHood.setAngle(angle);
+    // rightHood.setAngle(angle);
+  }
+
   @Override
   public void periodic() {
 
@@ -104,6 +113,7 @@ public class Shooter extends SubsystemBase {
 
     switch (getState()) {
       case IDLE:
+        leader.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
         leader.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
@@ -113,8 +123,11 @@ public class Shooter extends SubsystemBase {
             
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
+
+        setHoodAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
         break;
       case SPIN_UP:
+        leader.setStatusFramePeriod(StatusFrame.Status_1_General, 67);
         leader.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
         break;
@@ -122,6 +135,7 @@ public class Shooter extends SubsystemBase {
         leader.set(ControlMode.PercentOutput, -0.45);
         break;
       case CLIMBING:
+      leader.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
         leader.set(ControlMode.Disabled, 0);
         break;
       default:

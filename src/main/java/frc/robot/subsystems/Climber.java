@@ -9,6 +9,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,6 +19,8 @@ public class Climber extends SubsystemBase {
 
     public TalonFX leftClimber = new TalonFX(Constants.Ports.CLIMB_MASTER);
     public TalonFX rightClimber = new TalonFX(Constants.Ports.CLIMB_SLAVE);
+
+    public Solenoid actuator = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.CLIMB_ACTUATOR);
     /** Creates a new Climber. */
     // Green goes down
     public Climber() {
@@ -40,8 +44,8 @@ public class Climber extends SubsystemBase {
         leftClimber.configForwardSoftLimitThreshold(Constants.Climber.TELESCOPING_TO_MID_BAR_LIMIT);
         leftClimber.configForwardSoftLimitEnable(true);
 
-        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
-        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 200);
+        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 179);
+        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 153);
     }
 
     // public void setClimberOutput(double percent) {
@@ -82,13 +86,13 @@ public class Climber extends SubsystemBase {
         leftClimber.setSelectedSensorPosition(value);
         rightClimber.setSelectedSensorPosition(value);
     }
+
+    public void actuateClimb(boolean isActuated) {
+        actuator.set(isActuated);
+    }
     
     @Override
     public void periodic() {
-        // if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {
-        //     RobotContainer.compressor.disable();
-        //     setClimberOutput((RobotContainer.getOperator().getLeftYAxis()));
-        // }
 
         SmartDashboard.putNumber("Climb encoder right", rightClimber.getSelectedSensorPosition());
         SmartDashboard.putNumber("Climb encoder left", leftClimber.getSelectedSensorPosition());
