@@ -35,6 +35,10 @@ public class Shooter extends SubsystemBase {
 
   public static InterpolatingTreeMap<InterpolatingDouble, Vector2> shooterMap;
 
+  private double[] mRPMRegressionVariable = {0};
+  private double[] mHoodRegressionVariable = {0};
+
+
   /** Creates a new Shotoer. */
   public Shooter() {
     leader.setInverted(true);
@@ -50,10 +54,12 @@ public class Shooter extends SubsystemBase {
     follower.follow(leader);
 
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(1000)), new Vector2(2, 2));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(1)), new Vector2(2, 2));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(4)), new Vector2(4, 4));
 
-    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 67);
-    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 79);
+
+    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
+    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
   }
 
   // public static Shooter getInstance() {
@@ -102,11 +108,26 @@ public class Shooter extends SubsystemBase {
     // rightHood.setAngle(angle);
   }
 
+  public double calculateShooterRPM() {
+    double output = 0;
+    for (int i = 1; i < mRPMRegressionVariable.length; i++) {
+      output += Math.pow(mRPMRegressionVariable[1], i);
+    }
+    return output;
+  }
+
+  public double calculateHoodAngle() {
+    double output = 0;
+    for (int i = 1; i < mHoodRegressionVariable.length; i++) {
+      output += Math.pow(mHoodRegressionVariable[1], i);
+    }
+    return output;
+  }
+
   @Override
   public void periodic() {
 
-    // setHoodAngle(0);
-  
+    System.out.println(shooterMap.getInterpolated(new InterpolatingDouble(Double.valueOf(3))));
 
  //   SmartDashboard.putNumber("Shooter SetPoint Velocity", RPMToVelocity(4500));
     // SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());

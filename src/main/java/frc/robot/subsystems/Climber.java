@@ -48,8 +48,8 @@ public class Climber extends SubsystemBase {
         leftClimber.configForwardSoftLimitThreshold(Constants.Climber.CLIMB_ENCODER_LIMIT);
         leftClimber.configForwardSoftLimitEnable(true);
 
-        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 179);
-        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 157);
+        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
+        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
 
         leftClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         rightClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);

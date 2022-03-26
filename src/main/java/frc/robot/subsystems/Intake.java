@@ -27,7 +27,7 @@ public class Intake extends SubsystemBase {
     roller = new CANSparkMax(Constants.Ports.INTAKE, MotorType.kBrushless);
     deploy = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.INTAKE_SOLENOID);
 
-    roller.setControlFramePeriodMs(0);
+    roller.setControlFramePeriodMs(10);
 
     roller.setIdleMode(IdleMode.kCoast);
   }

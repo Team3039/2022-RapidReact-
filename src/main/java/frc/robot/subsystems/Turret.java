@@ -64,7 +64,7 @@ public class Turret extends SubsystemBase {
 
     turret.selectProfileSlot(0, 0);
 
-    turret.setStatusFramePeriod(StatusFrame.Status_1_General, 217);
+    turret.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
   }
 
   public void setState(TurretState state) {
