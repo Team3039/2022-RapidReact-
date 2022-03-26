@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,6 +38,8 @@ public class Turret extends SubsystemBase {
   private TurretState turretState = TurretState.DRIVE;
 
   public TalonSRX turret = new TalonSRX(Constants.Ports.TURRET);
+
+  public MedianFilter mFilter = new MedianFilter(10);
 
   public static boolean isAtTargetPosition;
 
@@ -154,7 +157,7 @@ public class Turret extends SubsystemBase {
         isAtTargetPosition = MathUtils.epsilonEquals(targetX, 0, 1);
         break;
       case DRIVE:
-      turret.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+        turret.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
         turret.selectProfileSlot(0, 0);
         RobotContainer.limelight.setCamMode(CamMode.DRIVER);
         RobotContainer.limelight.setLedMode(LedMode.OFF);

@@ -26,6 +26,7 @@ import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.SpinShooterNoTrack;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TrackTarget;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Climber;
@@ -144,13 +145,13 @@ public class RobotContainer {
 
     // driverR1.whileHeld(new SetGear(true));
     // driverR1.whenReleased(new SetGear(false));
-    // driverShare.toggleWhenPressed(new TrackTarget());
+    driverShare.toggleWhenPressed(new TrackTarget());
 
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
-    operatorR1.toggleWhenPressed(new SpinShooter(4150));
-    operatorTriangle.whenPressed(new SpinShooterNoTrack(4150));
+    operatorR1.toggleWhenPressed(new SpinShooter(4200));
+    operatorTriangle.whenPressed(new SpinShooterNoTrack(4200));
     
     // operatorTriangle.whileHeld(new SetHoodServoAngle(90));
     // operatorCircle.whileHeld(new SetHoodServoAngle(135));
@@ -162,11 +163,17 @@ public class RobotContainer {
     driverL1.whileHeld(new SetLeftClimber(.95));
     driverL2.whileHeld(new SetLeftClimber(-.90));
 
-    driverR1.whileHeld(new SetRightClimber(.95));
-    driverR2.whileHeld(new SetRightClimber(-.90));
+    driverR1.whileHeld(new SetRightClimber(.45));
+    driverR2.whileHeld(new SetRightClimber(-.40));
+
+    driverPadButton.whenPressed(new InstantCommand(() -> RobotContainer.drive.isHighGear = false));
+    driverPadButton.whenReleased(new InstantCommand(() -> RobotContainer.drive.isHighGear = true));
 
     driverTriangle.toggleWhenPressed(new ActuateClimb());
 
+    operatorCircle.whenPressed(new InstantCommand(() -> shooter.setHoodAngle(0)));
+    operatorX.whenPressed(new InstantCommand(() -> shooter.setHoodAngle(0.5)));
+    operatorSquare.whenPressed(new InstantCommand(() -> shooter.setHoodAngle(1)));
 
     driverPadButton.toggleWhenPressed(new DisableClimbSoftLimits());
   }

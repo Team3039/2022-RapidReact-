@@ -17,16 +17,17 @@ import frc.lib.util.InterpolatingTreeMap;
 import frc.lib.util.MathUtils;
 import frc.lib.util.Vector2;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
 
-  public static Shooter INSTANCE = new Shooter();
+  // public static Shooter INSTANCE = new Shooter();
   public static ShooterState state = ShooterState.IDLE;
 
-  public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER);
-  public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE);
+  public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER, "Drivetrain");
+  public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE, "Drivetrain");
 
-  //  public Servo leftHood = new Servo(Constants.Ports.LEFT_HOOD);
+  public Servo leftHood = new Servo(Constants.Ports.LEFT_HOOD);
   // public Servo rightHood = new Servo(Constants.Ports.RIGHT_HOOD);
 
   public static double mSetPoint = 4125;
@@ -42,9 +43,9 @@ public class Shooter extends SubsystemBase {
     follower.setInverted(false);
     follower.setNeutralMode(NeutralMode.Coast);
 
-    leader.config_kP(0, 0.49);
+    leader.config_kP(0, 0.39);
     leader.config_kI(0, 0);
-    leader.config_kD(0, 6.5);
+    leader.config_kD(0, 7.5);
 
     follower.follow(leader);
 
@@ -55,9 +56,9 @@ public class Shooter extends SubsystemBase {
     follower.setStatusFramePeriod(StatusFrame.Status_1_General, 79);
   }
 
-  public static Shooter getInstance() {
-    return INSTANCE;
-  }
+  // public static Shooter getInstance() {
+  //   return INSTANCE;
+  // }
 
   public enum ShooterState {
     IDLE,
@@ -96,13 +97,16 @@ public class Shooter extends SubsystemBase {
     return setpoint - (setpoint - 3000) / 4;
   }
 
-  public void setHoodAngle(double angle) {
-    // leftHood.setAngle(angle);
+  public void setHoodAngle(double pos) {
+    leftHood.setPosition(pos);
     // rightHood.setAngle(angle);
   }
 
   @Override
   public void periodic() {
+
+    // setHoodAngle(0);
+  
 
  //   SmartDashboard.putNumber("Shooter SetPoint Velocity", RPMToVelocity(4500));
     // SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());
@@ -117,6 +121,7 @@ public class Shooter extends SubsystemBase {
         leader.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
+        leader.setStatusFramePeriod(StatusFrame.Status_1_General, 67);
         mSetPoint = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y; 
         leader.set(ControlMode.Velocity,
             RPMToVelocity(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y));

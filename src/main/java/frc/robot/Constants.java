@@ -51,12 +51,12 @@ public final class Constants {
     }
 
     public static final class Turret {
-        public static final double kP_TURRET_TRACK = 0.02;
+        public static final double kP_TURRET_TRACK = 0.03;
     }
 
     public static final class Climber {
-        public static final int TRAVERSING_BARS_ENCODER_LIMIT = 99999999;
-        public static final int TELESCOPING_TO_MID_BAR_LIMIT = 219000;
+        public static final int CLIMB_ENCODER_LIMIT = 99999999;
+        public static final int TELESCOPING_TO_MID_BAR_VALUE = 219000;
     }
 
     public static final class Swerve {
