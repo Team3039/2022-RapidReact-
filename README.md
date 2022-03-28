@@ -1,4 +1,4 @@
-# 2022-RapidReact-Homecoming
+# 2022-RapidReact-Venetian
 
 Code used to run Venetian in 2022 Rapid React.
 
