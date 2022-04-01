@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -18,6 +17,7 @@ import frc.lib.util.MathUtils;
 import frc.lib.util.Vector2;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Indexer.IndexerState;
 
 public class Shooter extends SubsystemBase {
 
@@ -27,11 +27,13 @@ public class Shooter extends SubsystemBase {
   public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER, "Drivetrain");
   public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE, "Drivetrain");
 
-  public Servo leftHood = new Servo(Constants.Ports.LEFT_HOOD);
+  public Servo hood = new Servo(Constants.Ports.HOOD);
   // public Servo rightHood = new Servo(Constants.Ports.RIGHT_HOOD);
 
-  public static double mSetPoint = 4125;
+  public static double mSetPoint = 0;
   public static boolean isAtSetPoint;
+
+  public static double mAngle;
 
   public static InterpolatingTreeMap<InterpolatingDouble, Vector2> shooterMap;
 
@@ -47,19 +49,29 @@ public class Shooter extends SubsystemBase {
     follower.setInverted(false);
     follower.setNeutralMode(NeutralMode.Coast);
 
-    leader.config_kP(0, 0.39);
-    leader.config_kI(0, 0);
-    leader.config_kD(0, 7.5);
+    // With Flywheels
+    leader.config_kP(0, 0.9);
+    leader.config_kI(0, 0.00015);
+    leader.config_kD(0, 6);
+
+    // Without Flywheels
+    // leader.config_kP(0, 0.4);
+    // leader.config_kI(0, 0.0001);
+    // leader.config_kD(0, 8);
 
     follower.follow(leader);
 
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(1)), new Vector2(2, 2));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(4)), new Vector2(4, 4));
 
-
-    leader.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
-    follower.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
+  
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-8.3)), new Vector2(2200, 0));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-14)), new Vector2(2600, 0.2));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-17)), new Vector2(2800, 0.4));
+    // shooterMap.put(new InterpolatingDouble(Double.valueOf(4s)), new Vector2(4000, 0.4));
+    // shooterMap.put(new InterpolatingDouble(Double.valueOf(1)), new Vector2(2000, 0.2));
+    // shooterMap.put(new InterpolatingDouble(Double.valueOf(4)), new Vector2(4000, 0.4));
+    // shooterMap.put(new InterpolatingDouble(Double.valueOf(1)), new Vector2(2000, 0.2));
+    // shooterMap.put(new InterpolatingDouble(Double.valueOf(4)), new Vector2(4000, 0.4));
   }
 
   // public static Shooter getInstance() {
@@ -98,13 +110,8 @@ public class Shooter extends SubsystemBase {
     leader.set(ControlMode.PercentOutput, percent);
   }
 
-  // Alter the setpoint based on observed deviations.
-  public double offsetRPM(double setpoint) {
-    return setpoint - (setpoint - 3000) / 4;
-  }
-
   public void setHoodAngle(double pos) {
-    leftHood.setPosition(pos);
+    hood.setPosition(pos);
     // rightHood.setAngle(angle);
   }
 
@@ -126,42 +133,40 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // System.out.println(shooterMap.getInterpolated(new InterpolatingDouble(Double.valueOf(3))));
 
-    System.out.println(shooterMap.getInterpolated(new InterpolatingDouble(Double.valueOf(3))));
-
- //   SmartDashboard.putNumber("Shooter SetPoint Velocity", RPMToVelocity(4500));
+    SmartDashboard.putNumber("Shooter SetPoint Velocity", velocityToRPM(leader.getSelectedSensorVelocity()));
     // SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());
     // SmartDashboard.putNumber("Shooter Percent Speed", leader.getMotorOutputPercent());
-    SmartDashboard.putNumber("Shooter RPM", velocityToRPM(leader.getSelectedSensorVelocity()));
+    SmartDashboard.putNumber("Hood Angle", hood.getPosition());
 
     // SmartDashboard.putString("Shooter State", String.valueOf(getState()));
 
     switch (getState()) {
       case IDLE:
-        leader.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
         leader.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
-        leader.setStatusFramePeriod(StatusFrame.Status_1_General, 67);
-        mSetPoint = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y; 
-        leader.set(ControlMode.Velocity,
-            RPMToVelocity(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y));
+        if (!RobotContainer.indexer.getState().equals(IndexerState.SHOOTING)) {
+          mSetPoint = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x;
+          mAngle = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y;
+        }
+
+        leader.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
             
-        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
+        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), mSetPoint, 100);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
 
-        setHoodAngle(shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x);
+        setHoodAngle(mAngle);
         break;
       case SPIN_UP:
-        leader.setStatusFramePeriod(StatusFrame.Status_1_General, 67);
         leader.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
-        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), offsetRPM(mSetPoint), 500);
+        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), mSetPoint, 100);
         break;
       case UNJAMMING:
         leader.set(ControlMode.PercentOutput, -0.45);
         break;
       case CLIMBING:
-      leader.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
         leader.set(ControlMode.Disabled, 0);
         break;
       default:

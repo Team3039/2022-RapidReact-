@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -109,6 +111,9 @@ public class RobotContainer {
   private final JoystickButton operatorStart = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_START);
   private final JoystickButton operatorShare = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_SHARE);
   private final JoystickButton operatorOptions = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_OPTIONS);
+  private final JoystickButton operatorPadButton = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_PAD);
+
+  public static double mHoodAngle = 0;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -143,41 +148,48 @@ public class RobotContainer {
     // driverCircle.whileHeld(new SetSnap(-90));
     // driverX.whileHeld(new SetSnap(180));
 
-    // driverR1.whileHeld(new SetGear(true));
-    // driverR1.whenReleased(new SetGear(false));
     driverShare.toggleWhenPressed(new TrackTarget());
 
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
-    operatorR1.toggleWhenPressed(new SpinShooter(4200));
-    operatorTriangle.whenPressed(new SpinShooterNoTrack(4200));
-    
+
+    operatorR1.whileHeld(new SpinShooter(2250, false));
+
+    operatorTriangle.whenPressed(new SpinShooterNoTrack(2250));
+
     // operatorTriangle.whileHeld(new SetHoodServoAngle(90));
     // operatorCircle.whileHeld(new SetHoodServoAngle(135));
 
     operatorR3.toggleWhenPressed(new SetManualTurretMode());
 
-    driverStart.toggleWhenPressed(new SetSubsystemsClimbMode());
+    driverStart.whenPressed(new InstantCommand(
+        () -> climber.leftClimber.set(ControlMode.Position, Constants.Climber.TELESCOPING_TO_MID_BAR_VALUE_LEFT)));
+    driverStart.whenPressed(new InstantCommand(
+        () -> climber.rightClimber.set(ControlMode.Position, Constants.Climber.TELESCOPING_TO_MID_BAR_VALUE_RIGHT)));
+    driverStart.whenReleased(new InstantCommand(() -> climber.leftClimber.set(ControlMode.PercentOutput, 0)));
+    driverStart.whenReleased(new InstantCommand(() -> climber.rightClimber.set(ControlMode.PercentOutput, 0)));
 
-    driverL1.whileHeld(new SetLeftClimber(.95));
+    driverL1.whileHeld(new SetLeftClimber(.90));
     driverL2.whileHeld(new SetLeftClimber(-.90));
 
-    driverR1.whileHeld(new SetRightClimber(.45));
-    driverR2.whileHeld(new SetRightClimber(-.40));
+    driverR1.whileHeld(new SetRightClimber(.90));
+    driverR2.whileHeld(new SetRightClimber(-.90));
 
     driverPadButton.whenPressed(new InstantCommand(() -> RobotContainer.drive.isHighGear = false));
     driverPadButton.whenReleased(new InstantCommand(() -> RobotContainer.drive.isHighGear = true));
 
-    driverTriangle.toggleWhenPressed(new ActuateClimb());
+    // driverTriangle.toggleWhenPressed(new ActuateClimb());
+
+    operatorX.whenPressed(new InstantCommand(() -> {
+      shooter.setHoodAngle(0);
+    }));
 
     operatorCircle.whenPressed(new InstantCommand(() -> shooter.setHoodAngle(0)));
-    operatorX.whenPressed(new InstantCommand(() -> shooter.setHoodAngle(0.5)));
-    operatorSquare.whenPressed(new InstantCommand(() -> shooter.setHoodAngle(1)));
 
     driverPadButton.toggleWhenPressed(new DisableClimbSoftLimits());
   }
-
+  
   public static InterpolatedPS4Gamepad getDriver() {
     return driverPad;
   }
@@ -186,7 +198,7 @@ public class RobotContainer {
     return operatorPad;
   }
 
-    /**
+  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous

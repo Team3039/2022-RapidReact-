@@ -41,8 +41,8 @@ public final class Constants {
         public static final int CLIMB_ACTUATOR = 2;
 
         // PWM
-        public static final int LEFT_HOOD = 0;
-        public static final int RIGHT_HOOD = 1;
+        public static final int HOOD = 0;
+        // public static final int RIGHT_HOOD = 1;
     }
 
     public static final class Shooter {
@@ -55,8 +55,9 @@ public final class Constants {
     }
 
     public static final class Climber {
-        public static final int CLIMB_ENCODER_LIMIT = 99999999;
-        public static final int TELESCOPING_TO_MID_BAR_VALUE = 219000;
+        public static final double CLIMB_ENCODER_LIMIT = 226959;
+        public static final double TELESCOPING_TO_MID_BAR_VALUE_RIGHT = 219000;
+        public static final double TELESCOPING_TO_MID_BAR_VALUE_LEFT = 200000;
     }
 
     public static final class Swerve {

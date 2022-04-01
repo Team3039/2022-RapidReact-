@@ -16,6 +16,7 @@ import frc.robot.auto.commands.SetIndexingFeedMode;
 import frc.robot.auto.commands.SetIndexingIdleMode;
 import frc.robot.auto.commands.SetIndexingIntakeMode;
 import frc.robot.auto.commands.SetShooterIdleMode;
+import frc.robot.auto.commands.SetShooterShootingMode;
 import frc.robot.auto.commands.SetShooterSpinUpMode;
 import frc.robot.auto.commands.SetTurretDriveMode;
 import frc.robot.auto.commands.SetTurretTrackMode;
@@ -51,11 +52,13 @@ public class GenericTwoBallAuto extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
                 new SetTurretDriveMode(),
-                new SetShooterSpinUpMode(4800),
+                new SetShooterSpinUpMode(2350),
                 new SetIndexingIntakeMode(),
                 grabBallCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
+                // new SetShooterShootingMode(),
+                new WaitCommand(0.5),
                 new SetIndexingFeedMode(),
                 new WaitCommand(1),
                 new SetTurretDriveMode(),

@@ -31,9 +31,6 @@ public class Limelight implements Subsystem {
 
     private final Drive drivetrain;
 
-    private final NetworkTableEntry dXOuterEntry;
-    private final NetworkTableEntry dYOuterEntry;
-
     private boolean hasTarget;
     private boolean isInnerTargetVisible;
     private OptionalDouble distanceToTarget = OptionalDouble.empty();
@@ -41,35 +38,35 @@ public class Limelight implements Subsystem {
 
     public Limelight(Drive drivetrainSubsystem) {
         drivetrain = drivetrainSubsystem;
-        ShuffleboardTab tab = Shuffleboard.getTab("Vision");
-        dXOuterEntry = tab.add("dXOuter", 0.0)
-                .withPosition(1, 0)
-                .withSize(1, 1)
-                .getEntry();
-        dYOuterEntry = tab.add("dYOuter", 0.0)
-                .withPosition(2, 0)
-                .withSize(1, 1)
-                .getEntry();
-        tab.addNumber("target angle", () -> Math.toDegrees(getAngleToTarget().orElse(Double.NaN)))
-                .withPosition(4, 0)
-                .withSize(1, 1);
-        tab.addBoolean("Is on target", this::isOnTarget)
-                .withPosition(5, 0)
-                .withSize(1, 1);
-        tab.addNumber("Horizontal Target Error", () -> {
-            double gyroAngle = drivetrain.getPose().getRotation().getRadians();
-            return getDistanceToTarget().orElse(0.0) *
-                    (Math.sin(gyroAngle - getAngleToTarget().orElse(0.0)) / Math.sin(Math.PI / 2.0 - gyroAngle));
-        })
-                .withPosition(6, 0)
-                .withSize(1, 1);
-        tab.addNumber("X-Coord Distance to Target", () -> xFromTarget)
-                .withPosition(2, 1)
-                .withSize(1, 1);
-        tab.addNumber("Y-Coord Distance To Target", () -> yFromTarget)
-                .withPosition(3, 1)
-                .withSize(1, 1);
-    }
+        // ShuffleboardTab tab = Shuffleboard.getTab("Vision");
+        // dXOuterEntry = tab.add("dXOuter", 0.0)
+        //         .withPosition(1, 0)
+        //         .withSize(1, 1)
+        //         .getEntry();
+        // dYOuterEntry = tab.add("dYOuter", 0.0)
+        //         .withPosition(2, 0)
+        //         .withSize(1, 1)
+        //         .getEntry();
+        // tab.addNumber("target angle", () -> Math.toDegrees(getAngleToTarget().orElse(Double.NaN)))
+        //         .withPosition(4, 0)
+        //         .withSize(1, 1);
+        // tab.addBoolean("Is on target", this::isOnTarget)
+        //         .withPosition(5, 0)
+        //         .withSize(1, 1);
+        // tab.addNumber("Horizontal Target Error", () -> {
+        //     double gyroAngle = drivetrain.getPose().getRotation().getRadians();
+        //     return getDistanceToTarget().orElse(0.0) *
+        //             (Math.sin(gyroAngle - getAngleToTarget().orElse(0.0)) / Math.sin(Math.PI / 2.0 - gyroAngle));
+        // })
+        //         .withPosition(6, 0)
+        //         .withSize(1, 1);
+        // tab.addNumber("X-Coord Distance to Target", () -> xFromTarget)
+        //         .withPosition(2, 1)
+        //         .withSize(1, 1);
+        // tab.addNumber("Y-Coord Distance To Target", () -> yFromTarget)
+        //         .withPosition(3, 1)
+        //         .withSize(1, 1);
+}
 
     public void setCamMode(frc.lib.util.Limelight.CamMode mode) {
         LIMELIGHT.setCamMode(mode);
@@ -125,8 +122,6 @@ public class Limelight implements Subsystem {
                     - targetPosition.x;
             double dYOuter = distanceToOuterTarget * Math.sin(angleToOuter);
             double dXOuter = distanceToOuterTarget * Math.cos(angleToOuter);
-            dXOuterEntry.setDouble(dXOuter);
-            dYOuterEntry.setDouble(dYOuter);
 
             // Calculate the distance to the inner target
             double dXInner = dXOuter + INNER_TARGET_DEPTH;

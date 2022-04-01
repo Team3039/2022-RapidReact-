@@ -41,9 +41,6 @@ public class Indexer extends SubsystemBase {
         mFirstStageGate = new DigitalInput(Constants.Ports.FIRST_STAGE_GATE);
         mSecondStageGate = new DigitalInput(Constants.Ports.SECOND_STAGE_GATE);
 
-        mFirstStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-        mSecondStageMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-
         mFirstStageMaster.setNeutralMode(NeutralMode.Brake);
         mSecondStageMaster.setNeutralMode(NeutralMode.Brake);
 
@@ -86,12 +83,7 @@ public class Indexer extends SubsystemBase {
             case HELLA_ZOOMING:
                 System.out.println("Zoomies");
             case IDLE:
-            if (!mFirstStageGate.get()) {
-                setOpenLoop(-0.025, 0);
-            }
-            else {
                 setOpenLoop(0, 0);
-            }
                 break;
             case SHOOTING:
                 if (mTimer.hasElapsed(0.5))
@@ -110,7 +102,7 @@ public class Indexer extends SubsystemBase {
                 }
                 break;
             case UNJAMMING:
-                setOpenLoop(-0.60, -0.35);
+                setOpenLoop(-0.90, -0.45);
                 break;
             case CLIMBING:
                 mFirstStageMaster.set(ControlMode.Disabled, 0);

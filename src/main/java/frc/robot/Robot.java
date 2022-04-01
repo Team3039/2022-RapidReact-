@@ -8,6 +8,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -19,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.math.FieldOrientedTurretHelper;
 import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
+import frc.lib.util.Limelight.CamMode;
+import frc.lib.util.Limelight.LedMode;
 import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.GenericTwoBallAuto;
 import frc.robot.auto.routines.RightFarFourBallAuto;
@@ -62,7 +66,7 @@ public class Robot extends TimedRobot {
   /**
    * This function is run when the robot is first started up and should be used
    * for any
-   * initialization code.s
+   * initialization code.
    */
   @Override
   public void robotInit() {
@@ -137,6 +141,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    RobotContainer.shooter.setHoodAngle(0.65);
     mFieldOrientedTurretHelper = new FieldOrientedTurretHelper(mStartPoseChooser.getSelected());
     autonomousCommand = autonTaskChooser.getSelected();
 
@@ -164,6 +169,11 @@ public class Robot extends TimedRobot {
     
     // Should reset the gyro to face forward at the start of teleop
     RobotContainer.drive.setGyro(-1 * (FieldOrientedTurretHelper.startAngle + RobotContainer.drive.swerveOdometry.getPoseMeters().getRotation().getDegrees()));
+
+    RobotContainer.turret.setState(TurretState.DRIVE);
+    RobotContainer.shooter.setState(ShooterState.IDLE);
+    RobotContainer.indexer.setState(IndexerState.IDLE);
+    RobotContainer.intake.setState(IntakeState.IDLE);
   }
 
   /** This function is called periodically during operator control. */

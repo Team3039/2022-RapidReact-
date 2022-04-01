@@ -1,7 +1,5 @@
 package frc.robot;
 
-import java.security.cert.CRLReason;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.StatusFrame;

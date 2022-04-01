@@ -7,8 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -39,7 +39,7 @@ public class Turret extends SubsystemBase {
 
   public TalonSRX turret = new TalonSRX(Constants.Ports.TURRET);
 
-  public MedianFilter mFilter = new MedianFilter(10);
+  public MedianFilter mFilter = new MedianFilter(5);
 
   public static boolean isAtTargetPosition;
 
@@ -56,15 +56,17 @@ public class Turret extends SubsystemBase {
     turret.configForwardSoftLimitEnable(true);
     turret.configReverseSoftLimitEnable(true);
 
-    turret.config_kP(0, 1);
-    // turret.config_kD(0, 2);
+    turret.config_kP(0, 1.2);
+    turret.config_kI(0, 0);
+    turret.config_kD(0, 3.5);
     
     turret.config_kP(1, 0);
+    turret.config_kI(1, 0);
     turret.config_kD(1, 0);
-
+ 
     turret.selectProfileSlot(0, 0);
 
-    turret.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
+    // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
   }
 
   public void setState(TurretState state) {
@@ -76,9 +78,8 @@ public class Turret extends SubsystemBase {
   }
 
   public void trackTarget() {
-    // double correctionX = -1 * targetX;
-    // setTurretPosition(correctionX + ticksToDegrees());
-    turret.set(ControlMode.PercentOutput, -1 * targetX * Constants.Turret.kP_TURRET_TRACK);
+    // turret.set(ControlMode.PercentOutput, -1 * targetX * Constants.Turret.kP_TURRET_TRACK);
+    setTurretPosition(getCurrentAngle() - targetX);
   }
 
   // Assuming 0 is facing the opposite of the intake .
@@ -86,12 +87,7 @@ public class Turret extends SubsystemBase {
 
   // rotate turret to specified angle
   public void setTurretPosition(double targetAngle) {
-    if (targetAngle < -90 || targetAngle > 90) {
-      System.out.println("Turret Stop");
-      turret.set(ControlMode.PercentOutput, 0);
-    } else {
-      turret.set(ControlMode.Position, degreesToTicks(targetAngle));
-    }
+    turret.set(ControlMode.Position, degreesToTicks(targetAngle));
   }
 
   public void stop() {
@@ -131,7 +127,7 @@ public class Turret extends SubsystemBase {
     // SmartDashboard.putNumber("Desired Value", degreesToTicks(90));
 
     SmartDashboard.putNumber("Current Angle", getCurrentAngle());
-    // SmartDashboard.putNumber("TargetX",
+    SmartDashboard.putNumber("TargetX", targetX);
     // RobotContainer.limelight.getAngleToTarget().getAsDouble());
 
     SmartDashboard.putString("Turret State", String.valueOf(getState()));
@@ -149,7 +145,6 @@ public class Turret extends SubsystemBase {
 
     switch (currentMode) {
       case TRACKING:
-        turret.setStatusFramePeriod(StatusFrame.Status_1_General, 67);
         turret.selectProfileSlot(0, 0);
         RobotContainer.limelight.setCamMode(CamMode.VISION);
         RobotContainer.limelight.setLedMode(LedMode.ON);
@@ -157,7 +152,7 @@ public class Turret extends SubsystemBase {
         isAtTargetPosition = MathUtils.epsilonEquals(targetX, 0, 1);
         break;
       case DRIVE:
-        turret.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+        // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
         turret.selectProfileSlot(0, 0);
         RobotContainer.limelight.setCamMode(CamMode.DRIVER);
         RobotContainer.limelight.setLedMode(LedMode.OFF);
@@ -168,7 +163,7 @@ public class Turret extends SubsystemBase {
         turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * -1);
         break;
       case CLIMBING:
-        turret.setStatusFramePeriod(StatusFrame.Status_1_General, 253);
+        // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 253);
         turret.set(ControlMode.Disabled, 0);
         break;
       default:

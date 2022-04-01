@@ -17,7 +17,7 @@ public class SetClimbToBarHeight extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.climber.setClimberPosition(Constants.Climber.TELESCOPING_TO_MID_BAR_VALUE);
+    // RobotContainer.climber.setClimberPosition(Constants.Climber.TELESCOPING_TO_MID_BAR_VALUE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

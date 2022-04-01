@@ -16,6 +16,7 @@ import frc.robot.auto.commands.SetIndexingFeedMode;
 import frc.robot.auto.commands.SetIndexingIdleMode;
 import frc.robot.auto.commands.SetIndexingIntakeMode;
 import frc.robot.auto.commands.SetShooterIdleMode;
+import frc.robot.auto.commands.SetShooterShootingMode;
 import frc.robot.auto.commands.SetShooterSpinUpMode;
 import frc.robot.auto.commands.SetTurretDriveMode;
 import frc.robot.auto.commands.SetTurretTrackMode;
@@ -41,7 +42,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
                 thetaController,
-                Drive.getSwerveHeadingSupplier(-10),
+                Drive.getSwerveHeadingSupplier(10),
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
@@ -91,33 +92,36 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-                new SetShooterSpinUpMode(4250),
-                new SetTurretTrackMode(),
-                new WaitCommand(0.5),
-                new SetIndexingFeedMode(),
-                new WaitCommand(0.5),
-                new SetShooterSpinUpMode(4150),
+                new SetShooterSpinUpMode(2350),
                 new SetTurretDriveMode(),
-                new WaitCommand(0.1),
                 new SetIndexingIntakeMode(),
                 grabMidBallCommand,
                 new StopTrajectory(),
+                new SetTurretTrackMode(),
+                new WaitCommand(0.5),
+                // new SetShooterShootingMode(),
+                new SetIndexingFeedMode(),
+                new WaitCommand(0.5),
+                new SetTurretDriveMode(),
+                // new SetShooterSpinUpMode(2650),
+                new SetIndexingIntakeMode(),
                 grabRightBallCommand,
                 new StopTrajectory(),
-                goToStartCommand,
-                new StopTrajectory(),
                 new SetTurretTrackMode(),
-                new WaitCommand(.5),
+                // new SetShooterShootingMode(),
+                new WaitCommand(0.5),
                 new SetIndexingFeedMode(),
                 new WaitCommand(0.5),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
+                // new SetShooterSpinUpMode(2650),
                 grabTerminalBallCommand,
                 new StopTrajectory(),
-                new WaitCommand(0.5),
+                new WaitCommand(1),
                 goToShootingPointCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
+                // new SetShooterShootingMode(),
                 new WaitCommand(.5),
                 new SetIndexingFeedMode(),
                 new WaitCommand(0.5),

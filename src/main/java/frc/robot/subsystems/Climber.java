@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -23,8 +24,10 @@ public class Climber extends SubsystemBase {
     public TalonFX leftClimber = new TalonFX(Constants.Ports.CLIMB_MASTER, "Drivetrain");
     public TalonFX rightClimber = new TalonFX(Constants.Ports.CLIMB_SLAVE, "Drivetrain");
 
-    public Solenoid actuator = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.CLIMB_ACTUATOR);
+    public SupplyCurrentLimitConfiguration mSupplyCurrentLimitConfig = new SupplyCurrentLimitConfiguration(true, 30, 30, 5);
 
+    public Solenoid actuator = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.CLIMB_ACTUATOR);
+// 
     /** Creates a new Climber. */
     // Green goes down
     public Climber() {
@@ -48,11 +51,14 @@ public class Climber extends SubsystemBase {
         leftClimber.configForwardSoftLimitThreshold(Constants.Climber.CLIMB_ENCODER_LIMIT);
         leftClimber.configForwardSoftLimitEnable(true);
 
-        leftClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
-        rightClimber.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
-
         leftClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         rightClimber.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+
+        leftClimber.configSupplyCurrentLimit(mSupplyCurrentLimitConfig);
+        rightClimber.configSupplyCurrentLimit(mSupplyCurrentLimitConfig);
+
+        leftClimber.config_kP(0, 0.8);
+        rightClimber.config_kP(0, 0.8);
 
         // leftClimber.config_kP(0, 0);
         // rightClimber.config_kP(0, 0);
@@ -87,12 +93,14 @@ public class Climber extends SubsystemBase {
         rightClimber.setSelectedSensorPosition(value);
     }
 
-    public void actuateClimb(boolean isActuated) {
-        actuator.set(isActuated);
-    }
+    // public void actuateClimb(boolean isActuated) {
+    //     actuator.set(isActuated);
+    // }
     
     @Override
     public void periodic() {
+        // System.out.println(leftClimber.getSelectedSensorPosition());
+
         SmartDashboard.putNumber("Climb encoder right", rightClimber.getSelectedSensorPosition());
         SmartDashboard.putNumber("Climb encoder left", leftClimber.getSelectedSensorPosition());
     }

@@ -14,10 +14,12 @@ public class SpinShooter extends CommandBase {
   /** Creates a new SpinShooter. */
 
   double setpoint;
-  public SpinShooter(double setpoint) {
+  boolean isAdjustable;
+  public SpinShooter(double setpoint, boolean isAdjustable) {
     // Use addRequirements() here to declare subsystem dependencies.
     // addRequirements(RobotContainer.shooter);
     this.setpoint = setpoint;
+    this.isAdjustable = isAdjustable;
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +31,7 @@ public class SpinShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    RobotContainer.shooter.setState(ShooterState.SPIN_UP);
+      RobotContainer.shooter.setState(ShooterState.SPIN_UP);
     if (!RobotContainer.turret.getState().equals(TurretState.MANUAL)) {
       RobotContainer.turret.setState(TurretState.TRACKING);
     }
