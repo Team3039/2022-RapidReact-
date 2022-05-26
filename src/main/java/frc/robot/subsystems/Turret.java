@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import javax.management.ConstructorParameters;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -46,19 +48,20 @@ public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
   public Turret() {
     turret.setSelectedSensorPosition(0);
-    turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    turret.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
     turret.setNeutralMode(NeutralMode.Coast);
 
-    turret.configForwardSoftLimitThreshold(degreesToTicks(30));
-    turret.configReverseSoftLimitThreshold(degreesToTicks(-30));
+    turret.configForwardSoftLimitThreshold(degreesToTicks(45));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(-45));
 
     turret.configForwardSoftLimitEnable(true);
     turret.configReverseSoftLimitEnable(true);
+    turret.setInverted(false);
 
-    turret.config_kP(0, 1.2);
-    turret.config_kI(0, 0);
-    turret.config_kD(0, 3.5);
+    turret.config_kP(0, 2.125);
+    turret.config_kI(0, 0.000001); 
+    turret.config_kD(0, 1);
     
     turret.config_kP(1, 0);
     turret.config_kI(1, 0);
@@ -118,6 +121,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void resetEncoder() {
+    System.out.println("bruh");
     turret.setSelectedSensorPosition(0);
   }
 
@@ -128,6 +132,8 @@ public class Turret extends SubsystemBase {
 
     SmartDashboard.putNumber("Current Angle", getCurrentAngle());
     SmartDashboard.putNumber("TargetX", targetX);
+    SmartDashboard.putNumber("Turret Encoder", turret.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Turret Voltage", turret.getMotorOutputVoltage());
     // RobotContainer.limelight.getAngleToTarget().getAsDouble());
 
     SmartDashboard.putString("Turret State", String.valueOf(getState()));
@@ -159,12 +165,13 @@ public class Turret extends SubsystemBase {
         setTurretPosition(0);
         break;
       case MANUAL:
-        turret.selectProfileSlot(1, 0);
-        turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * -1);
+        // turret.selectProfileSlot(1, 0);
+        // turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * -1);
         break;
       case CLIMBING:
+        turret.selectProfileSlot(0, 0);
         // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 253);
-        turret.set(ControlMode.Disabled, 0);
+        setTurretPosition(-180);
         break;
       default:
         RobotContainer.limelight.setCamMode(CamMode.DRIVER);

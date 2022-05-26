@@ -65,7 +65,7 @@ public class Intake extends SubsystemBase {
         case INTAKING:
           if (!RobotContainer.indexer.hasTwoBalls) {
             deploy.set(!RobotContainer.indexer.isFeeding);
-            roller.set(0.70);
+            roller.set(0.60);
           } else {
             deploy.set(false);
             roller.set(0.0);

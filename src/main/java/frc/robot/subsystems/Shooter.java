@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
     // leader.config_kI(0, 0.0001);
     // leader.config_kD(0, 8);
 
-    follower.follow(leader);
+    // follower.follow(leader);
 
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
 
@@ -103,11 +103,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterRPM(double rpm) {
-    leader.set(ControlMode.Velocity, RPMToVelocity(rpm));
+    follower.set(ControlMode.Velocity, RPMToVelocity(rpm));
   }
 
   public void setShooterPercent(double percent) {
-    leader.set(ControlMode.PercentOutput, percent);
+    follower.set(ControlMode.PercentOutput, percent);
   }
 
   public void setHoodAngle(double pos) {
@@ -152,7 +152,7 @@ public class Shooter extends SubsystemBase {
           mAngle = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y;
         }
 
-        leader.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
+        follower.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
             
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), mSetPoint, 100);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
@@ -160,8 +160,8 @@ public class Shooter extends SubsystemBase {
         setHoodAngle(mAngle);
         break;
       case SPIN_UP:
-        leader.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
-        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), mSetPoint, 100);
+        follower.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
+        isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(follower.getSelectedSensorVelocity()), mSetPoint, 100);
         break;
       case UNJAMMING:
         leader.set(ControlMode.PercentOutput, -0.45);

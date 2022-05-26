@@ -97,7 +97,6 @@ public class Robot extends TimedRobot {
     UsbCamera usbCamera = CameraServer.startAutomaticCapture();
     usbCamera.setVideoMode(VideoMode.PixelFormat.kYUYV, 160, 90, 40);
 
-    RobotContainer.turret.setState(TurretState.DRIVE);
     RobotContainer.shooter.setState(ShooterState.IDLE);
     RobotContainer.indexer.setState(IndexerState.IDLE);
     RobotContainer.intake.setState(IntakeState.IDLE);
@@ -165,15 +164,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
-    RobotContainer.turret.setState(TurretState.DRIVE);
-    
-    // Should reset the gyro to face forward at the start of teleop
-    RobotContainer.drive.setGyro(-1 * (FieldOrientedTurretHelper.startAngle + RobotContainer.drive.swerveOdometry.getPoseMeters().getRotation().getDegrees()));
-
-    RobotContainer.turret.setState(TurretState.DRIVE);
-    RobotContainer.shooter.setState(ShooterState.IDLE);
-    RobotContainer.indexer.setState(IndexerState.IDLE);
-    RobotContainer.intake.setState(IntakeState.IDLE);
   }
 
   /** This function is called periodically during operator control. */

@@ -23,18 +23,18 @@ public class InterpolatedPS4Gamepad extends PS4Gamepad {
     public double interpolatedLeftYAxis() {
         if (Math.abs(this.getLeftYAxis()) <= 0.05)
             return 0.0;
-        return ((Math.sin(this.getLeftYAxis())));
+        return ((Math.sin(this.getLeftYAxis())) * .5);
     }
 
     public double interpolatedLeftXAxis() {
         if (Math.abs(this.getLeftXAxis()) <= 0.05)
             return 0.0;
-        return ((Math.sin(this.getLeftXAxis())));
+        return ((Math.sin(this.getLeftXAxis())) * .5);
     }
 
     public double interpolatedRightXAxis() {
         if (Math.abs(this.getRightXAxis()) <= 0.05)
             return 0.0;
-        return -(Math.sin(this.getRightXAxis()));
+        return -(Math.sin(this.getRightXAxis()) * .75);
     }
 }

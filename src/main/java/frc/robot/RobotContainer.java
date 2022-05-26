@@ -40,6 +40,7 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Turret.TurretState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -154,7 +155,7 @@ public class RobotContainer {
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
 
-    operatorR1.whileHeld(new SpinShooter(2250, false));
+    operatorR1.whileHeld(new SpinShooter(2200, false));
 
     operatorTriangle.whenPressed(new SpinShooterNoTrack(2250));
 
@@ -169,6 +170,9 @@ public class RobotContainer {
         () -> climber.rightClimber.set(ControlMode.Position, Constants.Climber.TELESCOPING_TO_MID_BAR_VALUE_RIGHT)));
     driverStart.whenReleased(new InstantCommand(() -> climber.leftClimber.set(ControlMode.PercentOutput, 0)));
     driverStart.whenReleased(new InstantCommand(() -> climber.rightClimber.set(ControlMode.PercentOutput, 0)));
+
+    // driverTriangle.whenPressed(new InstantCommand(() -> turret.setTurretPosition(0)));
+    // driverX.whenPressed(new InstantCommand(() -> turret.setTurretPosition(-180)));
 
     driverL1.whileHeld(new SetLeftClimber(.90));
     driverL2.whileHeld(new SetLeftClimber(-.90));

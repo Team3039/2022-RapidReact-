@@ -41,6 +41,8 @@ public class Indexer extends SubsystemBase {
         mFirstStageGate = new DigitalInput(Constants.Ports.FIRST_STAGE_GATE);
         mSecondStageGate = new DigitalInput(Constants.Ports.SECOND_STAGE_GATE);
 
+        mFirstStageMaster.setInverted(false);
+
         mFirstStageMaster.setNeutralMode(NeutralMode.Brake);
         mSecondStageMaster.setNeutralMode(NeutralMode.Brake);
 
