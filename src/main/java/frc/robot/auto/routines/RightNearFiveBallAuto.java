@@ -57,17 +57,6 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-        SwerveControllerCommand goToStartCommand = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightNearSecondBallToStart(),
-                s_Swerve::getPose,
-                Constants.Swerve.SWERVE_KINEMATICS,
-                new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-                new PIDController(Constants.AutoConstants.KPY_CONTROLLER, 0, 0),
-                thetaController,
-                Drive.getSwerveHeadingSupplier(0),
-                s_Swerve::setModuleStates,
-                s_Swerve);
-
         SwerveControllerCommand grabTerminalBallCommand = new SwerveControllerCommand(
                 frc.robot.auto.TrajectoryGenerator.getRightNearSecondBallToThirdBall(),
                 s_Swerve::getPose,

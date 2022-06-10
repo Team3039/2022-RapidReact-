@@ -28,7 +28,7 @@ public class DriveStraight extends SequentialCommandGroup {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         SwerveControllerCommand driveStraight = new SwerveControllerCommand(
-                frc.robot.auto.TrajectoryGenerator.getRightFarStartToFirstBall(),
+                frc.robot.auto.TrajectoryGenerator.getRightNearStartToFirstBall(),
                 s_Swerve::getPose,
                 Constants.Swerve.SWERVE_KINEMATICS,
                 new PIDController(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),

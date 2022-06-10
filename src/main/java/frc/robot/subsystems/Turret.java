@@ -4,24 +4,17 @@
 
 package frc.robot.subsystems;
 
-import javax.management.ConstructorParameters;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.math.FieldOrientedTurretHelper;
-import frc.lib.util.Limelight.CamMode;
-import frc.lib.util.Limelight.LedMode;
 import frc.lib.util.MathUtils;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Turret extends SubsystemBase {
 
@@ -48,28 +41,31 @@ public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
   public Turret() {
     turret.setSelectedSensorPosition(0);
-    turret.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     turret.setNeutralMode(NeutralMode.Coast);
 
     turret.configForwardSoftLimitThreshold(degreesToTicks(45));
-    turret.configReverseSoftLimitThreshold(degreesToTicks(-45));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(-135));
 
     turret.configForwardSoftLimitEnable(true);
     turret.configReverseSoftLimitEnable(true);
     turret.setInverted(false);
 
-    turret.config_kP(0, 2.125);
-    turret.config_kI(0, 0.000001); 
-    turret.config_kD(0, 1);
+    // Tracking
+    turret.config_kP(0, .875);
+    turret.config_kI(0, 0.0000001); 
+    turret.config_kD(0, 12);
     
+    // Off
     turret.config_kP(1, 0);
     turret.config_kI(1, 0);
     turret.config_kD(1, 0);
- 
-    turret.selectProfileSlot(0, 0);
 
-    // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 10);
+    // Zeroing
+    turret.config_kP(2, 0.15);
+    turret.config_kI(2, 0);
+    turret.config_kD(2, 10);
   }
 
   public void setState(TurretState state) {
@@ -95,7 +91,6 @@ public class Turret extends SubsystemBase {
 
   public void stop() {
     turret.set(ControlMode.PercentOutput, 0);
-    RobotContainer.limelight.setCamMode(CamMode.DRIVER);
   }
 
   public double degreesToTicks(double theta) {
@@ -106,23 +101,32 @@ public class Turret extends SubsystemBase {
     return (turret.getSelectedSensorPosition() / 22320) * 360;
   }
 
-  // Experimental center field tracking. Gyro must be centered with intake facing away from you.
-  public void trackCenterField() {
-    // double x = RobotContainer.drive.swerveOdometry.getPoseMeters().getX();
-    // double y = RobotContainer.drive.swerveOdometry.getPoseMeters().getY();    
+  //  Experimental center field tracking. Gyro must be centered with intake facing away from you.
+  // public void trackCenterField() {
+  //   // double x = RobotContainer.drive.swerveOdometry.getPoseMeters().getX();
+  //   // double y = RobotContainer.drive.swerveOdometry.getPoseMeters().getY();    
 
-    double driveAngleToTarget = FieldOrientedTurretHelper.getAngleToTarget(RobotContainer.drive.swerveOdometry.getPoseMeters()).getDegrees();
-    SmartDashboard.putNumber("Drive Error To Target", driveAngleToTarget);
+  //   double driveAngleToTarget = FieldOrientedTurretHelper.getAngleToTarget(RobotContainer.drive.swerveOdometry.getPoseMeters()).getDegrees();
+  //   SmartDashboard.putNumber("Drive Error To Target", driveAngleToTarget);
 
-    double targetAngle = driveAngleToTarget - RobotContainer.drive.swerveOdometry.getPoseMeters().getRotation().getDegrees();
-    SmartDashboard.putNumber("Non Limelight Target Angle", targetAngle);
+  //   double targetAngle = driveAngleToTarget - RobotContainer.drive.swerveOdometry.getPoseMeters().getRotation().getDegrees();
+  //   SmartDashboard.putNumber("Non Limelight Target Angle", targetAngle);
 
-    turret.set(ControlMode.Position, targetAngle);
-  }
+  //   turret.set(ControlMode.Position, targetAngle);
+  // }
 
   public void resetEncoder() {
-    System.out.println("bruh");
     turret.setSelectedSensorPosition(0);
+  }
+
+  // 0 tracking, 1 driver
+  public void setCamMode(int val) {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(val);
+  }
+
+  // 1 off, 3 on
+  public void setLedMode(int val) {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(val);
   }
 
   @Override
@@ -152,16 +156,16 @@ public class Turret extends SubsystemBase {
     switch (currentMode) {
       case TRACKING:
         turret.selectProfileSlot(0, 0);
-        RobotContainer.limelight.setCamMode(CamMode.VISION);
-        RobotContainer.limelight.setLedMode(LedMode.ON);
+        setCamMode(0);
+        setLedMode(3);
         trackTarget();
         isAtTargetPosition = MathUtils.epsilonEquals(targetX, 0, 1);
         break;
       case DRIVE:
         // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
-        turret.selectProfileSlot(0, 0);
-        RobotContainer.limelight.setCamMode(CamMode.DRIVER);
-        RobotContainer.limelight.setLedMode(LedMode.OFF);
+        turret.selectProfileSlot(2, 0);
+        setCamMode(1);
+        setLedMode(1);
         setTurretPosition(0);
         break;
       case MANUAL:
@@ -174,7 +178,8 @@ public class Turret extends SubsystemBase {
         setTurretPosition(-180);
         break;
       default:
-        RobotContainer.limelight.setCamMode(CamMode.DRIVER);
+        setCamMode(1);
+        setLedMode(1);
         stop();
     }
   }

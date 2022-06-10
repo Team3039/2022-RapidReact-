@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.ActuateClimb;
 import frc.robot.commands.DisableClimbSoftLimits;
 // import frc.robot.auto.commands.SetClimbSpeed;
 import frc.robot.commands.FeedCargo;
@@ -23,7 +22,6 @@ import frc.robot.commands.SetIndexing;
 import frc.robot.commands.SetLeftClimber;
 import frc.robot.commands.SetManualTurretMode;
 import frc.robot.commands.SetRightClimber;
-import frc.robot.commands.SetSubsystemsClimbMode;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.SpinShooterNoTrack;
@@ -37,10 +35,8 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Turret.TurretState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -60,7 +56,7 @@ public class RobotContainer {
   public static final Turret turret = new Turret();
   public static final Climber climber = new Climber();
   public static final LEDs LEDs = new LEDs();
-  public static final Limelight limelight = new Limelight(drive);
+  // public static final Limelight limelight = new Limelight(drive);
 
   public static Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
@@ -125,7 +121,7 @@ public class RobotContainer {
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
             Drive.getInstance(),
-            driverPad,
+            operatorPad,
             true,
             true));
 
@@ -142,20 +138,20 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    driverOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
+    operatorOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
 
     // driverTriangle.whileHeld(new SetSnap(0));
     // driverSquare.whileHeld(new SetSnap(90));
     // driverCircle.whileHeld(new SetSnap(-90));
     // driverX.whileHeld(new SetSnap(180));
 
-    driverShare.toggleWhenPressed(new TrackTarget());
+    operatorShare.toggleWhenPressed(new TrackTarget());
 
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
 
-    operatorR1.whileHeld(new SpinShooter(2200, false));
+    operatorR1.whileHeld(new SpinShooter(2300, false));
 
     operatorTriangle.whenPressed(new SpinShooterNoTrack(2250));
 

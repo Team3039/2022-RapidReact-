@@ -46,6 +46,8 @@ public class Drive extends SubsystemBase {
     public boolean isSnapping = false;
     public boolean isHighGear = false;
 
+    public double[] previousPose = new double[2];
+
     public Drive() {
         gyro = new PigeonIMU(RobotContainer.indexer.mFirstStageMaster);
         gyro.configFactoryDefault();
@@ -183,9 +185,13 @@ public class Drive extends SubsystemBase {
 
     @Override
     public void periodic() {
+        previousPose[0] = swerveOdometry.getPoseMeters().getX();
+        previousPose[1] = swerveOdometry.getPoseMeters().getY();
         swerveOdometry.update(getYaw(), getStates());
 
         SmartDashboard.putNumber("Pigeon Reading", gyro.getYaw());
+        SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
 
         // for (SwerveModule mod : mSwerveMods) {
         //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());

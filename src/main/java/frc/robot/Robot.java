@@ -8,8 +8,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -17,17 +15,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.math.FieldOrientedTurretHelper;
 import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
-import frc.lib.util.Limelight.CamMode;
-import frc.lib.util.Limelight.LedMode;
 import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.GenericTwoBallAuto;
-import frc.robot.auto.routines.RightFarFourBallAuto;
+import frc.robot.auto.routines.PathweaverTest;
 import frc.robot.auto.routines.RightNearFiveBallAuto;
-import frc.robot.auto.routines.RightNearFourBallAuto;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake.IntakeState;
@@ -77,11 +71,10 @@ public class Robot extends TimedRobot {
 
     autonTaskChooser.setDefaultOption("Do Nothing", new PrintCommand("Do Nothing"));
 
-    autonTaskChooser.addOption("Right Far Four Ball", new RightFarFourBallAuto(Drive.getInstance()));
-    autonTaskChooser.addOption("Right Near Four Ball", new RightNearFourBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Right Near Five Ball", new RightNearFiveBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Generic Two Ball", new GenericTwoBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Drive Straight", new DriveStraight(Drive.getInstance()));
+    autonTaskChooser.addOption("Pathweaver Test", new PathweaverTest(Drive.getInstance()));
 
     SmartDashboard.putData("Autonomous", autonTaskChooser);
 
@@ -132,6 +125,9 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    RobotContainer.shooter.setState(ShooterState.IDLE);
+    RobotContainer.indexer.setState(IndexerState.IDLE);
+    RobotContainer.intake.setState(IntakeState.IDLE);
   }
 
   @Override

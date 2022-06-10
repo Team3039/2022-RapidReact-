@@ -7,8 +7,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.InterpolatingDouble;
@@ -24,11 +27,11 @@ public class Shooter extends SubsystemBase {
   // public static Shooter INSTANCE = new Shooter();
   public static ShooterState state = ShooterState.IDLE;
 
-  public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_MASTER, "Drivetrain");
-  public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_SLAVE, "Drivetrain");
+  public TalonFX leader = new TalonFX(Constants.Ports.SHOOTER_LEADER, "Drivetrain");
+  public TalonFX follower = new TalonFX(Constants.Ports.SHOOTER_FOLLOWER, "Drivetrain");
 
-  public Servo hood = new Servo(Constants.Ports.HOOD);
-  // public Servo rightHood = new Servo(Constants.Ports.RIGHT_HOOD);
+  public TalonSRX hood = new TalonSRX(Constants.Ports.HOOD);
+  public CANCoder cancoder = new CANCoder(Constants.Ports.HOOD_CANCODER, "Drivetrain");
 
   public static double mSetPoint = 0;
   public static boolean isAtSetPoint;
@@ -43,6 +46,10 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shotoer. */
   public Shooter() {
+    cancoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+    cancoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+    cancoder.configSensorDirection(false);
+
     leader.setInverted(true);
     leader.setNeutralMode(NeutralMode.Coast);
 
@@ -59,11 +66,16 @@ public class Shooter extends SubsystemBase {
     // leader.config_kI(0, 0.0001);
     // leader.config_kD(0, 8);
 
-    // follower.follow(leader);
+    // Hood
+    hood.config_kP(0, 0);
+    hood.config_kI(0, 0);
+    hood.config_kD(0, 0);
+
+
+    follower.follow(leader);
 
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
 
-  
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-8.3)), new Vector2(2200, 0));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-14)), new Vector2(2600, 0.2));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-17)), new Vector2(2800, 0.4));
@@ -111,7 +123,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setHoodAngle(double pos) {
-    hood.setPosition(pos);
+
     // rightHood.setAngle(angle);
   }
 
@@ -138,13 +150,15 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter SetPoint Velocity", velocityToRPM(leader.getSelectedSensorVelocity()));
     // SmartDashboard.putNumber("Shooter Encoder", leader.getSelectedSensorVelocity());
     // SmartDashboard.putNumber("Shooter Percent Speed", leader.getMotorOutputPercent());
-    SmartDashboard.putNumber("Hood Angle", hood.getPosition());
 
     // SmartDashboard.putString("Shooter State", String.valueOf(getState()));
+
+    SmartDashboard.putNumber("Hood Cancoder Degrees", cancoder.getPosition());
 
     switch (getState()) {
       case IDLE:
         leader.set(ControlMode.PercentOutput, 0);
+        follower.set(ControlMode.PercentOutput, 0);
         break;
       case SHOOTING:
         if (!RobotContainer.indexer.getState().equals(IndexerState.SHOOTING)) {

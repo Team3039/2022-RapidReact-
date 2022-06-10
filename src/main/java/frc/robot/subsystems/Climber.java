@@ -8,11 +8,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,8 +19,8 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-    public TalonFX leftClimber = new TalonFX(Constants.Ports.CLIMB_MASTER, "Drivetrain");
-    public TalonFX rightClimber = new TalonFX(Constants.Ports.CLIMB_SLAVE, "Drivetrain");
+    public TalonFX leftClimber = new TalonFX(Constants.Ports.CLIMB_LEADER, "Drivetrain");
+    public TalonFX rightClimber = new TalonFX(Constants.Ports.CLIMB_FOLLOWER, "Drivetrain");
 
     public SupplyCurrentLimitConfiguration mSupplyCurrentLimitConfig = new SupplyCurrentLimitConfiguration(true, 30, 30, 5);
 

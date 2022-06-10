@@ -20,14 +20,18 @@ public final class Constants {
         public static final int FIRST_STAGE = 9;
         public static final int SECOND_STAGE = 10;
 
-        public static final int SHOOTER_MASTER = 11;
-        public static final int SHOOTER_SLAVE = 12;
+        public static final int SHOOTER_LEADER = 11;
+        public static final int SHOOTER_FOLLOWER = 12;
 
-        public static final int CLIMB_MASTER = 15;
-        public static final int CLIMB_SLAVE = 13;
+        public static final int CLIMB_LEADER = 15;
+        public static final int CLIMB_FOLLOWER = 13;
 
         public static final int TURRET = 8;
-        
+
+        public static final int HOOD = 16;
+
+        public static final int HOOD_CANCODER = 4;
+    
         // DIO
         public static final int FIRST_STAGE_GATE = 0;
         public static final int SECOND_STAGE_GATE = 1;
@@ -39,10 +43,6 @@ public final class Constants {
         public static final int INTAKE_SOLENOID = 3;
 
         public static final int CLIMB_ACTUATOR = 2;
-
-        // PWM
-        public static final int HOOD = 0;
-        // public static final int RIGHT_HOOD = 1;
     }
 
     public static final class Shooter {
@@ -51,7 +51,7 @@ public final class Constants {
     }
 
     public static final class Turret {
-        public static final double kP_TURRET_TRACK = 0.03;
+        public static final double SHOOT_WHILE_MOVING_OFFSET_KP = 0.1;
     }
 
     public static final class Climber {
