@@ -20,6 +20,9 @@ import frc.lib.math.FieldOrientedTurretHelper;
 import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
 import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.GenericTwoBallAuto;
+import frc.robot.auto.routines.PathweaverFiveBall;
+import frc.robot.auto.routines.StealOneBall;
+import frc.robot.auto.routines.PathweaverStealTwoBall;
 import frc.robot.auto.routines.PathweaverTest;
 import frc.robot.auto.routines.RightNearFiveBallAuto;
 import frc.robot.subsystems.Drive;
@@ -74,8 +77,12 @@ public class Robot extends TimedRobot {
     autonTaskChooser.addOption("Right Near Five Ball", new RightNearFiveBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Generic Two Ball", new GenericTwoBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Drive Straight", new DriveStraight(Drive.getInstance()));
-    autonTaskChooser.addOption("Pathweaver Test", new PathweaverTest(Drive.getInstance()));
+    // autonTaskChooser.addOption("Pathweaver Test", new PathweaverTest(Drive.getInstance()));
+    // autonTaskChooser.addOption("Pathweaver 5 Ball", new PathweaverFiveBall(Drive.getInstance()));
+    autonTaskChooser.addOption("Steal One Ball", new StealOneBall(Drive.getInstance()));
+    // autonTaskChooser.addOption("Pathweaver Steal Two Ball", new PathweaverStealTwoBall(Drive.getInstance()));
 
+    // MAKE SURE TO DEPLOY CODE BETWEEN AUTO RUNS
     SmartDashboard.putData("Autonomous", autonTaskChooser);
 
     mStartPoseChooser.addOption("Left Far Start Pose", Start_Pose.LEFT_FAR);

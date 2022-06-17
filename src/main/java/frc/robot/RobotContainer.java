@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -13,15 +11,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DisableClimbSoftLimits;
+import frc.robot.commands.AutomatedClimbMode;
 // import frc.robot.auto.commands.SetClimbSpeed;
 import frc.robot.commands.FeedCargo;
+import frc.robot.commands.SetClimbToBarHeight;
 // import frc.robot.commands.SetClimberActuateMode;
 // import frc.robot.commands.SetHoodServoAngle;
 import frc.robot.commands.SetIndexing;
 import frc.robot.commands.SetLeftClimber;
 import frc.robot.commands.SetManualTurretMode;
 import frc.robot.commands.SetRightClimber;
+import frc.robot.commands.SetSubsystemsClimbMode;
 import frc.robot.commands.SetUnjamming;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.SpinShooterNoTrack;
@@ -33,6 +33,7 @@ import frc.robot.subsystems.Climber;
 // import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
@@ -159,27 +160,27 @@ public class RobotContainer {
     // operatorCircle.whileHeld(new SetHoodServoAngle(135));
 
     operatorR3.toggleWhenPressed(new SetManualTurretMode());
-
-    driverStart.whenPressed(new InstantCommand(
-        () -> climber.leftClimber.set(ControlMode.Position, Constants.Climber.TELESCOPING_TO_MID_BAR_VALUE_LEFT)));
-    driverStart.whenPressed(new InstantCommand(
-        () -> climber.rightClimber.set(ControlMode.Position, Constants.Climber.TELESCOPING_TO_MID_BAR_VALUE_RIGHT)));
-    driverStart.whenReleased(new InstantCommand(() -> climber.leftClimber.set(ControlMode.PercentOutput, 0)));
-    driverStart.whenReleased(new InstantCommand(() -> climber.rightClimber.set(ControlMode.PercentOutput, 0)));
+       
+    // driverStart.whenReleased(new InstantCommand(() -> climber.leftClimber.set(ControlMode.PercentOutput, 0)));
+    // driverStart.whenReleased(new InstantCommand(() -> climber.rightClimber.set(ControlMode.PercentOutput, 0)));
 
     // driverTriangle.whenPressed(new InstantCommand(() -> turret.setTurretPosition(0)));
     // driverX.whenPressed(new InstantCommand(() -> turret.setTurretPosition(-180)));
 
-    driverL1.whileHeld(new SetLeftClimber(.90));
-    driverL2.whileHeld(new SetLeftClimber(-.90));
+    driverCircle.toggleWhenPressed(new SetSubsystemsClimbMode());
 
-    driverR1.whileHeld(new SetRightClimber(.90));
-    driverR2.whileHeld(new SetRightClimber(-.90));
+    if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {
 
-    driverPadButton.whenPressed(new InstantCommand(() -> RobotContainer.drive.isHighGear = false));
-    driverPadButton.whenReleased(new InstantCommand(() -> RobotContainer.drive.isHighGear = true));
+      driverL1.whileHeld(new SetLeftClimber(.90));
+      driverL2.whileHeld(new SetLeftClimber(-.90));
+  
+      driverR1.whileHeld(new SetRightClimber(.90));
+      driverR2.whileHeld(new SetRightClimber(-.90));
+  
+      driverStart.toggleWhenPressed(new AutomatedClimbMode(Drive.getInstance(), Climber.getInstance()));
 
-    // driverTriangle.toggleWhenPressed(new ActuateClimb());
+      driverPadButton.whenPressed(new SetClimbToBarHeight());
+    }
 
     operatorX.whenPressed(new InstantCommand(() -> {
       shooter.setHoodAngle(0);
@@ -187,7 +188,7 @@ public class RobotContainer {
 
     operatorCircle.whenPressed(new InstantCommand(() -> shooter.setHoodAngle(0)));
 
-    driverPadButton.toggleWhenPressed(new DisableClimbSoftLimits());
+    // startButton.toggleWhenPressed(new DisableClimbSoftLimits());
   }
   
   public static InterpolatedPS4Gamepad getDriver() {

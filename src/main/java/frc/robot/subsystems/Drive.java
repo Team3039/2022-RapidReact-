@@ -176,6 +176,10 @@ public class Drive extends SubsystemBase {
         return (Constants.Swerve.INVERT_GYRO) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
     }
 
+    public double getRoll() {
+        return gyro.getRoll();
+    }
+
     public RigidTransform2 getPoseAtTime(double timestamp) {
         if (latencyCompensationMap.isEmpty()) {
             return RigidTransform2.ZERO;
@@ -193,10 +197,10 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("Odometry X", swerveOdometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Odometry Y", swerveOdometry.getPoseMeters().getY());
 
-        // for (SwerveModule mod : mSwerveMods) {
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-    //    }
+        for (SwerveModule mod : mSwerveMods) {
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+       }
     }
 }

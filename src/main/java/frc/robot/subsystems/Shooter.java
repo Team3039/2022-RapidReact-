@@ -58,7 +58,7 @@ public class Shooter extends SubsystemBase {
 
     // With Flywheels
     leader.config_kP(0, 0.9);
-    leader.config_kI(0, 0.00015);
+    leader.config_kI(0, 0.00012);
     leader.config_kD(0, 6);
 
     // Without Flywheels
@@ -122,26 +122,25 @@ public class Shooter extends SubsystemBase {
     follower.set(ControlMode.PercentOutput, percent);
   }
 
-  public void setHoodAngle(double pos) {
-
-    // rightHood.setAngle(angle);
+  public void setHoodAngle(double deg) {
+    hood.set(ControlMode.Position, deg);
   }
 
-  public double calculateShooterRPM() {
-    double output = 0;
-    for (int i = 1; i < mRPMRegressionVariable.length; i++) {
-      output += Math.pow(mRPMRegressionVariable[1], i);
-    }
-    return output;
-  }
+  // public double calculateShooterRPM() {
+  //   double output = 0;
+  //   for (int i = 1; i < mRPMRegressionVariable.length; i++) {
+  //     output += Math.pow(mRPMRegressionVariable[1], i);
+  //   }
+  //   return output;
+  // }
 
-  public double calculateHoodAngle() {
-    double output = 0;
-    for (int i = 1; i < mHoodRegressionVariable.length; i++) {
-      output += Math.pow(mHoodRegressionVariable[1], i);
-    }
-    return output;
-  }
+  // public double calculateHoodAngle() {
+  //   double output = 0;
+  //   for (int i = 1; i < mHoodRegressionVariable.length; i++) {
+  //     output += Math.pow(mHoodRegressionVariable[1], i);
+  //   }
+  //   return output;
+  // }
 
   @Override
   public void periodic() {
@@ -174,7 +173,7 @@ public class Shooter extends SubsystemBase {
         setHoodAngle(mAngle);
         break;
       case SPIN_UP:
-        follower.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
+        leader.set(ControlMode.Velocity, RPMToVelocity(mSetPoint));
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(follower.getSelectedSensorVelocity()), mSetPoint, 100);
         break;
       case UNJAMMING:
