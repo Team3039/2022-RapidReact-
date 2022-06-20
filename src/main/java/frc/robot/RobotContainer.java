@@ -176,9 +176,11 @@ public class RobotContainer {
   
       driverR1.whileHeld(new SetRightClimber(.90));
       driverR2.whileHeld(new SetRightClimber(-.90));
-  
-      driverStart.toggleWhenPressed(new AutomatedClimbMode(Drive.getInstance(), Climber.getInstance()));
 
+      // IF ATTEMPTING TO CLIMB, DO NOT TOGGLE IT OFF
+      driverStart.toggleWhenPressed(new AutomatedClimbMode(Drive.getInstance(), climber));
+
+      // RUN THIS BEFORE AutomatedClimbMode()
       driverPadButton.whenPressed(new SetClimbToBarHeight());
     }
 

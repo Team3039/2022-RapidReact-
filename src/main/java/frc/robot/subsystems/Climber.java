@@ -21,8 +21,6 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-    public static Climber INSTANCE = new Climber();
-
     public CANSparkMax leftClimber;
     public CANSparkMax rightClimber;
 
@@ -68,10 +66,6 @@ public class Climber extends SubsystemBase {
         rightController.setD(0);
     }
 
-    public static Climber getInstance() {
-        return INSTANCE;
-    }
-
     public static double encoderToRotations(double value) {
         return value / Constants.Climber.ENCODER_TO_ROTATIONS_RATIO_NEO;
     }
@@ -99,6 +93,16 @@ public class Climber extends SubsystemBase {
     public void setClimbEncoders(double value) {
         leftEncoder.setPosition(value);
         rightEncoder.setPosition(value);
+    }
+
+    // ticks
+    public double getLeftClimberPosition() {
+        return rotationsToEncoder(leftEncoder.getPosition());
+    }
+
+    // ticks
+    public double getRightClimberPosition() {
+        return rotationsToEncoder(rightEncoder.getPosition());
     }
 
     @Override
