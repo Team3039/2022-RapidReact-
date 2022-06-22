@@ -7,3 +7,5 @@ https://www.youtube.com/watch?v=iPjS8LcxxxY
 
 Bodhaansh Ravipati: bodhaansh@gmail.com
 Brandon Fortes: bman2505@yahoo.com
+
+Dedicated to the almighty Venetian Blinds
