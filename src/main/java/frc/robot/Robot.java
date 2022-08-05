@@ -20,11 +20,8 @@ import frc.lib.math.FieldOrientedTurretHelper;
 import frc.lib.math.FieldOrientedTurretHelper.Start_Pose;
 import frc.robot.auto.routines.DriveStraight;
 import frc.robot.auto.routines.GenericTwoBallAuto;
-import frc.robot.auto.routines.PathweaverFiveBall;
-import frc.robot.auto.routines.StealOneBall;
-import frc.robot.auto.routines.PathweaverStealTwoBall;
-import frc.robot.auto.routines.PathweaverTest;
 import frc.robot.auto.routines.RightNearFiveBallAuto;
+import frc.robot.auto.routines.StealOneBall;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake.IntakeState;
@@ -41,14 +38,9 @@ import frc.robot.subsystems.Turret.TurretState;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static Field2d field;
-
   public static Timer mTimer = new Timer();
 
-  public static boolean isRedAlliance;
-
   public static CTREConfigs ctreConfigs;
-  public static Trajectory mTrajectory = new Trajectory();
 
   public static FieldOrientedTurretHelper mFieldOrientedTurretHelper;
 
@@ -77,11 +69,8 @@ public class Robot extends TimedRobot {
     autonTaskChooser.addOption("Right Near Five Ball", new RightNearFiveBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Generic Two Ball", new GenericTwoBallAuto(Drive.getInstance()));
     autonTaskChooser.addOption("Drive Straight", new DriveStraight(Drive.getInstance()));
-    // autonTaskChooser.addOption("Pathweaver Test", new PathweaverTest(Drive.getInstance()));
-    // autonTaskChooser.addOption("Pathweaver 5 Ball", new PathweaverFiveBall(Drive.getInstance()));
     autonTaskChooser.addOption("Steal One Ball", new StealOneBall(Drive.getInstance()));
-    // autonTaskChooser.addOption("Pathweaver Steal Two Ball", new PathweaverStealTwoBall(Drive.getInstance()));
-
+  
     // MAKE SURE TO DEPLOY CODE BETWEEN AUTO RUNS
     SmartDashboard.putData("Autonomous", autonTaskChooser);
 
@@ -117,16 +106,9 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.mSecondStageGate.get());
-    SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.indexer.mFirstStageGate.get());
+    SmartDashboard.putBoolean("Second Stage Beam Break", RobotContainer.indexer.secondStageGate.get());
+    SmartDashboard.putBoolean("First Stage Beam Break", RobotContainer.indexer.firstStageGate.get());
 
-    // if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {
-    //   // RobotContainer.compressor.disable();
-    // }
-    // else {
-    //   RobotContainer.compressor.enableDigital();
-    // }
-    // RobotContainer.limelight.setCamMode(CamMode.VISION);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

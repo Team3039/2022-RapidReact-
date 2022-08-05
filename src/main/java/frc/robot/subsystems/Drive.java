@@ -49,7 +49,7 @@ public class Drive extends SubsystemBase {
     public double[] previousPose = new double[2];
 
     public Drive() {
-        gyro = new PigeonIMU(RobotContainer.indexer.mFirstStageMaster);
+        gyro = new PigeonIMU(RobotContainer.indexer.firstStage);
         gyro.configFactoryDefault();
         setGyro(0);
 

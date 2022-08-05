@@ -6,24 +6,22 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.Turret.TurretState;
 
-public class SpinShooterNoTrack extends CommandBase {
-
-  double setpoint;
-  /** Creates a new SpinShooterNoTrack. */
-  public SpinShooterNoTrack(double setpoint) {
+public class SpinShooterWithHood extends CommandBase {
+  /** Creates a new SpinShooterWithHood. */
+  public SpinShooterWithHood() {
     // Use addRequirements() here to declare subsystem dependencies.
-   // addRequirements(RobotContainer.shooter);
-    this.setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Shooter.setPointShooter = setpoint;
-    RobotContainer.shooter.setState(ShooterState.SPIN_UP);
+    if (!RobotContainer.turret.getState().equals(TurretState.MANUAL)) {
+      RobotContainer.turret.setState(TurretState.TRACKING);
+    }
+      RobotContainer.shooter.setState(ShooterState.SHOOTING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,11 +31,15 @@ public class SpinShooterNoTrack extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (!RobotContainer.turret.getState().equals(TurretState.MANUAL)) {
+      RobotContainer.turret.setState(TurretState.DRIVE);
+    }
+      RobotContainer.shooter.setState(ShooterState.IDLE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

@@ -21,7 +21,7 @@ public class SetShooterSpinUpMode extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Shooter.mSetPoint = setpoint;
+    Shooter.setPointShooter = setpoint;
     RobotContainer.shooter.setState(ShooterState.SPIN_UP);
   }
 

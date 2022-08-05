@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -65,7 +63,7 @@ public class Intake extends SubsystemBase {
         case INTAKING:
           if (!RobotContainer.indexer.hasTwoBalls) {
             deploy.set(!RobotContainer.indexer.isFeeding);
-            roller.set(0.55);
+            roller.set(0.70);
           } else {
             deploy.set(false);
             roller.set(0.0);

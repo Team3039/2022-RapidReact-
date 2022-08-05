@@ -31,6 +31,6 @@ public class SetIndexingFeedMode extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.indexer.mFirstStageGate.get() && RobotContainer.indexer.mSecondStageGate.get();
+    return RobotContainer.indexer.firstStageGate.get() && RobotContainer.indexer.secondStageGate.get();
   }
 }

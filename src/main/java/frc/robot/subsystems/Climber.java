@@ -36,6 +36,9 @@ public class Climber extends SubsystemBase {
 
         leftController = leftClimber.getPIDController();
         rightController = rightClimber.getPIDController();
+
+        leftClimber.setInverted(false);
+        rightClimber.setInverted(true);
     
         leftEncoder = leftClimber.getEncoder();
         rightEncoder = rightClimber.getEncoder();
@@ -49,13 +52,13 @@ public class Climber extends SubsystemBase {
 
         leftClimber.setSoftLimit(SoftLimitDirection.kReverse, 0);
         leftClimber.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.CLIMB_ROTATION_LIMIT);
-        leftClimber.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        leftClimber.enableSoftLimit(SoftLimitDirection.kForward, true);
+        leftClimber.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        leftClimber.enableSoftLimit(SoftLimitDirection.kForward, false);
 
         rightClimber.setSoftLimit(SoftLimitDirection.kReverse, 0);
         rightClimber.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.CLIMB_ROTATION_LIMIT);
-        rightClimber.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        rightClimber.enableSoftLimit(SoftLimitDirection.kForward, true);
+        rightClimber.enableSoftLimit(SoftLimitDirection.kReverse, false);
+        rightClimber.enableSoftLimit(SoftLimitDirection.kForward, false);
 
         leftController.setP(0.8);
         leftController.setI(0);

@@ -47,7 +47,15 @@ public final class Constants {
 
     public static final class Shooter {
         public static final double SHOOTER_TO_ENCODER_RATIO = 1;
-        public static final double TICKS_PER_ROTATION = 2048;
+        public static final double SHOOTER_TICKS_PER_ROTATION = 2048;
+
+        // cpr 4096
+        public static final double HOOD_TICKS_TO_DEGREES = 0.087890625;
+
+        // Degrees
+        public static final double HOOD_CANCODER_OFFEST = 1652 * HOOD_TICKS_TO_DEGREES;
+        public static final double HOOD_FORWARD_LIMIT_DEG = 600 / HOOD_TICKS_TO_DEGREES;
+        public static final double HOOD_REVERSE_LIMIT_DEG = 0 / HOOD_TICKS_TO_DEGREES;
     }
 
     public static final class Turret {

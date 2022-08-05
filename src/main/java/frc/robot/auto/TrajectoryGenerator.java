@@ -25,8 +25,8 @@ public class TrajectoryGenerator {
         // .setReversed(true);
 
         public static TrajectoryConfig configSlow = new TrajectoryConfig(
-                        Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND - 2,
-                        Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED - 2)
+                        Constants.AutoConstants.K_MAX_SPEED_METERS_PER_SECOND - 2.5,
+                        Constants.AutoConstants.K_MAX_ACCELERATION_METERS_PER_SECOND_SQUARED - 2.5)
                                         .setKinematics(Constants.Swerve.SWERVE_KINEMATICS);
         // .setReversed(true);
 
@@ -35,11 +35,11 @@ public class TrajectoryGenerator {
 
                 // Right Near Five Ball Waypoints
                 public static Pose2d rightNearMidBall = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(36), Units.inchesToMeters(-13)),
+                                new Translation2d(Units.inchesToMeters(36), Units.inchesToMeters(-20)),
                                 new Rotation2d(-0.5));
 
                  public static Pose2d rightNearMidBallRot = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(36), Units.inchesToMeters(-13)),
+                                new Translation2d(Units.inchesToMeters(36), Units.inchesToMeters(-20)),
                                 new Rotation2d(90));
 
                 public static Pose2d rightNearRightBallOne = new Pose2d(
@@ -47,7 +47,7 @@ public class TrajectoryGenerator {
                                 new Rotation2d(90));
 
                 public static Pose2d rightNearRightBallTwo = new Pose2d(
-                                new Translation2d(Units.inchesToMeters(13), Units.inchesToMeters(58)),
+                                new Translation2d(Units.inchesToMeters(15), Units.inchesToMeters(62)),
                                 new Rotation2d(90));
 
                 public static Pose2d rightNearRightBallRot = new Pose2d(
@@ -56,7 +56,7 @@ public class TrajectoryGenerator {
 
                 public static Pose2d rightNearTerminalBall = new Pose2d(
                                 // original x was 150, original y was -77
-                        new Translation2d(Units.inchesToMeters(129), Units.inchesToMeters(-67)),
+                        new Translation2d(Units.inchesToMeters(132), Units.inchesToMeters(-83)),
                                 new Rotation2d(36.8));
 
                 public static Pose2d rightNearTerminalBallRot = new Pose2d(
@@ -70,41 +70,45 @@ public class TrajectoryGenerator {
 
                 // Generic Two Ball Waypoints
                 public static Pose2d genericBall = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(30), Units.inchesToMeters(0)),
+                        new Translation2d(Units.inchesToMeters(35), Units.inchesToMeters(0)),
                         new Rotation2d(0));
 
                 // Steal Balls
                 public static Pose2d leftNearBall = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(25), Units.inchesToMeters(0)),
+                        new Translation2d(Units.inchesToMeters(27), Units.inchesToMeters(0)),
                         new Rotation2d(0));
                 
                 public static Pose2d leftNearBallRot = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(25), Units.inchesToMeters(0)),
-                        Rotation2d.fromDegrees(-90));
+                        new Translation2d(Units.inchesToMeters(27), Units.inchesToMeters(0)),
+                        Rotation2d.fromDegrees(-110));
 
                 public static Pose2d stealFarLeftBallOne = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(20), Units.inchesToMeters(-42)),
-                        Rotation2d.fromDegrees(-90));
+                        new Translation2d(Units.inchesToMeters(20), Units.inchesToMeters(-25)),
+                        Rotation2d.fromDegrees(-110));
 
                 public static Pose2d stealFarLeftBallTwo = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(28), Units.inchesToMeters(-35)),
-                        Rotation2d.fromDegrees(-90));
+                        new Translation2d(Units.inchesToMeters(20), Units.inchesToMeters(-25)),
+                        Rotation2d.fromDegrees(-45));
+
+                public static Pose2d stealFarLeftBallThree = new Pose2d(
+                        new Translation2d(Units.inchesToMeters(30), Units.inchesToMeters(-35)),
+                        Rotation2d.fromDegrees(-45));
 
                 public static Pose2d stealFarLeftBallRot = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(33), Units.inchesToMeters(-30)),
-                        new Rotation2d(0));
+                        new Translation2d(Units.inchesToMeters(30), Units.inchesToMeters(-35)),
+                        Rotation2d.fromDegrees(38.5));
                 
                 public static Pose2d stealMidBall = new Pose2d(
                         new Translation2d(Units.inchesToMeters(5), Units.inchesToMeters(99)),
-                        new Rotation2d(0));
+                        Rotation2d.fromDegrees(-45));
 
                 public static Pose2d stealMidBallRot = new Pose2d(
                         new Translation2d(Units.inchesToMeters(5), Units.inchesToMeters(99)),
-                        new Rotation2d(0));
+                        Rotation2d.fromDegrees(-45));
         
                 public static Pose2d ejectBalls = new Pose2d(
-                        new Translation2d(Units.inchesToMeters(120), Units.inchesToMeters(27.5)),
-                        new Rotation2d(0));
+                        new Translation2d(Units.inchesToMeters(100), Units.inchesToMeters(0)),
+                        Rotation2d.fromDegrees(38.5));
 
 
         }
@@ -345,8 +349,9 @@ public class TrajectoryGenerator {
                         return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
                                         List.of(
                                                         Waypoints.leftNearBallRot,
-                                                        // Waypoints.stealFarLeftBallOne,
-                                                        Waypoints.stealFarLeftBallTwo),
+                                                        Waypoints.stealFarLeftBallOne,
+                                                        Waypoints.stealFarLeftBallTwo,
+                                                        Waypoints.stealFarLeftBallThree),
                                         configSlow);
                 } catch (MalformedSplineException e) {
                         e.printStackTrace();
@@ -361,7 +366,7 @@ public class TrajectoryGenerator {
                 try {
                         return edu.wpi.first.math.trajectory.TrajectoryGenerator.generateTrajectory(
                                         List.of(
-                                                        Waypoints.leftNearBallRot,
+                                                        Waypoints.stealFarLeftBallRot,
                                                         Waypoints.ejectBalls),
                                         configSlow);
                 } catch (MalformedSplineException e) {

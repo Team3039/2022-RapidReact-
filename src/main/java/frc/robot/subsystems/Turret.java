@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.MathUtils;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Turret extends SubsystemBase {
 
@@ -45,17 +46,17 @@ public class Turret extends SubsystemBase {
 
     turret.setNeutralMode(NeutralMode.Coast);
 
-    turret.configForwardSoftLimitThreshold(degreesToTicks(45));
-    turret.configReverseSoftLimitThreshold(degreesToTicks(-135));
+    turret.configForwardSoftLimitThreshold(degreesToTicks(135));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(-90));
 
     turret.configForwardSoftLimitEnable(true);
     turret.configReverseSoftLimitEnable(true);
     turret.setInverted(false);
 
     // Tracking
-    turret.config_kP(0, .875);
-    turret.config_kI(0, 0.0000001); 
-    turret.config_kD(0, 12);
+    turret.config_kP(0, .8);
+    turret.config_kI(0, 0.00000008); 
+    turret.config_kD(0, 8);
     
     // Off
     turret.config_kP(1, 0);
@@ -129,8 +130,18 @@ public class Turret extends SubsystemBase {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(val);
   }
 
+  public void setPipeline(int val) {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("Pipeline").setNumber(val);
+  }
+
   @Override
   public void periodic() {
+    // if (targetY <= -10) {
+    //   setPipeline(1);
+    // }
+    // else {
+    //   setPipeline(0);
+    // }
     // SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
     // SmartDashboard.putNumber("Desired Value", degreesToTicks(90));
 
@@ -138,7 +149,7 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("TargetX", targetX);
     SmartDashboard.putNumber("Turret Encoder", turret.getSelectedSensorPosition());
     SmartDashboard.putNumber("Turret Voltage", turret.getMotorOutputVoltage());
-    // RobotContainer.limelight.getAngleToTarget().getAsDouble());
+    SmartDashboard.putNumber("Target Y", targetY);
 
     SmartDashboard.putString("Turret State", String.valueOf(getState()));
     SmartDashboard.putBoolean("Is At Target Position", isAtTargetPosition);
@@ -159,7 +170,7 @@ public class Turret extends SubsystemBase {
         setCamMode(0);
         setLedMode(3);
         trackTarget();
-        isAtTargetPosition = MathUtils.epsilonEquals(targetX, 0, 1);
+        isAtTargetPosition = MathUtils.epsilonEquals(targetX, 0, 1.5);
         break;
       case DRIVE:
         // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
@@ -169,13 +180,13 @@ public class Turret extends SubsystemBase {
         setTurretPosition(0);
         break;
       case MANUAL:
-        // turret.selectProfileSlot(1, 0);
-        // turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * -1);
+        turret.selectProfileSlot(1, 0);
+        turret.set(ControlMode.PercentOutput, RobotContainer.getOperator().getRightXAxis() * -1);
         break;
       case CLIMBING:
         turret.selectProfileSlot(0, 0);
         // turret.setStatusFramePeriod(StatusFrame.Status_1_General, 253);
-        setTurretPosition(-180);
+        // setTurretPosition(-180);
         break;
       default:
         setCamMode(1);

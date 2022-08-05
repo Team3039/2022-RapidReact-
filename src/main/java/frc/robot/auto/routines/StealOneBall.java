@@ -27,7 +27,7 @@ import frc.robot.subsystems.Drive;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class StealOneBall extends SequentialCommandGroup {
-  /** Creates a new PathweaverStealOneBall. */
+  /** Creates a new StealOneBall. */
   public StealOneBall(Drive s_Swerve) {
 
     var thetaController = new ProfiledPIDController(
@@ -74,7 +74,7 @@ public class StealOneBall extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
       new SetTurretTrackMode(),
-      new SetShooterSpinUpMode(2400),
+      new SetShooterSpinUpMode(3000),
       new SetIndexingIntakeMode(),
       GenericBallCommand,
       new StopTrajectory(),
@@ -85,12 +85,14 @@ public class StealOneBall extends SequentialCommandGroup {
       new SetTurretDriveMode(),
       new SetIndexingIntakeMode(),
       StealFarLeftBallCommand,
-      new StopTrajectory()
-      // EjectBallsCommand,
-      // new StopTrajectory()
-      // new SetIndexingUnjamMode(),
-      // new WaitCommand(1),
-      // new SetIndexingIdleMode()
+      new StopTrajectory(),
+      new WaitCommand(0.3),
+      new SetIndexingIdleMode(),
+      EjectBallsCommand,
+      new StopTrajectory(),
+      new SetIndexingUnjamMode(),
+      new WaitCommand(1),
+      new SetIndexingIdleMode()
     );
   }
 

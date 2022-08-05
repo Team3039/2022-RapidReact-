@@ -52,7 +52,7 @@ public class GenericTwoBallAuto extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
                 new SetTurretDriveMode(),
-                new SetShooterSpinUpMode(2350),
+                new SetShooterSpinUpMode(2300),
                 new SetIndexingIntakeMode(),
                 grabBallCommand,
                 new StopTrajectory(),

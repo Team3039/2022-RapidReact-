@@ -6,6 +6,7 @@ package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Shooter.ShooterState;
 
 public class SetShooterShootingMode extends CommandBase {
@@ -32,6 +33,6 @@ public class SetShooterShootingMode extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.shooter.isAtSetPoint;
+    return Shooter.isAtSetPoint;
   }
 }
