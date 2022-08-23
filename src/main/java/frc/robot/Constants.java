@@ -41,8 +41,8 @@ public final class Constants {
         
         // PCM
         public static final int INTAKE_SOLENOID = 3;
-
-        public static final int CLIMB_ACTUATOR = 2;
+        public static final int CLIMB_STATIONARY_ACTUATOR = 1;
+        public static final int CLIMB_EXTENDING_ACTUATOR = 2;
     }
 
     public static final class Shooter {
@@ -63,22 +63,13 @@ public final class Constants {
     }
 
     public static final class Climber {
-        public static final double ENCODER_TO_ROTATIONS_RATIO_NEO = 42;
+        public static final double ENCODER_TO_ROTATIONS_RATIO = 2048;
 
-        public static final double CLIMB_ROTATION_LIMIT = 0;
+        public static final double CLIMB_ENCODER_LIMIT = 30431641;
         public static final double TELESCOPING_TO_MID_BAR_VALUE_RIGHT = 0;
         public static final double TELESCOPING_TO_MID_BAR_VALUE_LEFT = 0;
         public static final double EXTENDING_LIMIT_RIGHT = 0;
         public static final double EXTENDING_LIMIT_LEFT = 0;
-        public static final double EXTENDING_PARTIAL_LIMIT_RIGHT = 0; //about 3/4 of the extend limit
-        public static final double EXTENDING_PARTIAL_LIMIT_LEFT = 0;
-        public static final double REASONABLE_MINIMUM_RIGHT = 0;
-        public static final double REASONABLE_MINIMUM_LEFT = 0;
-
-        public static final double HIGH_BAR_EXTEND_ANGLE = -38.0;
-        public static final double HIGH_BAR_CONTACT_ANGLE = -31.0;
-        public static final double TRAVERSAL_BAR_EXTEND_ANGLE = -20.0;
-        public static final double TRAVERSAL_BAR_CONTACT_ANGLE = -29.0;
     }
 
     public static final class Swerve {
@@ -164,7 +155,7 @@ public final class Constants {
             public static final int driveMotorID = 0;
             public static final int angleMotorID = 1;
             public static final int canCoderID = 0;
-            public static final double angleOffset = 255.761 - 180;
+            public static final double angleOffset = 255.937 - 180;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -174,7 +165,7 @@ public final class Constants {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 1;
-            public static final double angleOffset = 120.673 + 180;
+            public static final double angleOffset = 119.179 + 180;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -184,7 +175,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 2;
-            public static final double angleOffset = 164.794 + 180;
+            public static final double angleOffset = 165.322 + 180;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -194,7 +185,7 @@ public final class Constants {
             public static final int driveMotorID = 6;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 3;
-            public static final double angleOffset = 281.777 - 180;
+            public static final double angleOffset = 282.216 - 180;
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }

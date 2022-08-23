@@ -5,113 +5,109 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.ToggleClimbSoftLimits;
 
 public class Climber extends SubsystemBase {
 
-    public CANSparkMax leftClimber;
-    public CANSparkMax rightClimber;
+    public TalonFX leftClimber = new TalonFX(Constants.Ports.LEFT_CLIMBER, "Drivetrain");
+    public TalonFX rightClimber = new TalonFX(Constants.Ports.RIGHT_CLIMBER, "Drivetrain");
 
-    public SparkMaxPIDController leftController;
-    public SparkMaxPIDController rightController;
- 
-    public RelativeEncoder leftEncoder;
-    public RelativeEncoder rightEncoder;
+    public Solenoid stationarySolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.CLIMB_STATIONARY_ACTUATOR);
+    public Solenoid extendingSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Ports.CLIMB_EXTENDING_ACTUATOR);
+    
 
     public Climber() {
-        leftClimber = new CANSparkMax(Constants.Ports.LEFT_CLIMBER, MotorType.kBrushless);
-        rightClimber = new CANSparkMax(Constants.Ports.RIGHT_CLIMBER, MotorType.kBrushless);
-
-        leftController = leftClimber.getPIDController();
-        rightController = rightClimber.getPIDController();
-
         leftClimber.setInverted(false);
         rightClimber.setInverted(true);
-    
-        leftEncoder = leftClimber.getEncoder();
-        rightEncoder = rightClimber.getEncoder();
 
-        rightClimber.setInverted(true);
+        leftClimber.setNeutralMode(NeutralMode.Brake);
+        rightClimber.setNeutralMode(NeutralMode.Brake);
 
-        leftClimber.setIdleMode(IdleMode.kBrake);
-        rightClimber.setIdleMode(IdleMode.kBrake);
+        setClimbEncoders(0); 
 
-        setClimbEncoders(0);  
+        leftClimber.config_kP(0, 0.8);
+        leftClimber.config_kI(0, 0);
+        leftClimber.config_kD(0, 0);
 
-        leftClimber.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        leftClimber.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.CLIMB_ROTATION_LIMIT);
-        leftClimber.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        leftClimber.enableSoftLimit(SoftLimitDirection.kForward, false);
+        rightClimber.config_kP(0, 0.8);
+        rightClimber.config_kI(0, 0);
+        rightClimber.config_kD(0, 0);
 
-        rightClimber.setSoftLimit(SoftLimitDirection.kReverse, 0);
-        rightClimber.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.CLIMB_ROTATION_LIMIT);
-        rightClimber.enableSoftLimit(SoftLimitDirection.kReverse, false);
-        rightClimber.enableSoftLimit(SoftLimitDirection.kForward, false);
+        toggleSoftLimits(false);
+        leftClimber.configForwardSoftLimitThreshold(Constants.Climber.CLIMB_ENCODER_LIMIT);
+        leftClimber.configReverseSoftLimitThreshold(0);
+        rightClimber.configForwardSoftLimitThreshold(Constants.Climber.CLIMB_ENCODER_LIMIT);
+        rightClimber.configReverseSoftLimitThreshold(0);
+    }
 
-        leftController.setP(0.8);
-        leftController.setI(0);
-        leftController.setD(0);
+    // the flipping arms
+    public void releaseArms(boolean isRetracted) {
+        stationarySolenoid.set(isRetracted);
+    }
 
-        rightController.setP(0.8);
-        rightController.setI(0);
-        rightController.setD(0);
+    // the extending arms
+    public void actuateClimbers(boolean isRetracted) {
+        extendingSolenoid.set(isRetracted);
     }
 
     public static double encoderToRotations(double value) {
-        return value / Constants.Climber.ENCODER_TO_ROTATIONS_RATIO_NEO;
+        return value / Constants.Climber.ENCODER_TO_ROTATIONS_RATIO;
     }
 
     public static double rotationsToEncoder(double value) {
-        return value * Constants.Climber.ENCODER_TO_ROTATIONS_RATIO_NEO;
+        return value * Constants.Climber.ENCODER_TO_ROTATIONS_RATIO;
     }
 
     public void setLeftOutput(double percent) {
-        leftClimber.set(percent);
+        leftClimber.set(ControlMode.PercentOutput, percent);
     }
 
     public void setRightOutput(double percent) {
-        rightClimber.set(percent);
+        rightClimber.set(ControlMode.PercentOutput, percent);
     }
 
     public void setLeftClimberPosition(double encoderPos) {
-        leftController.setReference(encoderToRotations(encoderPos), ControlType.kPosition);
+        leftClimber.set(ControlMode.Position, encoderPos);
     }
 
     public void setRightClimberPosition(double encoderPos) {
-        rightController.setReference(encoderToRotations(encoderPos), ControlType.kPosition);
+        rightClimber.set(ControlMode.Position, encoderPos);
     }
 
     public void setClimbEncoders(double value) {
-        leftEncoder.setPosition(value);
-        rightEncoder.setPosition(value);
+        leftClimber.setSelectedSensorPosition(value);
+        rightClimber.setSelectedSensorPosition(value);
     }
 
     // ticks
     public double getLeftClimberPosition() {
-        return rotationsToEncoder(leftEncoder.getPosition());
+        return rotationsToEncoder(leftClimber.getSelectedSensorPosition());
     }
 
     // ticks
     public double getRightClimberPosition() {
-        return rotationsToEncoder(rightEncoder.getPosition());
+        return rotationsToEncoder(rightClimber.getSelectedSensorPosition());
+    }
+
+    public void toggleSoftLimits(boolean isOn) {
+        leftClimber.configForwardSoftLimitEnable(isOn);
+        leftClimber.configReverseSoftLimitEnable(isOn);     
+        rightClimber.configForwardSoftLimitEnable(isOn);
+        rightClimber.configReverseSoftLimitEnable(isOn);
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Climb encoder right", rightEncoder.getPosition());
-        SmartDashboard.putNumber("Climb encoder left", leftEncoder.getPosition());
+        SmartDashboard.putNumber("Climb encoder right", getRightClimberPosition());
+        SmartDashboard.putNumber("Climb encoder left", getLeftClimberPosition());
     }
 }
        

@@ -121,8 +121,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Shooter Velocity": true
+              "Y-axis/Unit": "ul"
             }
           },
           "6,1": {
@@ -321,8 +320,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Shooter Velocity": true
+              "Y-axis/Unit": "ul"
             }
           },
           "3,1": {
@@ -339,8 +337,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/TargetX": true
+              "Y-axis/Unit": "ul"
             }
           },
           "0,0": {
@@ -357,8 +354,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Hood Relative Ticks": true
+              "Y-axis/Unit": "ul"
             }
           },
           "3,0": {
@@ -422,8 +418,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Second Stage Supply Current": true
+              "Y-axis/Unit": "ul"
             }
           },
           "5,0": {
@@ -440,8 +435,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Second Stage Stator Current": true
+              "Y-axis/Unit": "ul"
             }
           }
         }

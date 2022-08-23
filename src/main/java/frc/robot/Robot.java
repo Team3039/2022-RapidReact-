@@ -149,6 +149,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
+    RobotContainer.climber.actuateClimbers(false);
   }
 
   /** This function is called periodically during operator control. */

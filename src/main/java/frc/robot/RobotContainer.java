@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.AutomatedClimbMode;
 // import frc.robot.auto.commands.SetClimbSpeed;
 import frc.robot.commands.FeedCargo;
+import frc.robot.commands.ReleaseArms;
 import frc.robot.commands.SetClimbToBarHeight;
 import frc.robot.commands.SetHoodAngle;
 // import frc.robot.commands.SetClimberActuateMode;
@@ -29,6 +29,7 @@ import frc.robot.commands.SpinShooterWithHood;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.ToggleClimbSoftLimits;
 import frc.robot.commands.TrackTarget;
+import frc.robot.commands.ActuateClimbers;
 import frc.robot.controllers.InterpolatedPS4Gamepad;
 import frc.robot.controllers.PS4Gamepad;
 import frc.robot.subsystems.Climber;
@@ -64,6 +65,7 @@ public class RobotContainer {
   /* Controllers */
   private static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   private static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
+  private static final InterpolatedPS4Gamepad testPad = new InterpolatedPS4Gamepad(3);
 
   /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(driverPad, PS4Gamepad.BUTTON_X);
@@ -111,6 +113,8 @@ public class RobotContainer {
   private final JoystickButton operatorOptions = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_OPTIONS);
   private final JoystickButton operatorPadButton = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_PAD);
 
+  private final JoystickButton testL2 = new JoystickButton(testPad, PS4Gamepad.BUTTON_L2);
+  private final JoystickButton testR2 = new JoystickButton(testPad, PS4Gamepad.BUTTON_R2);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -119,7 +123,7 @@ public class RobotContainer {
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
             Drive.getInstance(),
-            operatorPad,
+            driverPad,
             true,
             true));    
     configureButtonBindings();
@@ -135,7 +139,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    operatorOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
+    driverOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
 
     // driverTriangle.whileHeld(new SetSnap(0));
     // driverSquare.whileHeld(new SetSnap(90));
@@ -152,30 +156,16 @@ public class RobotContainer {
 
     operatorR3.toggleWhenPressed(new SetManualTurretMode());
 
-    driverCircle.toggleWhenPressed(new SetSubsystemsClimbMode());
+    driverStart.toggleWhenPressed(new SetSubsystemsClimbMode());
 
-    driverL1.whileHeld(new SetLeftClimber(-.70));
-    driverL2.whileHeld(new SetLeftClimber(.70));
+    driverL1.whileHeld(new SetLeftClimber(.50));
+    driverL2.whileHeld(new SetLeftClimber(-.75));
 
-    driverR1.whileHeld(new SetRightClimber(-.70));
-    driverR2.whileHeld(new SetRightClimber(.70));
+    driverR1.whileHeld(new SetRightClimber(.50));
+    driverR2.whileHeld(new SetRightClimber(-.75));
 
-    if (RobotContainer.indexer.getState().equals(IndexerState.CLIMBING)) {
-
- 
-
-      // IF ATTEMPTING TO CLIMB, DO NOT TOGGLE IT OFF
-      // driverStart.toggleWhenPressed(new AutomatedClimbMode(Drive.getInstance(), climber));
-
-      // RUN THIS BEFORE AutomatedClimbMode()
-      driverPadButton.whenPressed(new SetClimbToBarHeight());
-    }
-
-    operatorCircle.toggleWhenPressed(new SetHoodAngle(200));
-    operatorX.toggleWhenPressed(new SetHoodAngle(0));
-    operatorSquare.toggleWhenPressed(new SetHoodAngle(400));
-
-    // driverSquare.toggleWhenPressed(new ToggleClimbSoftLimits());
+    driverCircle.toggleWhenPressed(new ActuateClimbers());
+    driverSquare.toggleWhenPressed(new ReleaseArms());
   }
   
   public static InterpolatedPS4Gamepad getDriver() {

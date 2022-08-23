@@ -42,7 +42,7 @@ public class Shooter extends SubsystemBase {
   public static double setPointHood = 0;
 
   public static boolean isAtSetPoint;
-  public static boolean controllerHasBeenReset = false;
+  public static boolean hoodControllerHasBeenReset = false;
 
   public static PIDController hoodController;
 
@@ -85,13 +85,17 @@ public class Shooter extends SubsystemBase {
 
     shooterMap = new InterpolatingTreeMap<InterpolatingDouble, Vector2>();
 
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-0.23)), new Vector2(2550, 200));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-4.43)), new Vector2(2800, 800));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-7.56)), new Vector2(2800, 1100));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-9.89)), new Vector2(2900, 1100));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-12)), new Vector2(2810, 1100));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-13.83)), new Vector2(2850, 1139));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-15.35)), new Vector2(2985, 1750));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(9)), new Vector2(1900, 0));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(5)), new Vector2(1900, 100));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(2)), new Vector2(1950, 150));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-0.23)), new Vector2(2100, 500));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-1.76)), new Vector2(2250, 750));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-4.43)), new Vector2(2350, 850));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-7.56)), new Vector2(2450, 1200));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-9.89)), new Vector2(2600, 1550));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-12)), new Vector2(3000, 1600));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-13.83)), new Vector2(3450, 2200));
+    // shooterMap.put(new InterpolatingDouble(Double.valueOf(-15.35)), new Vector2(2985, 1750));
   }
 
   // public static Shooter getInstance() {
@@ -206,22 +210,26 @@ public class Shooter extends SubsystemBase {
       case IDLE:
         leader.set(ControlMode.PercentOutput, 0);
         follower.set(ControlMode.PercentOutput, 0);
-        if (!controllerHasBeenReset) {
+        if (!hoodControllerHasBeenReset) {
           hoodController.reset();
-          controllerHasBeenReset = true;
+          hoodControllerHasBeenReset = true;
         }
         setHoodAngle(0);
         break;
       case SHOOTING:
-        controllerHasBeenReset = false;
-        leader.set(ControlMode.Velocity, RPMToVelocity(2800));
-        follower.set(ControlMode.Velocity, RPMToVelocity(2800));
+        if (!hoodControllerHasBeenReset) {
+          hoodController.reset();
+          hoodControllerHasBeenReset = true;
+        }
+        leader.set(ControlMode.Velocity, RPMToVelocity(setPointShooter - 100));
+        follower.set(ControlMode.Velocity, RPMToVelocity(setPointShooter - 100));
             
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), setPointShooter, 25) &&  
                        MathUtils.epsilonEquals(cancoder.getPosition(), setPointHood, 20);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
         
-        setHoodAngle(800);
+        setHoodAngle(setPointHood);
+        
         break;
       case SPIN_UP:
         leader.set(ControlMode.Velocity, RPMToVelocity(setPointShooter));
@@ -230,9 +238,11 @@ public class Shooter extends SubsystemBase {
         break;
       case UNJAMMING:
         leader.set(ControlMode.PercentOutput, -0.45);
+        follower.set(ControlMode.PercentOutput, -0.45);
         break;
       case CLIMBING:
         leader.set(ControlMode.Disabled, 0);
+        follower.set(ControlMode.Disabled, 0);
         break;
       default:
         break;

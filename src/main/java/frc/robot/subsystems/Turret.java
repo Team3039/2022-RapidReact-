@@ -54,9 +54,9 @@ public class Turret extends SubsystemBase {
     turret.setInverted(false);
 
     // Tracking
-    turret.config_kP(0, .8);
-    turret.config_kI(0, 0.00000008); 
-    turret.config_kD(0, 8);
+    turret.config_kP(0, .7);
+    turret.config_kI(0, 0.0000001); 
+    turret.config_kD(0, 10);
     
     // Off
     turret.config_kP(1, 0);

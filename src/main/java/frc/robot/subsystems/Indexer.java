@@ -90,13 +90,13 @@ public class Indexer extends SubsystemBase {
                 setOpenLoop(0, 0);
                 break;
             case SHOOTING:
-              if (Shooter.isAtSetPoint && Turret.isAtTargetPosition) {
+            //   if (Shooter.isAtSetPoint && Turret.isAtTargetPosition) {
                 mTimer.start();
-                if (mTimer.hasElapsed(1.25)) // Was 2 seconds
+                if (mTimer.hasElapsed(0.75)) // Was 2 seconds
                     setOpenLoop(0.55, .9);
                 else
                     setOpenLoop(0, .9);
-              } 
+            //   } 
                 break;
             case INDEXING:
                 isFeeding = false;
