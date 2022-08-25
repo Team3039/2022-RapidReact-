@@ -90,11 +90,11 @@ public class Shooter extends SubsystemBase {
     shooterMap.put(new InterpolatingDouble(Double.valueOf(2)), new Vector2(1950, 150));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-0.23)), new Vector2(2100, 500));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-1.76)), new Vector2(2250, 750));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-4.43)), new Vector2(2350, 850));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-7.56)), new Vector2(2450, 1200));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-4.43)), new Vector2(2350, 1050));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-7.56)), new Vector2(2500, 1250));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-9.89)), new Vector2(2600, 1550));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-12)), new Vector2(3000, 1600));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-13.83)), new Vector2(3450, 2200));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-13.83)), new Vector2(3425, 2200));
     // shooterMap.put(new InterpolatingDouble(Double.valueOf(-15.35)), new Vector2(2985, 1750));
   }
 
@@ -158,7 +158,6 @@ public class Shooter extends SubsystemBase {
     if (cancoder.getPosition() > target) {
       output -= 0.031;
     }
-    System.out.println(output);
     output = hoodSoftLimits(output);
     hood.set(ControlMode.PercentOutput, MathUtils.clamp(output, -0.3, 0.3));
   }
@@ -190,8 +189,8 @@ public class Shooter extends SubsystemBase {
       setPointHood = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y;
     }
     
-    SmartDashboard.putNumber("Leader Shooter Output", leader.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Follower Shooter Output", follower.getMotorOutputVoltage());
+    // SmartDashboard.putNumber("Leader Shooter Output", leader.getMotorOutputVoltage());
+    // SmartDashboard.putNumber("Follower Shooter Output", follower.getMotorOutputVoltage());
 
     // System.out.println(shooterMap.getInterpolated(new InterpolatingDouble(Double.valueOf(3))));
 
@@ -221,8 +220,8 @@ public class Shooter extends SubsystemBase {
           hoodController.reset();
           hoodControllerHasBeenReset = true;
         }
-        leader.set(ControlMode.Velocity, RPMToVelocity(setPointShooter - 100));
-        follower.set(ControlMode.Velocity, RPMToVelocity(setPointShooter - 100));
+        leader.set(ControlMode.Velocity, RPMToVelocity(setPointShooter));
+        follower.set(ControlMode.Velocity, RPMToVelocity(setPointShooter));
             
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(leader.getSelectedSensorVelocity()), setPointShooter, 25) &&  
                        MathUtils.epsilonEquals(cancoder.getPosition(), setPointHood, 20);

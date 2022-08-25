@@ -123,7 +123,7 @@ public class RobotContainer {
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
             Drive.getInstance(),
-            driverPad,
+            operatorPad,
             true,
             true));    
     configureButtonBindings();
@@ -139,7 +139,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    driverOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
+    operatorOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
 
     // driverTriangle.whileHeld(new SetSnap(0));
     // driverSquare.whileHeld(new SetSnap(90));
@@ -164,7 +164,7 @@ public class RobotContainer {
     driverR1.whileHeld(new SetRightClimber(.50));
     driverR2.whileHeld(new SetRightClimber(-.75));
 
-    driverCircle.toggleWhenPressed(new ActuateClimbers());
+    operatorCircle.toggleWhenPressed(new ActuateClimbers());
     driverSquare.toggleWhenPressed(new ReleaseArms());
   }
   

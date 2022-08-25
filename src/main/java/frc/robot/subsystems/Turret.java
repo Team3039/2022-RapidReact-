@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.MathUtils;
@@ -46,11 +47,11 @@ public class Turret extends SubsystemBase {
 
     turret.setNeutralMode(NeutralMode.Coast);
 
-    turret.configForwardSoftLimitThreshold(degreesToTicks(135));
-    turret.configReverseSoftLimitThreshold(degreesToTicks(-90));
+    turret.configForwardSoftLimitThreshold(degreesToTicks(60));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(-60));
 
-    turret.configForwardSoftLimitEnable(true);
-    turret.configReverseSoftLimitEnable(true);
+    turret.configForwardSoftLimitEnable(false);
+    turret.configReverseSoftLimitEnable(false);
     turret.setInverted(false);
 
     // Tracking
@@ -120,6 +121,16 @@ public class Turret extends SubsystemBase {
     turret.setSelectedSensorPosition(0);
   }
 
+  public void resetSoftLimits(int fwd, int rev) {
+    turret.configForwardSoftLimitThreshold(degreesToTicks(fwd));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(rev));
+  }
+
+  public void toggleSoftLimits(boolean isOn) {
+    turret.configForwardSoftLimitEnable(isOn);
+    turret.configReverseSoftLimitEnable(isOn);
+  }
+
   // 0 tracking, 1 driver
   public void setCamMode(int val) {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(val);
@@ -136,15 +147,7 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // if (targetY <= -10) {
-    //   setPipeline(1);
-    // }
-    // else {
-    //   setPipeline(0);
-    // }
-    // SmartDashboard.putNumber("TurretEncoder", turret.getSelectedSensorPosition());
-    // SmartDashboard.putNumber("Desired Value", degreesToTicks(90));
-
+ 
     SmartDashboard.putNumber("Current Angle", getCurrentAngle());
     SmartDashboard.putNumber("TargetX", targetX);
     SmartDashboard.putNumber("Turret Encoder", turret.getSelectedSensorPosition());
@@ -177,7 +180,7 @@ public class Turret extends SubsystemBase {
         turret.selectProfileSlot(2, 0);
         setCamMode(1);
         setLedMode(1);
-        setTurretPosition(0);
+        // setTurretPosition(0);
         break;
       case MANUAL:
         turret.selectProfileSlot(1, 0);
