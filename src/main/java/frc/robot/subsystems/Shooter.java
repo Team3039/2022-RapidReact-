@@ -68,13 +68,13 @@ public class Shooter extends SubsystemBase {
     hood.setNeutralMode(NeutralMode.Brake);
 
     // With Flywheels
-    leader.config_kP(0, 1);
-    leader.config_kI(0, 0.000015);
+    leader.config_kP(0, 0.8);
+    leader.config_kI(0, 0.000013);
     leader.config_kD(0, 15);
     leader.config_kF(0, 0.05669);
 
-    follower.config_kP(0, 1);
-    follower.config_kI(0, 0.000015);
+    follower.config_kP(0, 0.8);
+    follower.config_kI(0, 0.000013);
     follower.config_kD(0, 15);
     follower.config_kF(0, 0.05669);
 
@@ -90,10 +90,12 @@ public class Shooter extends SubsystemBase {
     shooterMap.put(new InterpolatingDouble(Double.valueOf(2)), new Vector2(1950, 150));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-0.23)), new Vector2(2100, 500));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-1.76)), new Vector2(2250, 750));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-2.34)), new Vector2(2300, 900));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-4.43)), new Vector2(2350, 1050));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-7.56)), new Vector2(2500, 1250));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-9.89)), new Vector2(2600, 1550));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-12)), new Vector2(3000, 1600));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-10.5)), new Vector2(2750, 1650));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-12)), new Vector2(3000, 1800));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-13.83)), new Vector2(3425, 2200));
     // shooterMap.put(new InterpolatingDouble(Double.valueOf(-15.35)), new Vector2(2985, 1750));
   }
@@ -207,8 +209,8 @@ public class Shooter extends SubsystemBase {
 
     switch (getState()) {
       case IDLE:
-        leader.set(ControlMode.PercentOutput, 0);
-        follower.set(ControlMode.PercentOutput, 0);
+      leader.set(ControlMode.PercentOutput, 0.15);
+      follower.set(ControlMode.PercentOutput, 0.15);
         if (!hoodControllerHasBeenReset) {
           hoodController.reset();
           hoodControllerHasBeenReset = true;

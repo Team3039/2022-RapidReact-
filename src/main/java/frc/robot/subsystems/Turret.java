@@ -47,17 +47,17 @@ public class Turret extends SubsystemBase {
 
     turret.setNeutralMode(NeutralMode.Coast);
 
-    turret.configForwardSoftLimitThreshold(degreesToTicks(60));
-    turret.configReverseSoftLimitThreshold(degreesToTicks(-60));
+    turret.configForwardSoftLimitThreshold(degreesToTicks(90));
+    turret.configReverseSoftLimitThreshold(degreesToTicks(-90));
 
-    turret.configForwardSoftLimitEnable(false);
+    turret.configForwardSoftLimitEnable(true);
     turret.configReverseSoftLimitEnable(false);
     turret.setInverted(false);
 
     // Tracking
     turret.config_kP(0, .7);
     turret.config_kI(0, 0.0000001); 
-    turret.config_kD(0, 10);
+    turret.config_kD(0, 12);
     
     // Off
     turret.config_kP(1, 0);
@@ -180,7 +180,7 @@ public class Turret extends SubsystemBase {
         turret.selectProfileSlot(2, 0);
         setCamMode(1);
         setLedMode(1);
-        // setTurretPosition(0);
+        setTurretPosition(0);
         break;
       case MANUAL:
         turret.selectProfileSlot(1, 0);

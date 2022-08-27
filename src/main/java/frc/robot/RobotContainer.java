@@ -123,7 +123,7 @@ public class RobotContainer {
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
             Drive.getInstance(),
-            operatorPad,
+            driverPad,
             true,
             true));    
     configureButtonBindings();
@@ -139,7 +139,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    operatorOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
+    driverOptions.whenPressed(new InstantCommand(() -> Drive.getInstance().setGyro(0)));
 
     // driverTriangle.whileHeld(new SetSnap(0));
     // driverSquare.whileHeld(new SetSnap(90));
@@ -152,11 +152,11 @@ public class RobotContainer {
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
     operatorR1.whileHeld(new SpinShooterWithHood());
-    operatorTriangle.whenPressed(new SpinShooterNoTrack(3000));
+    operatorTriangle.whenPressed(new SpinShooterNoTrack(2500));
 
     operatorR3.toggleWhenPressed(new SetManualTurretMode());
 
-    driverStart.toggleWhenPressed(new SetSubsystemsClimbMode());
+    // driverStart.toggleWhenPressed(new SetSubsystemsClimbMode());
 
     driverL1.whileHeld(new SetLeftClimber(.50));
     driverL2.whileHeld(new SetLeftClimber(-.75));
@@ -164,7 +164,7 @@ public class RobotContainer {
     driverR1.whileHeld(new SetRightClimber(.50));
     driverR2.whileHeld(new SetRightClimber(-.75));
 
-    operatorCircle.toggleWhenPressed(new ActuateClimbers());
+    driverCircle.toggleWhenPressed(new ActuateClimbers());
     driverSquare.toggleWhenPressed(new ReleaseArms());
   }
   

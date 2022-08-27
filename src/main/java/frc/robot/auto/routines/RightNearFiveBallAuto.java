@@ -16,6 +16,7 @@ import frc.robot.auto.commands.SetIndexingFeedMode;
 import frc.robot.auto.commands.SetIndexingIdleMode;
 import frc.robot.auto.commands.SetIndexingIntakeMode;
 import frc.robot.auto.commands.SetShooterIdleMode;
+import frc.robot.auto.commands.SetShooterShootingMode;
 import frc.robot.auto.commands.SetShooterSpinUpMode;
 import frc.robot.auto.commands.SetTurretDriveMode;
 import frc.robot.auto.commands.SetTurretTrackMode;
@@ -80,7 +81,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-                new SetShooterSpinUpMode(2350),
+                new SetShooterShootingMode(),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
                 grabMidBallCommand,
@@ -91,7 +92,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 new WaitCommand(0.5),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
-                new SetShooterSpinUpMode(2325),
+                new SetShooterShootingMode(),
                 grabRightBallCommand,
                 new StopTrajectory(),
                 new WaitCommand(0.2),
@@ -104,7 +105,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 grabTerminalBallCommand,
                 new StopTrajectory(),
                 new WaitCommand(1.5),
-                new SetShooterSpinUpMode(2325),
+                new SetShooterShootingMode(),
                 goToShootingPointCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
