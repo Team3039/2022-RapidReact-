@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -91,13 +92,18 @@ public class Indexer extends SubsystemBase {
                 setOpenLoop(0, 0);
                 break;
             case SHOOTING:
+                if (DriverStation.isAutonomousEnabled()) {
+                    setOpenLoop(0.55, .9);
+                }
             //   if (Shooter.isAtSetPoint && Turret.isAtTargetPosition) {
+                else {
                 mTimer.start();
-                if (mTimer.hasElapsed(0.75)) // Was 2 seconds
+                if (mTimer.hasElapsed(0.5)) // Was 2 seconds
                     setOpenLoop(0.55, .9);
                 else
                     setOpenLoop(0, .9);
             //   } 
+                }
                 break;
             case INDEXING:
                 isFeeding = false;

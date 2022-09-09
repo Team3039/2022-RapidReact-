@@ -28,7 +28,14 @@ public class SpinShooterWithHood extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (!RobotContainer.turret.getState().equals(TurretState.MANUAL)) {
+      RobotContainer.turret.setState(TurretState.TRACKING);
+    }
+      RobotContainer.shooter.setState(ShooterState.SHOOTING);
+  }
+
+  
 
   // Called once the command ends or is interrupted.
   @Override

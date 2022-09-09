@@ -23,16 +23,19 @@ public class SpinShooterNoTrack extends CommandBase {
   @Override
   public void initialize() {
     Shooter.setPointShooter = setpoint;
-    RobotContainer.shooter.setState(ShooterState.SPIN_UP);
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    RobotContainer.shooter.setState(ShooterState.SPIN_UP);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.shooter.setState(ShooterState.IDLE);
   }
 
   // Returns true when the command should end.

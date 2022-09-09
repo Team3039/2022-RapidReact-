@@ -56,8 +56,8 @@ public class Shooter extends SubsystemBase {
     cancoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
     cancoder.configSensorDirection(true);
 
-    cancoder.setPositionToAbsolute();
-    // cancoder.setPosition(0);
+    // cancoder.setPositionToAbsolute();
+    cancoder.setPosition(0);
 
     leader.setInverted(false);
     leader.setNeutralMode(NeutralMode.Coast);
@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase {
     follower.config_kF(0, 0.05669);
 
     // hoodController = new ProfiledPIDController(0.0005, 0.0, .000005, new TrapezoidProfile.Constraints(16000.0, 12000.0));
-    hoodController = new PIDController(0.0005, 0.00008, .000015);
+    hoodController = new PIDController(0.00015, 0.00006, .000015);
 
     follower.follow(leader);
 
@@ -90,9 +90,9 @@ public class Shooter extends SubsystemBase {
     shooterMap.put(new InterpolatingDouble(Double.valueOf(2)), new Vector2(1950, 150));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-0.23)), new Vector2(2100, 500));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-1.76)), new Vector2(2250, 750));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-2.34)), new Vector2(2300, 900));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-4.43)), new Vector2(2350, 1050));
-    shooterMap.put(new InterpolatingDouble(Double.valueOf(-7.56)), new Vector2(2500, 1250));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-2.34)), new Vector2(2350, 900));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-4.43)), new Vector2(2500, 1050));
+    shooterMap.put(new InterpolatingDouble(Double.valueOf(-7.56)), new Vector2(2550, 1250));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-9.89)), new Vector2(2600, 1550));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-10.5)), new Vector2(2750, 1650));
     shooterMap.put(new InterpolatingDouble(Double.valueOf(-12)), new Vector2(3000, 1800));
@@ -155,10 +155,10 @@ public class Shooter extends SubsystemBase {
   public void setHoodAngle(double target) {
     double output = hoodController.calculate(cancoder.getPosition(), target);
     if (cancoder.getPosition() < target) {
-      output += 0.031;
+      output += 0.010;
     }
     if (cancoder.getPosition() > target) {
-      output -= 0.031;
+      output -= 0.010;
     }
     output = hoodSoftLimits(output);
     hood.set(ControlMode.PercentOutput, MathUtils.clamp(output, -0.3, 0.3));
@@ -186,10 +186,10 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!RobotContainer.indexer.getState().equals(IndexerState.SHOOTING)) {
-      setPointShooter = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x;
-      setPointHood = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y;
-    }
+    // if (!RobotContainer.indexer.getState().equals(IndexerState.SHOOTING)) {
+    //   setPointShooter = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).x;
+    //   setPointHood = shooterMap.getInterpolated(new InterpolatingDouble(Turret.targetY)).y;
+    // }
     
     // SmartDashboard.putNumber("Leader Shooter Output", leader.getMotorOutputVoltage());
     // SmartDashboard.putNumber("Follower Shooter Output", follower.getMotorOutputVoltage());
@@ -215,6 +215,7 @@ public class Shooter extends SubsystemBase {
           hoodController.reset();
           hoodControllerHasBeenReset = true;
         }
+      // manualHood();
         setHoodAngle(0);
         break;
       case SHOOTING:
@@ -229,10 +230,11 @@ public class Shooter extends SubsystemBase {
                        MathUtils.epsilonEquals(cancoder.getPosition(), setPointHood, 20);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
         
-        setHoodAngle(setPointHood);
+        // setHoodAngle(setPointHood);
         
         break;
       case SPIN_UP:
+        hood.set(ControlMode.PercentOutput, 0);
         leader.set(ControlMode.Velocity, RPMToVelocity(setPointShooter));
         follower.set(ControlMode.Velocity, RPMToVelocity(setPointShooter));
         isAtSetPoint = MathUtils.epsilonEquals(velocityToRPM(follower.getSelectedSensorVelocity()), setPointShooter, 100);

@@ -51,7 +51,7 @@ public class Turret extends SubsystemBase {
     turret.configReverseSoftLimitThreshold(degreesToTicks(-90));
 
     turret.configForwardSoftLimitEnable(true);
-    turret.configReverseSoftLimitEnable(false);
+    turret.configReverseSoftLimitEnable(true);
     turret.setInverted(false);
 
     // Tracking

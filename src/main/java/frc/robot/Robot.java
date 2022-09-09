@@ -125,7 +125,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    RobotContainer.shooter.setHoodAngle(0.65);
     mFieldOrientedTurretHelper = new FieldOrientedTurretHelper(mStartPoseChooser.getSelected());
     autonomousCommand = autonTaskChooser.getSelected();
 

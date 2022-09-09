@@ -60,12 +60,11 @@ public class RobotContainer {
   public static final Turret turret = new Turret();
   public static final Climber climber = new Climber();
   public static final LEDs LEDs = new LEDs();
-  // public static final Limelight limelight = new Limelight(drive);
 
   /* Controllers */
   private static final InterpolatedPS4Gamepad driverPad = new InterpolatedPS4Gamepad(1);
   private static final InterpolatedPS4Gamepad operatorPad = new InterpolatedPS4Gamepad(2);
-  private static final InterpolatedPS4Gamepad testPad = new InterpolatedPS4Gamepad(3);
+  // private static final InterpolatedPS4Gamepad testPad = new InterpolatedPS4Gamepad(3);
 
   /* Driver Buttons */
   private final JoystickButton driverX = new JoystickButton(driverPad, PS4Gamepad.BUTTON_X);
@@ -113,8 +112,6 @@ public class RobotContainer {
   private final JoystickButton operatorOptions = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_OPTIONS);
   private final JoystickButton operatorPadButton = new JoystickButton(operatorPad, PS4Gamepad.BUTTON_PAD);
 
-  private final JoystickButton testL2 = new JoystickButton(testPad, PS4Gamepad.BUTTON_L2);
-  private final JoystickButton testR2 = new JoystickButton(testPad, PS4Gamepad.BUTTON_R2);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -151,8 +148,11 @@ public class RobotContainer {
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
-    operatorR1.whileHeld(new SpinShooterWithHood());
-    operatorTriangle.whenPressed(new SpinShooterNoTrack(2500));
+    // operatorR1.whileHeld(new SpinShooterWithHood());
+    operatorCircle.whileHeld(new SpinShooter(2500, false));
+    operatorX.whileHeld(new SpinShooter(2300, false));
+    operatorTriangle.whileHeld(new SpinShooter(2900, false));
+    operatorSquare.whileHeld(new SpinShooter(2700, false));
 
     operatorR3.toggleWhenPressed(new SetManualTurretMode());
 

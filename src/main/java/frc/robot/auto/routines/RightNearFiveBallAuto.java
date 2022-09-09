@@ -81,7 +81,7 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d())),
-                new SetShooterShootingMode(),
+                new SetShooterSpinUpMode(2600),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
                 grabMidBallCommand,
@@ -90,31 +90,32 @@ public class RightNearFiveBallAuto extends SequentialCommandGroup {
                 new WaitCommand(0.5),
                 new SetIndexingFeedMode(),
                 new WaitCommand(0.5),
+                new SetShooterSpinUpMode(2550),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
-                new SetShooterShootingMode(),
+                // new SetShooterShootingMode(),
                 grabRightBallCommand,
                 new StopTrajectory(),
-                new WaitCommand(0.2),
+                new WaitCommand(0.0),
                 new SetTurretTrackMode(),    
                 new WaitCommand(0.3),
                 new SetIndexingFeedMode(),
-                new WaitCommand(0.5),
+                new WaitCommand(0.4),
                 new SetTurretDriveMode(),
                 new SetIndexingIntakeMode(),
                 grabTerminalBallCommand,
                 new StopTrajectory(),
                 new WaitCommand(1.5),
-                new SetShooterShootingMode(),
+                new SetShooterSpinUpMode(2600),
                 goToShootingPointCommand,
                 new StopTrajectory(),
                 new SetTurretTrackMode(),
-                new WaitCommand(.3),
+                new WaitCommand(.4),
                 new SetIndexingFeedMode(),
-                new WaitCommand(0.5),
+                new WaitCommand(0.4),
                 new SetTurretDriveMode(),
-                new SetIndexingIdleMode(),
-                new SetShooterIdleMode()
+                new SetIndexingIdleMode()
+                // new SetShooterIdleMode()
                 );
                 
     }

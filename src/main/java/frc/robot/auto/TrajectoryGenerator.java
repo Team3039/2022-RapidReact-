@@ -56,7 +56,7 @@ public class TrajectoryGenerator {
 
                 public static Pose2d rightNearTerminalBall = new Pose2d(
                                 // original x was 150, original y was -77
-                        new Translation2d(Units.inchesToMeters(132), Units.inchesToMeters(-83)),
+                        new Translation2d(Units.inchesToMeters(134), Units.inchesToMeters(-80)),
                                 new Rotation2d(36.8));
 
                 public static Pose2d rightNearTerminalBallRot = new Pose2d(
