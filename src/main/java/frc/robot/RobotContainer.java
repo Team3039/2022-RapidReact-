@@ -123,7 +123,7 @@ public class RobotContainer {
     Drive.getInstance().setDefaultCommand(
         new TeleopSwerve(
             Drive.getInstance(),
-            driverPad,
+            operatorPad,
             true,
             true));    
     configureButtonBindings();
