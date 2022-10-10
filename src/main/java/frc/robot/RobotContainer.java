@@ -151,7 +151,7 @@ public class RobotContainer {
     operatorL1.whileHeld(new SetIndexing());
     operatorR2.whileHeld(new FeedCargo());
     operatorL2.whileHeld(new SetUnjamming());
-    operatorR1.whileHeld(new SpinShooterWithHood());
+    operatorR1.whileHeld(new SpinShooterNoTrack(2500));
     operatorTriangle.whenPressed(new SpinShooterNoTrack(2500));
 
     operatorR3.toggleWhenPressed(new SetManualTurretMode());

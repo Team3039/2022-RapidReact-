@@ -209,13 +209,13 @@ public class Shooter extends SubsystemBase {
 
     switch (getState()) {
       case IDLE:
-      leader.set(ControlMode.PercentOutput, 0.15);
-      follower.set(ControlMode.PercentOutput, 0.15);
+      // leader.set(ControlMode.PercentOutput, 0.15);
+      // follower.set(ControlMode.PercentOutput, 0.15);
         if (!hoodControllerHasBeenReset) {
           hoodController.reset();
           hoodControllerHasBeenReset = true;
         }
-        setHoodAngle(0);
+        // setHoodAngle(0);
         break;
       case SHOOTING:
         if (!hoodControllerHasBeenReset) {
@@ -229,7 +229,7 @@ public class Shooter extends SubsystemBase {
                        MathUtils.epsilonEquals(cancoder.getPosition(), setPointHood, 20);
         SmartDashboard.putBoolean("Is At Shooter Setpoint", isAtSetPoint);
         
-        setHoodAngle(setPointHood);
+        // setHoodAngle(setPointHood);
         
         break;
       case SPIN_UP:
